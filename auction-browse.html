@@ -258,6 +258,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   .pg-btn{min-width:34px;height:34px;font-size:13px}
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/api.js"></script>
 </head>
 <body>
 
@@ -317,13 +319,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   </div>
   <div class="search-bar" style="margin-bottom:16px">
     <input class="sb-input" type="text" id="search-input" placeholder="Search by keyword, category, or estate name…" oninput="handleSearch(this.value)">
-    <button class="sb-btn" onclick="handleSearch(document.getElementById('search-input').value)">🔍 Search</button>
+    <button class="sb-btn" onclick="FNA.loadBrowseItems({search:document.getElementById('search-input').value,category:window._activeCat||'All'})">🔍 Search</button>
   </div>
   <div class="category-strip" id="cat-strip">
-    <button class="cat-chip on" onclick="setCat(this,'All')">All Items</button>
-    <button class="cat-chip" onclick="setCat(this,'Furniture')">🪑 Furniture</button>
-    <button class="cat-chip" onclick="setCat(this,'Art')">🖼️ Art &amp; Décor</button>
-    <button class="cat-chip" onclick="setCat(this,'Jewelry')">💍 Jewelry</button>
+    <button class="cat-chip on" onclick="setCat(this,'All');FNA.loadBrowseItems({category:'All'})">All Items</button>
+    <button class="cat-chip" onclick="setCat(this,'Furniture');FNA.loadBrowseItems({category:'Furniture'})">🪑 Furniture</button>
+    <button class="cat-chip" onclick="setCat(this,'Art');FNA.loadBrowseItems({category:'Art'})">🖼️ Art &amp; Décor</button>
+    <button class="cat-chip" onclick="setCat(this,'Jewelry');FNA.loadBrowseItems({category:'Jewelry'})">💍 Jewelry</button>
     <button class="cat-chip" onclick="setCat(this,'Lighting')">🪔 Lighting</button>
     <button class="cat-chip" onclick="setCat(this,'Rugs')">🏺 Rugs &amp; Textiles</button>
     <button class="cat-chip" onclick="setCat(this,'Collectibles')">🧸 Collectibles</button>
@@ -387,7 +389,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
     </div>
 
     <!-- Grid -->
-    <div class="results-grid" id="results-grid"></div>
+    <div class="results-grid" id="results-grid" id="results-grid"></div>
 
     <!-- Pagination -->
     <div class="pagination" id="pagination"></div>

@@ -322,6 +322,10 @@
   .mobile-nav-ctas{display:flex;flex-direction:column;gap:12px;width:80%;max-width:280px;margin-top:12px}
   .mobile-nav-ctas button{width:100%;padding:14px;font-size:16px;border-radius:var(--r-sm);cursor:pointer;font-family:'Jost',sans-serif;font-weight:700;transition:all .2s}
 </style>
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Family Nest API -->
+  <script src="js/api.js"></script>
 </head>
 <body>
 
@@ -453,89 +457,8 @@
       <button class="chip" onclick="setChip(this)">📺 Electronics</button>
       <button class="chip" onclick="setChip(this)">🏺 Collectibles</button>
     </div>
-    <div class="cards">
-
-      <div class="ac">
-        <div class="ac-img" style="background:linear-gradient(135deg,#f0e8d8,#e8d8b8)">🛋</div>
-        <div class="ac-badge live">🔴 Live</div>
-        <button class="ac-fav" onclick="toggleFav(this)">🤍</button>
-        <div class="ac-body">
-          <div class="ac-estate">📍 Nashville, TN — Morris Estate</div>
-          <div class="ac-name">Mid-Century Walnut Sofa Set</div>
-          <span class="cond c-ex">✅ Excellent Condition</span>
-          <div class="ac-pricing">
-            <div><div class="ac-bid-lbl">Current Bid</div><div class="ac-bid">$445</div><div class="ac-ct">18 bids</div></div>
-            <div><div class="ac-time-lbl">Ends In</div><div class="ac-time u">1h 42m</div></div>
-          </div>
-          <div class="cost-panel">
-            <div class="cp-hd">💡 Full Cost Estimate</div>
-            <div class="cp-row"><span>Current bid</span><span>$445.00</span></div>
-            <div class="cp-row"><span>Buyer's premium (15%)</span><span>$66.75</span></div>
-            <div class="cp-row"><span>Est. shipping (TN → FL)</span><span>~$85.00</span></div>
-            <div class="cp-tot"><span>Estimated total</span><span>~$597</span></div>
-          </div>
-          <div class="ac-seller"><span class="stars">★★★★★</span><span>4.9 · Morris Estate · Ships in 3 days</span></div>
-          <div class="ac-actions">
-            <button class="btn-bid-c" onclick="window.location.href='auction-item-detail.html'">View &amp; Bid</button>
-            <button class="btn-watch-c" onclick="toast('Added to watchlist!','👁 Watching')">👁 Watch</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="ac">
-        <div class="ac-img" style="background:linear-gradient(135deg,#e8f2f0,#c8e4dc)">🎨</div>
-        <div class="ac-badge">2d left</div>
-        <button class="ac-fav" onclick="toggleFav(this)">🤍</button>
-        <div class="ac-body">
-          <div class="ac-estate">📍 Charleston, SC — Whitfield Estate</div>
-          <div class="ac-name">Original Oil Painting — Harbor Scene</div>
-          <span class="cond c-gd">✅ Good Condition</span>
-          <div class="ac-pricing">
-            <div><div class="ac-bid-lbl">Current Bid</div><div class="ac-bid">$1,200</div><div class="ac-ct">34 bids</div></div>
-            <div><div class="ac-time-lbl">Ends In</div><div class="ac-time">2d 4h</div></div>
-          </div>
-          <div class="cost-panel">
-            <div class="cp-hd">💡 Full Cost Estimate</div>
-            <div class="cp-row"><span>Current bid</span><span>$1,200.00</span></div>
-            <div class="cp-row"><span>Buyer's premium (15%)</span><span>$180.00</span></div>
-            <div class="cp-row"><span>Est. shipping (SC → FL)</span><span>~$45.00</span></div>
-            <div class="cp-tot"><span>Estimated total</span><span>~$1,425</span></div>
-          </div>
-          <div class="ac-seller"><span class="stars">★★★★★</span><span>5.0 · Whitfield Estate · Insured shipping</span></div>
-          <div class="ac-actions">
-            <button class="btn-bid-c" onclick="window.location.href='auction-item-detail.html'">View &amp; Bid</button>
-            <button class="btn-watch-c" onclick="toast('Added to watchlist!','👁 Watching')">👁 Watch</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="ac">
-        <div class="ac-img" style="background:linear-gradient(135deg,#f4eef8,#e0d0ec)">💍</div>
-        <div class="ac-badge hot">⚡ Ending Soon</div>
-        <button class="ac-fav" onclick="toggleFav(this)">🤍</button>
-        <div class="ac-body">
-          <div class="ac-estate">📍 Savannah, GA — Beaumont Estate</div>
-          <div class="ac-name">Art Deco Diamond &amp; Sapphire Ring</div>
-          <span class="cond c-ex">✅ Excellent · GIA Certified</span>
-          <div class="ac-pricing">
-            <div><div class="ac-bid-lbl">Current Bid</div><div class="ac-bid">$3,750</div><div class="ac-ct">89 bids</div></div>
-            <div><div class="ac-time-lbl">Ends In</div><div class="ac-time u">0h 47m</div></div>
-          </div>
-          <div class="cost-panel">
-            <div class="cp-hd">💡 Full Cost Estimate</div>
-            <div class="cp-row"><span>Current bid</span><span>$3,750.00</span></div>
-            <div class="cp-row"><span>Buyer's premium (15%)</span><span>$562.50</span></div>
-            <div class="cp-row"><span>Insured shipping</span><span>~$35.00</span></div>
-            <div class="cp-tot"><span>Estimated total</span><span>~$4,348</span></div>
-          </div>
-          <div class="ac-seller"><span class="stars">★★★★★</span><span>4.8 · Beaumont Estate · GIA docs included</span></div>
-          <div class="ac-actions">
-            <button class="btn-bid-c" onclick="window.location.href='auction-item-detail.html'">View &amp; Bid</button>
-            <button class="btn-watch-c" onclick="toast('Added to watchlist!','👁 Watching')">👁 Watch</button>
-          </div>
-        </div>
-      </div>
-
+    <div class="cards" id="live-auctions-grid">
+    <!-- Cards loaded dynamically by api.js -->
     </div>
     <div class="load-wrap"><button class="btn-load" onclick="window.location.href='auction-browse.html'">Browse All Listings →</button></div>
   </div>
