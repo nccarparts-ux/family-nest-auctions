@@ -8,11 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green-deep:   #2E5540;
-    --green-mid:    #3D6B4F;
-    --green-sage:   #6B8F71;
-    --green-light:  #A8C5A0;
-    --green-pale:   #E8F0E8;
+    --green-deep:   #3A7A5C;
+    --green-mid:    #4E9470;
+    --green-sage:   #7DB88A;
+    --green-light:  #B8D4AE;
+    --green-pale:   #EEF7EE;
     --honey:        #C8A96E;
     --honey-light:  #DFC28E;
     --honey-pale:   #F5EDD8;
@@ -81,7 +81,7 @@
   /* HERO PREVIEW */
   .hero-preview{display:flex;flex-direction:column;gap:14px;animation:rise .7s .15s ease both}
   .prev-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:var(--r-lg);overflow:hidden;backdrop-filter:blur(8px)}
-  .prev-img{height:210px;background:linear-gradient(135deg,#3d6b4f44,#2e554022);display:flex;align-items:center;justify-content:center;font-size:78px;position:relative}
+  .prev-img{height:210px;background:linear-gradient(135deg,#4E947044,#3A7A5C22);display:flex;align-items:center;justify-content:center;font-size:78px;position:relative}
   .prev-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to top,rgba(25,45,30,.6),transparent)}
   .prev-tag{position:absolute;top:14px;left:14px;background:var(--honey);color:var(--green-deep);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px}
   .prev-body{padding:18px 20px 20px}
@@ -262,17 +262,65 @@
   @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
   .act-av{width:26px;height:26px;border-radius:50%;background:var(--honey);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--green-deep);flex-shrink:0}
 
+  /* ── MOBILE: tablet 920px ── */
   @media(max-width:920px){
-    .hero-inner{grid-template-columns:1fr}
-    .hero-preview{display:none}
-    .steps{grid-template-columns:1fr 1fr}
-    .steps::before{display:none}
-    .why-grid,.testi-grid,.foot-grid{grid-template-columns:1fr}
-    nav{padding:0 18px}
-    .nav-links{display:none}
-    .sec{padding:60px 18px}
     .ribbon{display:none}
+    nav{padding:0 16px}
+    .nav-links{display:none}
+    .nav-ctas{display:none}
+    .hamburger{display:flex}
+    .hero{padding-top:70px}
+    .hero-inner{grid-template-columns:1fr;padding:36px 18px 32px;gap:28px}
+    .hero-preview{display:none}
+    h1{font-size:clamp(30px,7vw,44px)}
+    .hero-desc{font-size:14.5px}
+    .search-bar{flex-direction:column;border-radius:var(--r-md);overflow:visible;gap:8px;background:transparent;box-shadow:none}
+    .search-bar input{border-radius:var(--r-sm);border:none;background:rgba(255,255,255,.12);color:white;padding:13px 16px;font-size:14px}
+    .search-bar input::placeholder{color:rgba(255,255,255,.55)}
+    .search-bar select{border-radius:var(--r-sm);border:none;background:rgba(255,255,255,.12);color:white;padding:13px 16px;font-size:14px;width:100%;-webkit-appearance:none}
+    .btn-search{border-radius:var(--r-sm);padding:13px;width:100%}
+    .metrics{flex-wrap:wrap;gap:18px}
+    .metric{min-width:calc(50% - 9px)}
+    .sec{padding:48px 18px}
+    .cards{grid-template-columns:1fr}
+    .cat-strip{padding:0 18px 12px}
+    .steps{grid-template-columns:1fr 1fr;gap:18px}
+    .steps::before{display:none}
+    .why-grid{grid-template-columns:1fr;gap:32px}
+    .testi-grid{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:28px}
+    .foot-brand{grid-column:1/-1}
+    .load-wrap{padding:0 18px}
   }
+  /* ── MOBILE: phone 600px ── */
+  @media(max-width:600px){
+    .hero-inner{padding:28px 16px 24px}
+    h1{font-size:28px}
+    .metrics{gap:12px}
+    .metric{min-width:calc(50% - 6px)}
+    .foot-grid{grid-template-columns:1fr}
+    .foot-bottom{flex-direction:column;text-align:center;gap:8px}
+    .steps{grid-template-columns:1fr}
+    .ac-actions{flex-direction:column}
+    .ac-actions button{width:100%}
+    .testi-card{padding:18px}
+    .cta-btns{flex-direction:column;align-items:stretch}
+    .btn-cta-p,.btn-cta-s{text-align:center;padding:14px 20px}
+    .modal{padding:24px 18px;margin:8px}
+  }
+
+  /* ── HAMBURGER ── */
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:none;z-index:900}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mobile-nav{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--green-deep);z-index:850;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+  .mobile-nav.open{transform:none}
+  .mobile-nav a{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--white);text-decoration:none;transition:color .2s}
+  .mobile-nav a:hover{color:var(--honey)}
+  .mobile-nav-ctas{display:flex;flex-direction:column;gap:12px;width:80%;max-width:280px;margin-top:12px}
+  .mobile-nav-ctas button{width:100%;padding:14px;font-size:16px;border-radius:var(--r-sm);cursor:pointer;font-family:'Jost',sans-serif;font-weight:700;transition:all .2s}
 </style>
 </head>
 <body>
@@ -288,9 +336,9 @@
       <!-- SVG logo mark matching Family Nest brand: house + nest motif, honey + forest green -->
       <svg class="logo-mark" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="44" height="44" rx="9" fill="#C8A96E"/>
-        <path d="M22 7L6 19.5V37h11V27h10v10h11V19.5L22 7z" fill="#2E5540"/>
-        <ellipse cx="22" cy="31.5" rx="5.5" ry="2.5" fill="#6B8F71" opacity=".75"/>
-        <path d="M18 31.5 Q22 28 26 31.5" stroke="#A8C5A0" stroke-width="1.2" fill="none" opacity=".8"/>
+        <path d="M22 7L6 19.5V37h11V27h10v10h11V19.5L22 7z" fill="#3A7A5C"/>
+        <ellipse cx="22" cy="31.5" rx="5.5" ry="2.5" fill="#7DB88A" opacity=".75"/>
+        <path d="M18 31.5 Q22 28 26 31.5" stroke="#B8D4AE" stroke-width="1.2" fill="none" opacity=".8"/>
       </svg>
       <div class="logo-words">
         <span class="logo-name">Family Nest Auctions</span>
@@ -310,8 +358,23 @@
       <button class="btn-ghost" onclick="openOv('login')">Sign In</button>
       <button class="btn-honey" onclick="openOv('register')">Start Bidding Free</button>
     </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 </header>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobile-nav">
+  <a href="auction-browse.html" onclick="closeMobileMenu()">Live Auctions</a>
+  <a href="#how" onclick="closeMobileMenu()">How It Works</a>
+  <a href="#why" onclick="closeMobileMenu()">Why Us</a>
+  <a href="#sellers" onclick="closeMobileMenu()">Sell With Us</a>
+  <div class="mobile-nav-ctas">
+    <button class="btn-ghost" style="border-color:rgba(255,255,255,.4);color:white" onclick="closeMobileMenu();openOv('login')">Sign In</button>
+    <button class="btn-honey" onclick="closeMobileMenu();openOv('register')">Start Bidding Free</button>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -564,9 +627,9 @@
       <a href="#" class="logo-wrap">
         <svg class="logo-mark" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect width="44" height="44" rx="9" fill="#C8A96E"/>
-          <path d="M22 7L6 19.5V37h11V27h10v10h11V19.5L22 7z" fill="#2E5540"/>
-          <ellipse cx="22" cy="31.5" rx="5.5" ry="2.5" fill="#6B8F71" opacity=".75"/>
-          <path d="M18 31.5 Q22 28 26 31.5" stroke="#A8C5A0" stroke-width="1.2" fill="none" opacity=".8"/>
+          <path d="M22 7L6 19.5V37h11V27h10v10h11V19.5L22 7z" fill="#3A7A5C"/>
+          <ellipse cx="22" cy="31.5" rx="5.5" ry="2.5" fill="#7DB88A" opacity=".75"/>
+          <path d="M18 31.5 Q22 28 26 31.5" stroke="#B8D4AE" stroke-width="1.2" fill="none" opacity=".8"/>
         </svg>
         <div class="logo-words">
           <span class="logo-name">Family Nest Auctions</span>
@@ -747,6 +810,20 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
 }); // end DOMContentLoaded
+
+function toggleMobileMenu(){
+  var h=document.getElementById('hamburger'), m=document.getElementById('mobile-nav');
+  if(!h||!m) return;
+  h.classList.toggle('open'); m.classList.toggle('open');
+  document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
+}
+function closeMobileMenu(){
+  var h=document.getElementById('hamburger'), m=document.getElementById('mobile-nav');
+  if(h) h.classList.remove('open');
+  if(m) m.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 </script>
 </body>
 </html>

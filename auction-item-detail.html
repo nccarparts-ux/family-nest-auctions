@@ -8,11 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green-deep:   #2E5540;
-    --green-mid:    #3D6B4F;
-    --green-sage:   #6B8F71;
-    --green-light:  #A8C5A0;
-    --green-pale:   #E8F0E8;
+    --green-deep:   #3A7A5C;
+    --green-mid:    #4E9470;
+    --green-sage:   #7DB88A;
+    --green-light:  #B8D4AE;
+    --green-pale:   #EEF7EE;
     --honey:        #C8A96E;
     --honey-light:  #DFC28E;
     --honey-pale:   #F5EDD8;
@@ -292,16 +292,40 @@
   /* ── RESPONSIVE ── */
   @media(max-width:900px){
     .ribbon{display:none}
-    .breadcrumb{margin-top:70px}
+    .breadcrumb{margin-top:70px;padding:10px 16px;font-size:12px}
     .nav-links,.nav-ctas{display:none}
     .hamburger{display:flex}
-    .page-wrap{grid-template-columns:1fr;padding:20px 18px 60px}
-    .bid-panel{position:static}
-    .gallery-main{height:300px}
-    .gallery-main-emoji{font-size:90px}
-    .lightbox-emoji{font-size:120px}
+    .page-wrap{grid-template-columns:1fr;padding:16px 16px 60px;gap:20px}
+    .bid-panel{position:static;border-radius:var(--r-lg)}
+    .gallery-main{height:280px}
+    .gallery-main-emoji{font-size:80px}
+    .lightbox-emoji{font-size:100px}
+    .cond-grid{grid-template-columns:1fr 1fr}
+    .related-sec{padding:0 16px 60px}
+    .related-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+    .item-title{font-size:24px}
+    .item-meta-row{gap:7px}
+    .meta-pill{font-size:11.5px;padding:4px 10px}
+    .gallery-thumbs{gap:7px}
+    .thumb{width:68px;height:68px;font-size:26px}
+    .bp-body{padding:16px 18px}
+    .bp-bid-amt{font-size:38px}
+    .quick-bids{gap:6px}
+    .qb-btn{font-size:12.5px;padding:7px}
+    .upload-form{grid-template-columns:1fr}
+  }
+  @media(max-width:500px){
     .cond-grid{grid-template-columns:1fr}
-    .related-sec{padding:0 18px 60px}
+    .related-grid{grid-template-columns:1fr}
+    .bp-countdown{padding:10px 12px}
+    .cu-num{font-size:24px}
+    .gallery-main{height:240px}
+    .breadcrumb .sep + span:last-child{display:none}
+    .item-meta-row{flex-wrap:wrap}
+    .seller-stats{flex-direction:column;gap:6px}
+    .notify-options .no-left{font-size:12px}
+    .nei-row{flex-direction:column}
+    .nei-input,.btn-notify{width:100%}
   }
 </style>
 </head>
@@ -317,9 +341,9 @@
     <a href="family-nest-auctions.html" class="logo-wrap">
       <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
         <rect width="40" height="40" rx="8" fill="#C8A96E"/>
-        <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#2E5540"/>
-        <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#6B8F71" opacity=".75"/>
-        <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#A8C5A0" stroke-width="1.1" fill="none" opacity=".8"/>
+        <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#3A7A5C"/>
+        <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#7DB88A" opacity=".75"/>
+        <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#B8D4AE" stroke-width="1.1" fill="none" opacity=".8"/>
       </svg>
       <div>
         <div class="logo-name">Family Nest Auctions</div>
@@ -617,7 +641,7 @@
       <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Hand-Knotted Persian Wool Rug, 8×10</div><div class="rel-footer"><div class="rel-bid">$215</div><div class="rel-time">1d left</div></div></div>
     </a>
     <a class="rel-card" href="auction-item-detail.html">
-      <div class="rel-img" style="background:linear-gradient(135deg,#e8f0e8,#d0e4d0)">🖊️</div>
+      <div class="rel-img" style="background:linear-gradient(135deg,#EEF7EE,#d0e4d0)">🖊️</div>
       <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Victorian Mahogany Writing Desk</div><div class="rel-footer"><div class="rel-bid">$520</div><div class="rel-time u">2h left</div></div></div>
     </a>
     <a class="rel-card" href="auction-item-detail.html">

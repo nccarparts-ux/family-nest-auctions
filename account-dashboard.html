@@ -8,8 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --green-deep:#2E5540;--green-mid:#3D6B4F;--green-sage:#6B8F71;
-    --green-light:#A8C5A0;--green-pale:#E8F0E8;
+    --green-deep:   #3A7A5C;--green-mid:    #4E9470;--green-sage:   #7DB88A;
+    --green-light:  #B8D4AE;--green-pale:   #EEF7EE;
     --honey:#C8A96E;--honey-light:#DFC28E;--honey-pale:#F5EDD8;
     --cream:#FAF7F2;--cream-mid:#F0EBE3;--cream-dark:#E2D9CE;
     --charcoal:#2C2C2C;--charcoal-mid:#444;--text-mid:#666;--text-light:#999;
@@ -284,6 +284,32 @@
     .tabs-inner{padding:0 18px}
     nav{padding:0 18px}
   }
+
+  @media(max-width:900px){
+    .ribbon{display:none}
+    .nav-links,.nav-ctas{display:none}
+    .hamburger{display:flex}
+    .dash-body{grid-template-columns:1fr;margin-top:70px}
+    .dash-sidebar{display:none}
+    .dash-main{padding:16px 16px 60px}
+    .stat-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+    .stat-val{font-size:26px}
+    .bid-row{flex-wrap:wrap;gap:10px}
+    .bid-right{flex-direction:row;align-items:center;gap:10px;width:100%;justify-content:space-between}
+    .win-card{flex-direction:column}
+    .win-img{width:100%;height:140px}
+    .tab-bar{gap:6px;overflow-x:auto;padding-bottom:4px;flex-wrap:nowrap}
+    .tab-btn{flex-shrink:0;padding:8px 14px;font-size:13px}
+    .section-card{padding:16px}
+    .profile-form{grid-template-columns:1fr}
+  }
+  @media(max-width:500px){
+    .stat-grid{grid-template-columns:repeat(2,1fr)}
+    .stat-val{font-size:22px}
+    .bid-row{flex-direction:column}
+    .act-row{flex-wrap:wrap;gap:8px}
+    .watch-grid{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
@@ -298,9 +324,9 @@
     <a href="family-nest-auctions.html" class="logo-wrap">
       <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
         <rect width="40" height="40" rx="8" fill="#C8A96E"/>
-        <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#2E5540"/>
-        <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#6B8F71" opacity=".75"/>
-        <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#A8C5A0" stroke-width="1.1" fill="none" opacity=".8"/>
+        <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#3A7A5C"/>
+        <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#7DB88A" opacity=".75"/>
+        <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#B8D4AE" stroke-width="1.1" fill="none" opacity=".8"/>
       </svg>
       <div>
         <div class="logo-name">Family Nest Auctions</div>
