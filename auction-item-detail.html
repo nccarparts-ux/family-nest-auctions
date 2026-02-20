@@ -328,6 +328,8 @@
     .nei-input,.btn-notify{width:100%}
   }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/api.js"></script>
 </head>
 <body>
 
@@ -421,7 +423,7 @@
     <!-- ITEM INFO -->
     <div class="item-info">
       <div class="item-estate-tag">📍 Henderson Estate · Atlanta, GA · Sale #4821</div>
-      <h1 class="item-title">Victorian Carved Mahogany Armchair, c.1890</h1>
+      <h1 class="item-title" id="item-title">Victorian Carved Mahogany Armchair, c.1890</h1>
       <div class="item-meta-row">
         <span class="meta-pill green">✅ Excellent Condition</span>
         <span class="meta-pill honey">🏺 Furniture &amp; Seating</span>
@@ -514,7 +516,7 @@
       <div class="bp-current">
         <div>
           <div class="bp-bid-lbl">Current Bid</div>
-          <div class="bp-bid-amt" id="bp-bid">$187</div>
+          <div class="bp-bid-amt" id="bp-bid-amt" id="bp-bid">$187</div>
           <div class="bp-bid-ct" id="bp-bid-ct">18 bids · You are not the leader</div>
         </div>
         <button onclick="toggleWatch(this)" style="background:transparent;border:none;font-size:24px;cursor:pointer;padding:4px" title="Add to watchlist">🤍</button>
