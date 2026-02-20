@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Family Nest Auctions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-deep:#2E5540;--green-mid:#3D6B4F;--green-sage:#6B8F71;--green-light:#A8C5A0;--green-pale:#E8F0E8;
+  --honey:#C8A96E;--honey-light:#DFC28E;--honey-pale:#F5EDD8;
+  --cream:#FAF7F2;--cream-mid:#F0EBE3;--cream-dark:#E2D9CE;
+  --charcoal:#2C2C2C;--text-mid:#666;--text-light:#999;--white:#fff;
+  --red:#B03030;--red-pale:#FDECEA;--orange:#D4804A;
+  --blue:#3B6CB0;--blue-pale:#EBF0FA;--purple:#6B4FB0;--purple-pale:#F0EBFA;
+  --r-sm:8px;--r-md:14px;--r-lg:22px;
+  --sh-xs:0 2px 8px rgba(44,44,44,.06);--sh-sm:0 4px 18px rgba(44,44,44,.09);
+  --sh-md:0 8px 36px rgba(44,44,44,.13);--sh-lg:0 16px 56px rgba(44,44,44,.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:#0f1a14;color:var(--charcoal);overflow-x:hidden;display:flex;flex-direction:column;min-height:100vh}
+
+/* ── HEADER ── */
+header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border-bottom:1px solid rgba(200,169,110,.15);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:14px}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-mark{width:32px;height:32px}
+.logo-text .logo-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--white);line-height:1}
+.logo-text .logo-sub{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--honey)}
+.admin-badge{background:rgba(176,48,48,.2);border:1px solid rgba(176,48,48,.4);color:#e88;font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;letter-spacing:.06em}
+.hd-right{display:flex;align-items:center;gap:10px}
+.hd-right-btn{background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:var(--r-sm);padding:6px 13px;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
+.hd-right-btn:hover{border-color:var(--honey);color:var(--honey)}
+.admin-avatar{width:32px;height:32px;border-radius:50%;background:var(--red);color:white;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.hd-notif{position:relative;background:transparent;border:none;cursor:pointer;font-size:18px;color:rgba(255,255,255,.65);padding:4px}
+.hd-notif .badge{position:absolute;top:-2px;right:-2px;background:var(--red);color:white;font-size:8px;font-weight:700;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #0a1210}
+
+/* ── LAYOUT ── */
+.app-body{display:flex;margin-top:60px;flex:1}
+
+/* ── SIDEBAR ── */
+.sidebar{width:220px;min-width:220px;background:#0a1210;border-right:1px solid rgba(255,255,255,.06);height:calc(100vh - 60px);position:sticky;top:60px;overflow-y:auto;display:flex;flex-direction:column;padding-bottom:20px}
+.sidebar-section{padding:18px 0 6px}
+.sidebar-label{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 18px;margin-bottom:4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 18px;font-size:13px;font-weight:500;color:rgba(255,255,255,.55);cursor:pointer;transition:all .2s;border-left:3px solid transparent;background:transparent;border:none;border-left:3px solid transparent;width:100%;text-align:left;font-family:'Jost',sans-serif}
+.nav-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.9)}
+.nav-item.active{background:rgba(46,85,64,.35);color:var(--honey);border-left:3px solid var(--honey)}
+.nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;font-size:10px;font-weight:700;padding:1px 6px;border-radius:100px}
+.nav-badge.red{background:var(--red);color:white}
+.nav-badge.honey{background:var(--honey);color:var(--green-deep)}
+.nav-badge.green{background:var(--green-mid);color:white}
+
+/* ── MAIN ── */
+.main{flex:1;background:var(--cream);padding:26px 28px 60px;overflow-y:auto;min-width:0}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.page-header{margin-bottom:24px}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3vw,34px);font-weight:700;color:var(--charcoal);margin-bottom:4px}
+.ph-sub{font-size:13.5px;color:var(--text-mid)}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.btn-primary{padding:10px 20px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary:hover{background:var(--green-mid);transform:translateY(-1px)}
+.btn-danger{padding:10px 18px;background:var(--red);color:white;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+.btn-danger:hover{background:#8a2020}
+.btn-secondary{padding:9px 16px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:12.5px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--text-mid);transition:all .2s}
+.btn-secondary:hover{border-color:var(--charcoal);color:var(--charcoal)}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--white);border-radius:var(--r-lg);padding:18px;box-shadow:var(--sh-xs);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.stat-card.g::before{background:linear-gradient(90deg,var(--green-deep),var(--green-sage))}
+.stat-card.h::before{background:linear-gradient(90deg,var(--honey),var(--honey-light))}
+.stat-card.b::before{background:linear-gradient(90deg,var(--blue),#6B9FD4)}
+.stat-card.r::before{background:linear-gradient(90deg,var(--red),var(--orange))}
+.stat-card.p::before{background:linear-gradient(90deg,var(--purple),#9B7FE0)}
+.stat-icon{font-size:22px;margin-bottom:8px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--charcoal);line-height:1;margin-bottom:2px}
+.stat-label{font-size:11.5px;color:var(--text-mid)}
+.stat-delta{font-size:11px;margin-top:5px;font-weight:600}
+.stat-delta.up{color:#2a6040}
+.stat-delta.down{color:var(--red)}
+
+/* ── DATA TABLES ── */
+.section-card{background:var(--white);border-radius:var(--r-lg);padding:0;box-shadow:var(--sh-xs);margin-bottom:20px;overflow:hidden}
+.sc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--cream-mid);flex-wrap:wrap}
+.sc-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;color:var(--charcoal)}
+.sc-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-light);padding:10px 18px;text-align:left;border-bottom:1px solid var(--cream-dark);background:var(--cream);white-space:nowrap}
+.data-table th:first-child{padding-left:22px}
+.data-table th:last-child{padding-right:22px}
+.data-table td{font-size:13px;padding:11px 18px;border-bottom:1px solid var(--cream-mid);vertical-align:middle;color:var(--charcoal)}
+.data-table td:first-child{padding-left:22px}
+.data-table td:last-child{padding-right:22px}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:var(--cream)}
+
+/* Status pills */
+.pill{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap}
+.pill.live{background:var(--green-pale);color:var(--green-deep)}
+.pill.draft{background:var(--cream-mid);color:var(--text-mid)}
+.pill.pending{background:var(--honey-pale);color:#7a5a20}
+.pill.active{background:#d4edda;color:#2a6040}
+.pill.banned{background:var(--red-pale);color:var(--red)}
+.pill.suspended{background:#fff3cd;color:#856404}
+.pill.verified{background:var(--blue-pale);color:var(--blue)}
+.pill.flagged{background:var(--red-pale);color:var(--red)}
+.pill.resolved{background:var(--green-pale);color:var(--green-deep)}
+.pill.processing{background:var(--blue-pale);color:var(--blue)}
+.pill.paid{background:#d4edda;color:#2a6040}
+
+/* Search/filter bar */
+.table-toolbar{padding:14px 22px;border-bottom:1px solid var(--cream-mid);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tt-input{border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);padding:8px 12px;font-size:13px;font-family:'Jost',sans-serif;color:var(--charcoal);outline:none;transition:border-color .2s;min-width:220px}
+.tt-input:focus{border-color:var(--green-mid)}
+.tt-select{border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);padding:8px 28px 8px 12px;font-size:13px;font-family:'Jost',sans-serif;color:var(--charcoal);outline:none;cursor:pointer;background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E") no-repeat right 8px center;-webkit-appearance:none}
+
+/* Inline action links */
+.tbl-action{background:transparent;border:none;color:var(--green-mid);font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;padding:3px 0;transition:color .2s}
+.tbl-action:hover{color:var(--green-deep)}
+.tbl-action.danger{color:var(--red)}
+.tbl-action.danger:hover{color:#8a2020}
+.tbl-actions{display:flex;gap:10px;align-items:center}
+
+/* Alert strip */
+.alert-strip{border-radius:var(--r-md);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:14px;font-size:13.5px}
+.alert-strip.red{background:var(--red-pale);border-left:4px solid var(--red);color:var(--red)}
+.alert-strip.honey{background:var(--honey-pale);border-left:4px solid var(--honey);color:#7a5a20}
+.alert-strip.blue{background:var(--blue-pale);border-left:4px solid var(--blue);color:var(--blue)}
+.alert-strip strong{font-weight:700}
+
+/* ── LIVE AUCTION MONITOR ── */
+.live-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:22px}
+.live-card{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-xs);overflow:hidden;border:1.5px solid var(--cream-dark);transition:box-shadow .2s}
+.live-card:hover{box-shadow:var(--sh-md)}
+.lc-header{padding:13px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--cream-mid)}
+.lc-title{font-size:13px;font-weight:700;color:var(--charcoal);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:8px}
+.lc-body{padding:13px 16px}
+.lc-row{display:flex;justify-content:space-between;font-size:12.5px;padding:2.5px 0}
+.lc-row .lc-lbl{color:var(--text-light)}
+.lc-row .lc-val{font-weight:600;color:var(--charcoal)}
+.lc-row .lc-val.red{color:var(--red)}
+.lc-row .lc-val.green{color:var(--green-deep)}
+.lc-footer{padding:10px 16px;border-top:1px solid var(--cream-mid);display:flex;gap:8px}
+.lc-btn{flex:1;padding:7px;font-size:12px;font-weight:700;border-radius:var(--r-sm);cursor:pointer;font-family:'Jost',sans-serif;border:1.5px solid;transition:all .2s;text-align:center}
+.lc-btn.pause{border-color:var(--orange);color:var(--orange);background:transparent}
+.lc-btn.pause:hover{background:#fdf0e8}
+.lc-btn.extend{border-color:var(--green-mid);color:var(--green-mid);background:transparent}
+.lc-btn.extend:hover{background:var(--green-pale)}
+.lc-btn.flag{border-color:var(--red);color:var(--red);background:transparent}
+.lc-btn.flag:hover{background:var(--red-pale)}
+
+/* ── AUDIT LOG ── */
+.audit-row{display:flex;gap:14px;align-items:flex-start;padding:10px 22px;border-bottom:1px solid var(--cream-mid);font-size:13px}
+.audit-row:last-child{border-bottom:none}
+.audit-time{font-size:11.5px;color:var(--text-light);min-width:90px;flex-shrink:0;padding-top:1px}
+.audit-icon{font-size:16px;flex-shrink:0}
+.audit-text{flex:1;color:var(--charcoal)}
+.audit-text .au-actor{font-weight:700}
+.audit-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;margin-left:6px}
+.audit-tag.bid{background:var(--green-pale);color:var(--green-deep)}
+.audit-tag.user{background:var(--blue-pale);color:var(--blue)}
+.audit-tag.admin{background:var(--red-pale);color:var(--red)}
+.audit-tag.system{background:var(--cream-mid);color:var(--text-mid)}
+
+/* ── CHART ── */
+.bar-chart{display:flex;align-items:flex-end;gap:5px;height:110px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:3px 3px 0 0;cursor:pointer;position:relative;transition:opacity .2s}
+.bar:hover{opacity:.8}
+.bar-tooltip{position:absolute;top:-26px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+.bar:hover .bar-tooltip{opacity:1}
+.bar-lbl{font-size:9.5px;color:var(--text-light);text-align:center}
+
+/* Two column analytics */
+.analytics-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.chart-card{background:var(--white);border-radius:var(--r-lg);padding:20px;box-shadow:var(--sh-xs)}
+.chart-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--charcoal);margin-bottom:14px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--charcoal);color:white;padding:13px 18px;border-radius:var(--r-md);font-size:13px;max-width:280px;box-shadow:var(--sh-lg);border-left:4px solid var(--honey);transform:translateX(140%);transition:transform .3s;z-index:9999}
+.toast.on{transform:none}
+.toast strong{color:var(--honey);display:block;margin-bottom:2px}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.on{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:var(--r-lg);padding:30px;max-width:480px;width:100%;position:relative;transform:translateY(14px);transition:transform .3s;max-height:90vh;overflow-y:auto}
+.overlay.on .modal{transform:none}
+.modal-x{position:absolute;top:12px;right:12px;width:28px;height:28px;background:var(--cream-mid);border:none;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--charcoal);margin-bottom:5px}
+.modal .modal-sub{font-size:13.5px;color:var(--text-mid);margin-bottom:18px}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.form-label{font-size:12px;font-weight:700;color:var(--charcoal)}
+.form-input,.form-select,.form-textarea{border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);padding:9px 12px;font-size:13.5px;font-family:'Jost',sans-serif;color:var(--charcoal);outline:none;transition:border-color .2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--green-mid)}
+.form-textarea{min-height:80px;resize:vertical}
+
+/* ── RESPONSIVE ── */
+@media(max-width:880px){
+  .sidebar{display:none}
+  .main{padding:16px 16px 60px}
+  .analytics-row{grid-template-columns:1fr}
+  .live-grid{grid-template-columns:1fr}
+  .data-table{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="family-nest-auctions.html" class="logo-wrap">
+    <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+      <rect width="40" height="40" rx="8" fill="#C8A96E"/>
+      <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#2E5540"/>
+      <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#6B8F71" opacity=".75"/>
+      <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#A8C5A0" stroke-width="1.1" fill="none" opacity=".8"/>
+    </svg>
+    <div class="logo-text">
+      <div class="logo-name">Family Nest Auctions</div>
+      <div class="logo-sub">Admin Console</div>
+    </div>
+  </a>
+  <span class="admin-badge">🔐 Admin Access</span>
+  <div class="hd-right">
+    <button class="hd-right-btn" onclick="toast('System health: All systems operational ✅','🟢 System Status')">System Status</button>
+    <button class="hd-notif" onclick="toast('7 flagged items need review','🚨 Alerts')">🔔<span class="badge">7</span></button>
+    <div class="admin-avatar" title="Admin: Sarah H.">SA</div>
+  </div>
+</header>
+
+<div class="app-body">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Platform</div>
+      <button class="nav-item active" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span>Dashboard</button>
+      <button class="nav-item" onclick="switchTab('monitor',this)"><span class="nav-icon">🔴</span>Live Monitor<span class="nav-badge green">18</span></button>
+      <button class="nav-item" onclick="switchTab('analytics',this)"><span class="nav-icon">📈</span>Analytics</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Management</div>
+      <button class="nav-item" onclick="switchTab('listings',this)"><span class="nav-icon">📦</span>All Listings<span class="nav-badge honey">247</span></button>
+      <button class="nav-item" onclick="switchTab('users',this)"><span class="nav-icon">👥</span>Users</button>
+      <button class="nav-item" onclick="switchTab('sellers',this)"><span class="nav-icon">🏡</span>Sellers</button>
+      <button class="nav-item" onclick="switchTab('sales',this)"><span class="nav-icon">🗓️</span>Estate Sales</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Operations</div>
+      <button class="nav-item" onclick="switchTab('disputes',this)"><span class="nav-icon">⚖️</span>Disputes<span class="nav-badge red">3</span></button>
+      <button class="nav-item" onclick="switchTab('payouts',this)"><span class="nav-icon">💰</span>Payouts</button>
+      <button class="nav-item" onclick="switchTab('flags',this)"><span class="nav-icon">🚩</span>Flagged Items<span class="nav-badge red">7</span></button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">System</div>
+      <button class="nav-item" onclick="switchTab('audit',this)"><span class="nav-icon">📋</span>Audit Log</button>
+      <button class="nav-item" onclick="switchTab('settings',this)"><span class="nav-icon">⚙️</span>Platform Settings</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ── OVERVIEW ── -->
+    <div class="tab-panel active" id="panel-overview">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Platform Overview</div><div class="ph-sub">Thursday, February 19, 2026 · Real-time data</div></div>
+          <button class="btn-primary" onclick="toast('Generating platform report…','📊 Report')">📊 Export Report</button>
+        </div>
+      </div>
+
+      <div class="alert-strip red"><strong>🚨 3 active disputes</strong> require admin review — buyers and sellers are waiting for resolution.</div>
+      <div class="alert-strip honey"><strong>⚠️ 7 flagged listings</strong> pending review — possible condition misrepresentation.</div>
+      <div class="alert-strip blue"><strong>💡 Henderson Estate</strong> has 5 overdue shipments — automated reminder sent 12h ago.</div>
+
+      <div class="stat-grid">
+        <div class="stat-card g"><div class="stat-icon">💰</div><div class="stat-val">$84,220</div><div class="stat-label">Platform GMV This Month</div><div class="stat-delta up">↑ 22% MoM</div></div>
+        <div class="stat-card h"><div class="stat-icon">📦</div><div class="stat-val">247</div><div class="stat-label">Active Listings</div><div class="stat-delta up">↑ 31 new today</div></div>
+        <div class="stat-card b"><div class="stat-icon">👥</div><div class="stat-val">12,408</div><div class="stat-label">Registered Buyers</div><div class="stat-delta up">↑ 184 this week</div></div>
+        <div class="stat-card g"><div class="stat-icon">🏡</div><div class="stat-val">18</div><div class="stat-label">Active Estate Sales</div><div class="stat-delta up">↑ 3 new sales</div></div>
+        <div class="stat-card h"><div class="stat-icon">⚡</div><div class="stat-val">2,840</div><div class="stat-label">Bids Today</div><div class="stat-delta up">↑ 18% vs yesterday</div></div>
+        <div class="stat-card b"><div class="stat-icon">🏆</div><div class="stat-val">$12,630</div><div class="stat-label">Platform Revenue (15% fee)</div><div class="stat-delta up">↑ 22% MoM</div></div>
+        <div class="stat-card r"><div class="stat-icon">⚖️</div><div class="stat-val">3</div><div class="stat-label">Open Disputes</div><div class="stat-delta down">⚠️ Review needed</div></div>
+        <div class="stat-card p"><div class="stat-icon">⭐</div><div class="stat-val">4.87</div><div class="stat-label">Platform Avg. Rating</div><div class="stat-delta up">↑ All-time high</div></div>
+      </div>
+
+      <div class="analytics-row">
+        <div class="chart-card">
+          <div class="chart-title">Daily GMV — Last 14 Days</div>
+          <div class="bar-chart" id="gmv-chart"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px" id="gmv-labels"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">New Users — Last 14 Days</div>
+          <div class="bar-chart" id="user-chart"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px" id="user-labels"></div>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">⚡ Live Activity Feed</div><button class="btn-secondary" onclick="toast('Paused feed','⏸ Paused')">Pause Feed</button></div>
+        <div id="live-feed">
+          <div class="audit-row"><div class="audit-time">Just now</div><div class="audit-icon">⚡</div><div class="audit-text"><span class="au-actor">K***a</span> placed bid $187 on Victorian Armchair<span class="audit-tag bid">BID</span></div></div>
+          <div class="audit-row"><div class="audit-time">1 min ago</div><div class="audit-icon">👤</div><div class="audit-text"><span class="au-actor">New user</span> registered from Tampa, FL<span class="audit-tag user">USER</span></div></div>
+          <div class="audit-row"><div class="audit-time">2 min ago</div><div class="audit-icon">📦</div><div class="audit-text"><span class="au-actor">Henderson Estate</span> published new listing: Wedgwood Plates<span class="audit-tag system">LISTING</span></div></div>
+          <div class="audit-row"><div class="audit-time">4 min ago</div><div class="audit-icon">🏆</div><div class="audit-text"><span class="au-actor">P***l</span> won — Art Deco Brooch · Final: $1,340<span class="audit-tag bid">WIN</span></div></div>
+          <div class="audit-row"><div class="audit-time">6 min ago</div><div class="audit-icon">⚖️</div><div class="audit-text"><span class="au-actor">D***s T.</span> opened dispute #1042 — condition mismatch<span class="audit-tag admin">DISPUTE</span></div></div>
+          <div class="audit-row"><div class="audit-time">9 min ago</div><div class="audit-icon">💰</div><div class="audit-text"><span class="au-actor">Payout processed</span> to Morrison Collection · $4,210<span class="audit-tag system">PAYOUT</span></div></div>
+          <div class="audit-row"><div class="audit-time">12 min ago</div><div class="audit-icon">🚩</div><div class="audit-text">Listing flagged by system: <span class="au-actor">Edwardian Settee</span> — possible condition mismatch<span class="audit-tag admin">FLAG</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LIVE MONITOR ── -->
+    <div class="tab-panel" id="panel-monitor">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Live Auction Monitor</div><div class="ph-sub">18 auctions active · Real-time bid tracking</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-secondary" onclick="toast('All auctions paused','⏸ Paused')">⏸ Pause All</button>
+            <button class="btn-primary" onclick="toast('Refreshed','🔄 Refreshed')">🔄 Refresh</button>
+          </div>
+        </div>
+      </div>
+      <div class="live-grid" id="live-grid">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- ── ALL LISTINGS ── -->
+    <div class="tab-panel" id="panel-listings">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">All Listings</div><div class="ph-sub">247 active · 18 estate sales</div></div>
+          <div style="display:flex;gap:8px"><button class="btn-secondary" onclick="toast('Export CSV coming soon','📊 Export')">Export CSV</button></div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="table-toolbar">
+          <input class="tt-input" type="text" placeholder="🔍 Search listings…">
+          <select class="tt-select"><option>All Status</option><option>Live</option><option>Draft</option><option>Ended</option></select>
+          <select class="tt-select"><option>All Categories</option><option>Furniture</option><option>Jewelry</option><option>Art</option></select>
+          <select class="tt-select"><option>All Sellers</option><option>Henderson Estate</option><option>Morrison Collection</option><option>Whitfield Gallery</option></select>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Item</th><th>Seller</th><th>Status</th><th>Current Bid</th><th>Bids</th><th>Views</th><th>Ends</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Victorian Mahogany Armchair</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-4821-0047</div></td><td>Henderson Estate</td><td><span class="pill live">🟢 Live</span></td><td><strong>$187</strong></td><td>18</td><td>1,240</td><td style="color:var(--red);font-weight:600">1h 42m</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening listing…','View')">View</button><button class="tbl-action" onclick="toast('Editing listing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Listing paused','⏸ Paused')">Pause</button></div></td></tr>
+            <tr><td><strong>Art Deco Diamond Brooch, 1920s</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-2103-0088</div></td><td>Morrison Collection</td><td><span class="pill live">🟢 Live</span></td><td><strong>$1,250</strong></td><td>55</td><td>4,820</td><td>3h left</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action" onclick="toast('Editing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Paused','⏸ Paused')">Pause</button></div></td></tr>
+            <tr><td><strong>Signed Impressionist Oil Painting</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-3309-0021</div></td><td>Whitfield Gallery</td><td><span class="pill live">🟢 Live</span></td><td><strong>$2,800</strong></td><td>68</td><td>6,100</td><td>10h left</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action" onclick="toast('Editing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Paused','⏸ Paused')">Pause</button></div></td></tr>
+            <tr><td><strong>Edwardian Silk Velvet Settee</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-5012-0014 · 🚩 Flagged</div></td><td>Carmichael Estate</td><td><span class="pill flagged">🚩 Flagged</span></td><td><strong>$290</strong></td><td>12</td><td>880</td><td>20h left</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openDisputeModal('Edwardian Settee')">Review</button><button class="tbl-action danger" onclick="toast('Listing removed','❌ Removed')">Remove</button></div></td></tr>
+            <tr><td><strong>Bavarian Cuckoo Clock</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-7201-0033</div></td><td>Larson Collection</td><td><span class="pill live">🟢 Live</span></td><td><strong>$155</strong></td><td>14</td><td>720</td><td>6h left</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action" onclick="toast('Editing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Paused','⏸ Paused')">Pause</button></div></td></tr>
+            <tr><td><strong>First Edition Hemingway</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-7201-0041</div></td><td>Larson Collection</td><td><span class="pill live">🟢 Live</span></td><td><strong>$880</strong></td><td>38</td><td>2,100</td><td>9h left</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action" onclick="toast('Editing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Paused','⏸ Paused')">Pause</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── USERS ── -->
+    <div class="tab-panel" id="panel-users">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">User Management</div><div class="ph-sub">12,408 registered · 847 active today</div></div>
+          <button class="btn-primary" onclick="toast('Export CSV coming soon','📊 Export')">Export CSV</button>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="table-toolbar">
+          <input class="tt-input" type="text" placeholder="🔍 Search users by name, email, or ID…">
+          <select class="tt-select"><option>All Status</option><option>Active</option><option>Suspended</option><option>Banned</option></select>
+          <select class="tt-select"><option>All Roles</option><option>Buyer</option><option>Seller</option><option>Both</option></select>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Joined</th><th>Total Bids</th><th>Total Spent</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Jennifer M.</strong><div style="font-size:11.5px;color:var(--text-light)">jennifer.m@email.com · Tampa, FL</div></td><td>Buyer</td><td><span class="pill active">✅ Active</span></td><td>Jan 2025</td><td>142</td><td>$8,420</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Jennifer M.')">View</button><button class="tbl-action danger" onclick="toast('User suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
+            <tr><td><strong>Robert P.</strong><div style="font-size:11.5px;color:var(--text-light)">r.patterson@email.com · Chicago, IL</div></td><td>Buyer</td><td><span class="pill active">✅ Active</span></td><td>Mar 2025</td><td>87</td><td>$5,100</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Robert P.')">View</button><button class="tbl-action danger" onclick="toast('User suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
+            <tr><td><strong>Marcus T.</strong><div style="font-size:11.5px;color:var(--text-light)">m.thomas99@email.com · Dallas, TX</div></td><td>Buyer</td><td><span class="pill suspended">⚠️ Suspended</span></td><td>Jun 2025</td><td>23</td><td>$0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Marcus T.')">View</button><button class="tbl-action" onclick="toast('User reinstated','✅ Reinstated')">Reinstate</button><button class="tbl-action danger" onclick="toast('User banned','❌ Banned')">Ban</button></div></td></tr>
+            <tr><td><strong>Sarah K.</strong><div style="font-size:11.5px;color:var(--text-light)">sarah.k@email.com · Seattle, WA</div></td><td>Buyer</td><td><span class="pill active">✅ Active</span></td><td>Aug 2024</td><td>264</td><td>$18,700</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Sarah K.')">View</button><button class="tbl-action danger" onclick="toast('User suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
+            <tr><td><strong>Anonymous_X771</strong><div style="font-size:11.5px;color:var(--text-light)">Email hidden · Flagged for shill bidding</div></td><td>Buyer</td><td><span class="pill banned">❌ Banned</span></td><td>Dec 2025</td><td>0</td><td>$0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Anonymous_X771')">Details</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── SELLERS ── -->
+    <div class="tab-panel" id="panel-sellers">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Seller Management</div><div class="ph-sub">24 verified sellers · 3 pending approval</div></div>
+          <button class="btn-primary" onclick="toast('New seller onboarding coming soon','➕ New Seller')">➕ Onboard Seller</button>
+        </div>
+      </div>
+      <div class="alert-strip honey"><strong>⏳ 3 sellers pending approval</strong> — background check complete, awaiting admin sign-off.</div>
+      <div class="section-card">
+        <table class="data-table">
+          <thead><tr><th>Seller</th><th>Status</th><th>Rating</th><th>Active Listings</th><th>GMV (30d)</th><th>Disputes</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Henderson Estate Sales</strong><div style="font-size:11.5px;color:var(--text-light)">Atlanta, GA · Member since 2021</div></td><td><span class="pill verified">✅ Verified</span></td><td>⭐ 4.9 (312)</td><td>24</td><td>$12,840</td><td>0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening seller profile…','View')">View</button><button class="tbl-action" onclick="switchTab('payouts',null)">Payouts</button></div></td></tr>
+            <tr><td><strong>Morrison Collection</strong><div style="font-size:11.5px;color:var(--text-light)">Savannah, GA · Member since 2022</div></td><td><span class="pill verified">✅ Verified</span></td><td>⭐ 5.0 (188)</td><td>12</td><td>$8,420</td><td>0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action" onclick="switchTab('payouts',null)">Payouts</button></div></td></tr>
+            <tr><td><strong>Whitfield Gallery</strong><div style="font-size:11.5px;color:var(--text-light)">Charleston, SC · Member since 2023</div></td><td><span class="pill verified">✅ Verified</span></td><td>⭐ 4.8 (94)</td><td>8</td><td>$6,100</td><td>1</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action danger" onclick="openDisputeModal('Whitfield dispute')">Dispute</button></div></td></tr>
+            <tr><td><strong>Carmichael Estate</strong><div style="font-size:11.5px;color:var(--text-light)">Richmond, VA · Member since 2024</div></td><td><span class="pill pending">⏳ Pending Review</span></td><td>⭐ 4.6 (22)</td><td>5</td><td>$1,840</td><td>2</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Seller approved','✅ Approved')">Approve</button><button class="tbl-action danger" onclick="toast('Seller suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
+            <tr><td><strong>Larson Collection</strong><div style="font-size:11.5px;color:var(--text-light)">Denver, CO · Member since 2024</div></td><td><span class="pill pending">⏳ Pending Review</span></td><td>⭐ 4.9 (41)</td><td>9</td><td>$4,200</td><td>0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Seller approved','✅ Approved')">Approve</button><button class="tbl-action danger" onclick="toast('Seller suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── DISPUTES ── -->
+    <div class="tab-panel" id="panel-disputes">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Dispute Resolution</div><div class="ph-sub">3 open · 0 escalated · Avg. resolution time: 2.3 days</div></div>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">⚖️ Open Disputes (3)</div></div>
+        <table class="data-table">
+          <thead><tr><th>Dispute ID</th><th>Item</th><th>Buyer</th><th>Seller</th><th>Issue</th><th>Opened</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><strong>#1042</strong></td><td>Edwardian Silk Settee<div style="font-size:11.5px;color:var(--text-light)">$334 total paid</div></td><td>D***s T.</td><td>Carmichael Estate</td><td style="color:var(--red)">Condition mismatch — worse than listed</td><td>Today</td><td><span class="pill flagged">🔴 Open</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="openDisputeModal('Dispute #1042')">Resolve</button></div></td></tr>
+            <tr><td><strong>#1038</strong></td><td>Navajo Hand-Woven Blanket<div style="font-size:11.5px;color:var(--text-light)">$713 total paid</div></td><td>P***a W.</td><td>Thornton Estate</td><td>Shipping damage — item broken on arrival</td><td>Feb 17</td><td><span class="pill flagged">🔴 Open</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="openDisputeModal('Dispute #1038')">Resolve</button></div></td></tr>
+            <tr><td><strong>#1031</strong></td><td>Chinese Porcelain Vase<div style="font-size:11.5px;color:var(--text-light)">$1,265 total paid</div></td><td>M***l G.</td><td>Parker Estate</td><td>Item not as described — reproduction, not antique</td><td>Feb 15</td><td><span class="pill pending">🟡 Under Review</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="openDisputeModal('Dispute #1031')">Manage</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">✅ Recently Resolved (5)</div></div>
+        <table class="data-table">
+          <thead><tr><th>Dispute ID</th><th>Item</th><th>Resolution</th><th>Resolved</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>#1025</strong></td><td>Tiffany-Style Lamp</td><td>Full refund issued to buyer · Seller notified of condition standards</td><td>Feb 16</td><td><span class="pill resolved">✅ Resolved</span></td></tr>
+            <tr><td><strong>#1019</strong></td><td>Victorian Writing Desk</td><td>Partial refund $80 · Shipping damage confirmed via photos</td><td>Feb 14</td><td><span class="pill resolved">✅ Resolved</span></td></tr>
+            <tr><td><strong>#1011</strong></td><td>Art Deco Brooch</td><td>No action — buyer withdrew claim</td><td>Feb 12</td><td><span class="pill resolved">✅ Resolved</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAYOUTS ── -->
+    <div class="tab-panel" id="panel-payouts">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Payout Management</div><div class="ph-sub">$38,420 pending disbursement · 24 sellers</div></div>
+          <button class="btn-primary" onclick="toast('Batch payout initiated for all verified sellers','💰 Batch Payout')">💰 Run Batch Payout</button>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card g"><div class="stat-icon">💵</div><div class="stat-val">$84,220</div><div class="stat-label">Total GMV This Month</div></div>
+        <div class="stat-card h"><div class="stat-icon">🏦</div><div class="stat-val">$38,420</div><div class="stat-label">Pending Seller Payouts</div></div>
+        <div class="stat-card b"><div class="stat-icon">💸</div><div class="stat-val">$12,630</div><div class="stat-label">Platform Revenue (15%)</div></div>
+        <div class="stat-card g"><div class="stat-icon">✅</div><div class="stat-val">$33,170</div><div class="stat-label">Paid Out This Month</div></div>
+      </div>
+      <div class="section-card">
+        <table class="data-table">
+          <thead><tr><th>Seller</th><th>Available</th><th>Pending</th><th>Total Owed</th><th>Bank</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Henderson Estate</strong></td><td>$8,440</td><td>$3,220</td><td>$11,660</td><td>Chase ···4521</td><td><span class="pill processing">⚙️ Processing</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Payout approved for Henderson','✅ Approved')">Approve</button></div></td></tr>
+            <tr><td><strong>Morrison Collection</strong></td><td>$6,800</td><td>$0</td><td>$6,800</td><td>BofA ···8812</td><td><span class="pill active">✅ Ready</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Payout sent to Morrison','💸 Sent')">Send</button></div></td></tr>
+            <tr><td><strong>Whitfield Gallery</strong></td><td>$4,900</td><td>$1,200</td><td>$6,100</td><td>Wells Fargo ···3341</td><td><span class="pill pending">⏳ Dispute Hold</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="switchTab('disputes',null)">View Dispute</button></div></td></tr>
+            <tr><td><strong>Larson Collection</strong></td><td>$3,640</td><td>$560</td><td>$4,200</td><td>Chase ···9920</td><td><span class="pill active">✅ Ready</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Payout sent to Larson','💸 Sent')">Send</button></div></td></tr>
+            <tr><td><strong>Parker Estate</strong></td><td>$2,100</td><td>$1,265</td><td>$3,365</td><td>Citi ···7710</td><td><span class="pill pending">⏳ Dispute Hold</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="switchTab('disputes',null)">View Dispute</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── FLAGGED ITEMS ── -->
+    <div class="tab-panel" id="panel-flags">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Flagged Listings</div><div class="ph-sub">7 pending review · Auto-detected by system + buyer reports</div></div>
+        </div>
+      </div>
+      <div class="section-card">
+        <table class="data-table">
+          <thead><tr><th>Item</th><th>Seller</th><th>Flag Reason</th><th>Source</th><th>Flagged</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Edwardian Silk Velvet Settee</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-5012-0014</div></td><td>Carmichael Estate</td><td style="color:var(--red)">Condition photos don't match listing grade</td><td>Buyer report</td><td>Today</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openDisputeModal('Settee flag review')">Review</button><button class="tbl-action" onclick="toast('Listing approved — flag cleared','✅ Cleared')">Clear</button><button class="tbl-action danger" onclick="toast('Listing removed and seller notified','❌ Removed')">Remove</button></div></td></tr>
+            <tr><td><strong>Bavarian Cuckoo Clock</strong></td><td>Larson Collection</td><td>Description may be inaccurate — model year mismatch</td><td>System AI</td><td>Today</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openDisputeModal('Clock flag')">Review</button><button class="tbl-action" onclick="toast('Flag cleared','✅ Cleared')">Clear</button><button class="tbl-action danger" onclick="toast('Removed','❌ Removed')">Remove</button></div></td></tr>
+            <tr><td><strong>Vintage Rolex Oyster Perpetual</strong></td><td>Whitfield Gallery</td><td>Authenticity concern — no documentation</td><td>System AI</td><td>Yesterday</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openDisputeModal('Rolex flag')">Review</button><button class="tbl-action" onclick="toast('Approved — documentation verified','✅ Cleared')">Clear</button><button class="tbl-action danger" onclick="toast('Removed pending verification','❌ Removed')">Remove</button></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── AUDIT LOG ── -->
+    <div class="tab-panel" id="panel-audit">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Audit Log</div><div class="ph-sub">Complete record of all platform actions — immutable</div></div>
+          <div style="display:flex;gap:8px">
+            <select class="tt-select"><option>All Event Types</option><option>Bids</option><option>User Actions</option><option>Admin Actions</option><option>System</option></select>
+            <button class="btn-secondary" onclick="toast('Exporting audit log…','📊 Export')">Export</button>
+          </div>
+        </div>
+      </div>
+      <div class="section-card" style="padding:0">
+        <div class="audit-row"><div class="audit-time">2:14:32 PM</div><div class="audit-icon">⚡</div><div class="audit-text"><span class="au-actor">K***a</span> bid $187 on #FNA-4821-0047 (Victorian Armchair) from IP 74.125.x.x<span class="audit-tag bid">BID</span></div></div>
+        <div class="audit-row"><div class="audit-time">2:13:01 PM</div><div class="audit-icon">👤</div><div class="audit-text">New user registered: j.morales@email.com from Tampa, FL<span class="audit-tag user">USER</span></div></div>
+        <div class="audit-row"><div class="audit-time">2:11:44 PM</div><div class="audit-icon">📦</div><div class="audit-text"><span class="au-actor">Henderson Estate</span> published listing #FNA-4821-0054 — Wedgwood Plates<span class="audit-tag system">LISTING</span></div></div>
+        <div class="audit-row"><div class="audit-time">2:08:19 PM</div><div class="audit-icon">🏆</div><div class="audit-text"><span class="au-actor">P***l</span> won auction #FNA-2103-0088 (Art Deco Brooch) · Final: $1,340<span class="audit-tag bid">WIN</span></div></div>
+        <div class="audit-row"><div class="audit-time">2:05:47 PM</div><div class="audit-icon">🔐</div><div class="audit-text">Admin Sarah H. logged in from 192.168.1.x<span class="audit-tag admin">ADMIN</span></div></div>
+        <div class="audit-row"><div class="audit-time">2:02:31 PM</div><div class="audit-icon">⚖️</div><div class="audit-text"><span class="au-actor">D***s T.</span> opened dispute #1042 against Carmichael Estate<span class="audit-tag admin">DISPUTE</span></div></div>
+        <div class="audit-row"><div class="audit-time">1:58:14 PM</div><div class="audit-icon">💰</div><div class="audit-text">System: Payout $4,210 processed to Morrison Collection via ACH<span class="audit-tag system">PAYOUT</span></div></div>
+        <div class="audit-row"><div class="audit-time">1:55:02 PM</div><div class="audit-icon">🚩</div><div class="audit-text">System: Auto-flagged listing #FNA-5012-0014 (Edwardian Settee) — condition score mismatch<span class="audit-tag system">FLAG</span></div></div>
+        <div class="audit-row"><div class="audit-time">1:51:40 PM</div><div class="audit-icon">👤</div><div class="audit-text">Admin Sarah H. suspended user Anonymous_X771 — shill bidding detected<span class="audit-tag admin">ADMIN</span></div></div>
+        <div class="audit-row"><div class="audit-time">1:48:22 PM</div><div class="audit-icon">⚡</div><div class="audit-text"><span class="au-actor">M***e</span> placed max bid $4,500 on #FNA-3901-0012 (Vintage Rolex) via proxy bidding<span class="audit-tag bid">PROXY BID</span></div></div>
+        <div class="audit-row"><div class="audit-time">1:44:11 PM</div><div class="audit-icon">📦</div><div class="audit-text">Tracking updated: #9400111899223847382910 — Signed Painting delivered to New York, NY<span class="audit-tag system">SHIPPING</span></div></div>
+        <div class="audit-row"><div class="audit-time">1:40:58 PM</div><div class="audit-icon">🔔</div><div class="audit-text">System: Outbid notifications sent to 14 users on 3 auctions ending within 2 hours<span class="audit-tag system">NOTIF</span></div></div>
+      </div>
+    </div>
+
+    <!-- ── ANALYTICS ── -->
+    <div class="tab-panel" id="panel-analytics">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Platform Analytics</div><div class="ph-sub">Last 30 days · All sellers combined</div></div>
+          <select class="tt-select"><option>Last 30 days</option><option>Last 90 days</option><option>This year</option><option>All time</option></select>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card g"><div class="stat-icon">💰</div><div class="stat-val">$84,220</div><div class="stat-label">GMV</div><div class="stat-delta up">↑ 22% MoM</div></div>
+        <div class="stat-card h"><div class="stat-icon">🏆</div><div class="stat-val">412</div><div class="stat-label">Auctions Completed</div><div class="stat-delta up">↑ 15% MoM</div></div>
+        <div class="stat-card b"><div class="stat-icon">👤</div><div class="stat-val">+1,840</div><div class="stat-label">New Users</div><div class="stat-delta up">↑ 28% MoM</div></div>
+        <div class="stat-card g"><div class="stat-icon">💸</div><div class="stat-val">$12,630</div><div class="stat-label">Platform Revenue</div><div class="stat-delta up">↑ 22% MoM</div></div>
+        <div class="stat-card r"><div class="stat-icon">⚖️</div><div class="stat-val">0.73%</div><div class="stat-label">Dispute Rate</div><div class="stat-delta down">Industry avg: 2.1%</div></div>
+        <div class="stat-card p"><div class="stat-icon">🔁</div><div class="stat-val">68%</div><div class="stat-label">Repeat Buyer Rate</div><div class="stat-delta up">↑ 12% MoM</div></div>
+      </div>
+      <div class="analytics-row">
+        <div class="chart-card">
+          <div class="chart-title">GMV — Last 30 Days</div>
+          <div class="bar-chart" id="admin-gmv-chart"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Revenue by Category</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+            ${[['🪑 Furniture','$28,400','34%'],['🖼️ Art','$21,200','25%'],['💎 Jewelry','$15,600','19%'],['🥄 Silver/China','$8,400','10%'],['🏺 Rugs','$6,100','7%'],['Other','$4,520','5%']].map(([l,v,p])=>`<div style="display:flex;align-items:center;gap:10px"><span style="flex:1;font-size:12.5px;color:var(--text-mid)">${l}</span><div style="flex:2;background:var(--cream-dark);border-radius:4px;height:7px;overflow:hidden"><div style="width:${p};height:100%;background:var(--green-sage);border-radius:4px"></div></div><span style="min-width:50px;text-align:right;font-size:12.5px;font-weight:600;color:var(--charcoal)">${v}</span></div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PLATFORM SETTINGS ── */
+    <div class="tab-panel" id="panel-settings">
+      <div class="page-header"><div class="ph-title">Platform Settings</div><div class="ph-sub">System-wide configuration — changes affect all users and sellers</div></div>
+      <div class="section-card" style="padding:22px">
+        <div class="sc-head" style="padding:0 0 16px;border-bottom:1px solid var(--cream-mid);margin-bottom:18px"><div class="sc-title">💰 Fee Structure</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+          <div><label style="display:block;font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:5px">Buyer's Premium %</label><input class="form-input" type="number" value="15" style="width:100%"></div>
+          <div><label style="display:block;font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:5px">Seller Commission %</label><input class="form-input" type="number" value="0" style="width:100%"><div style="font-size:11px;color:var(--text-light);margin-top:3px">Currently: buyer pays full premium</div></div>
+          <div><label style="display:block;font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:5px">Minimum Starting Bid ($)</label><input class="form-input" type="number" value="1" style="width:100%"></div>
+          <div><label style="display:block;font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:5px">Payout Hold Days</label><input class="form-input" type="number" value="3" style="width:100%"><div style="font-size:11px;color:var(--text-light);margin-top:3px">Days after delivery confirmation</div></div>
+        </div>
+        <div class="sc-head" style="padding:16px 0;border-top:1px solid var(--cream-mid);border-bottom:1px solid var(--cream-mid);margin-bottom:18px"><div class="sc-title">⏱️ Auction Rules</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+          <div><label style="display:block;font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:5px">Anti-Sniping Extension (minutes)</label><input class="form-input" type="number" value="3" style="width:100%"><div style="font-size:11px;color:var(--text-light);margin-top:3px">Extend auction if bid in final N minutes</div></div>
+          <div><label style="display:block;font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:5px">Max Auction Duration (days)</label><input class="form-input" type="number" value="14" style="width:100%"></div>
+          <div><label style="display:block;font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:5px">Bid Increment Minimum ($)</label><input class="form-input" type="number" value="5" style="width:100%"></div>
+          <div><label style="display:block;font-size:12px;font-weight:700;color:var(--charcoal);margin-bottom:5px">Shipping Window (days)</label><input class="form-input" type="number" value="5" style="width:100%"><div style="font-size:11px;color:var(--text-light);margin-top:3px">Alert seller after this many days</div></div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button class="btn-secondary">Discard Changes</button>
+          <button class="btn-primary" onclick="toast('Platform settings saved','✅ Settings Saved')">Save Settings</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL — Dispute / User -->
+<div class="overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <h2 id="modal-title">Dispute Details</h2>
+    <p class="modal-sub" id="modal-sub"></p>
+    <div id="modal-body"></div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn-primary" onclick="toast('Action taken — parties notified','✅ Resolved');closeModal()">Take Action</button>
+      <button class="btn-secondary" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
+
+<script>
+function el(id){return document.getElementById(id)}
+function setText(id,v){const e=el(id);if(e)e.textContent=v}
+function toast(msg,title){
+  const t=el('the-toast');if(!t)return;
+  setText('t-ttl',title||'');setText('t-msg',msg);
+  t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3400);
+}
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const p=el('panel-'+name);if(p)p.classList.add('active');
+  if(btn)btn.classList.add('active');
+  else document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+name+"'"))n.classList.add('active');
+  });
+}
+function openDisputeModal(title){
+  setText('modal-title','⚖️ Dispute Review');
+  setText('modal-sub',title);
+  const body=el('modal-body');
+  if(body) body.innerHTML=`
+    <div style="background:var(--cream);border-radius:var(--r-sm);padding:14px;margin-bottom:14px">
+      <div style="font-size:13px;color:var(--text-mid);margin-bottom:8px"><strong style="color:var(--charcoal)">Buyer claim:</strong> Condition photos don't match actual condition. Item arrived with significant damage not disclosed in listing.</div>
+      <div style="font-size:13px;color:var(--text-mid)"><strong style="color:var(--charcoal)">Seller response:</strong> Awaiting response (sent 6h ago).</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <button style="padding:10px;background:var(--red-pale);border:1.5px solid var(--red);border-radius:var(--r-sm);color:var(--red);font-weight:700;cursor:pointer;font-family:'Jost',sans-serif" onclick="toast('Full refund issued','💸 Refunded');closeModal()">Issue Full Refund</button>
+      <button style="padding:10px;background:var(--honey-pale);border:1.5px solid var(--honey);border-radius:var(--r-sm);color:#7a5a20;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif" onclick="toast('Partial refund issued','💸 Partial')">Partial Refund</button>
+      <button style="padding:10px;background:var(--green-pale);border:1.5px solid var(--green-sage);border-radius:var(--r-sm);color:var(--green-deep);font-weight:700;cursor:pointer;font-family:'Jost',sans-serif" onclick="toast('Dispute dismissed — seller wins','✅ Dismissed');closeModal()">Dismiss — No Action</button>
+      <button style="padding:10px;background:var(--blue-pale);border:1.5px solid var(--blue);border-radius:var(--r-sm);color:var(--blue);font-weight:700;cursor:pointer;font-family:'Jost',sans-serif" onclick="toast('Escalated to senior admin','⬆️ Escalated');closeModal()">Escalate</button>
+    </div>`;
+  el('modal-overlay').classList.add('on');
+}
+function openUserModal(name){
+  setText('modal-title','👤 User Profile');
+  setText('modal-sub',name);
+  const body=el('modal-body');
+  if(body) body.innerHTML=`
+    <div style="display:grid;gap:8px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--cream-mid)"><span style="color:var(--text-mid)">Total bids placed</span><strong>142</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--cream-mid)"><span style="color:var(--text-mid)">Total spent</span><strong>$8,420</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--cream-mid)"><span style="color:var(--text-mid)">Disputes opened</span><strong>0</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--cream-mid)"><span style="color:var(--text-mid)">Account status</span><span class="pill active">✅ Active</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0"><span style="color:var(--text-mid)">Last active</span><strong>Today at 2:12 PM</strong></div>
+    </div>`;
+  el('modal-overlay').classList.add('on');
+}
+function closeModal(){el('modal-overlay').classList.remove('on');}
+el('modal-overlay').addEventListener('click',e=>{if(e.target===el('modal-overlay'))closeModal();});
+
+// Live auction cards
+const liveAuctions=[
+  {name:'Victorian Mahogany Armchair',icon:'🪑',bid:187,bids:18,ends:'1h 42m',urgent:true,estate:'Henderson'},
+  {name:'Art Deco Diamond Brooch',icon:'💎',bid:1250,bids:55,ends:'3h left',urgent:false,estate:'Morrison'},
+  {name:'Signed Impressionist Painting',icon:'🖼️',bid:2800,bids:68,ends:'10h left',urgent:false,estate:'Whitfield'},
+  {name:'Vintage Rolex Oyster',icon:'⌚',bid:4200,bids:89,ends:'1h 30m',urgent:true,estate:'Whitfield'},
+  {name:'First Edition Hemingway',icon:'📚',bid:880,bids:38,ends:'9h left',urgent:false,estate:'Larson'},
+  {name:'Persian Wool Rug 8×10',icon:'🏺',bid:215,bids:9,ends:'1d left',urgent:false,estate:'Henderson'},
+];
+function buildLiveGrid(){
+  const grid=el('live-grid');if(!grid)return;
+  grid.innerHTML=liveAuctions.map(a=>`
+    <div class="live-card">
+      <div class="lc-header">
+        <div class="lc-title">${a.icon} ${a.name}</div>
+        <span class="pill live" style="font-size:10px">🟢 Live</span>
+      </div>
+      <div class="lc-body">
+        <div class="lc-row"><span class="lc-lbl">Current bid</span><span class="lc-val">$${a.bid}</span></div>
+        <div class="lc-row"><span class="lc-lbl">Total bids</span><span class="lc-val">${a.bids}</span></div>
+        <div class="lc-row"><span class="lc-lbl">Ends in</span><span class="lc-val ${a.urgent?'red':''}">${a.ends}</span></div>
+        <div class="lc-row"><span class="lc-lbl">Seller</span><span class="lc-val">${a.estate}</span></div>
+      </div>
+      <div class="lc-footer">
+        <button class="lc-btn extend" onclick="toast('Extended 10 min: ${a.name}','⏰ Extended')">+10m</button>
+        <button class="lc-btn pause" onclick="toast('Paused: ${a.name}','⏸ Paused')">Pause</button>
+        <button class="lc-btn flag" onclick="toast('Flagged for review','🚩 Flagged')">Flag</button>
+      </div>
+    </div>`).join('');
+}
+
+// Charts
+function buildChart(containerId, vals, color, labelId, labelFn){
+  const c=el(containerId);if(!c)return;
+  const max=Math.max(...vals);
+  c.innerHTML=vals.map(v=>`<div class="bar-wrap"><div class="bar" style="height:${Math.max(8,Math.round(v/max*100))}%;background:${color}"><div class="bar-tooltip">${labelFn(v)}</div></div></div>`).join('');
+  const lb=el(labelId);
+  if(lb) lb.innerHTML=vals.map((_,i)=>`<div style="flex:1;font-size:9px;color:var(--text-light);text-align:center">${['F6','F7','F8','F9','F10','F11','F12','F13','F14','F15','F16','F17','F18','F19'][i]||'—'}</div>`).join('');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  buildLiveGrid();
+  buildChart('gmv-chart',[4800,3900,5200,4100,6300,5800,4400,5100,6800,4200,7200,5600,6100,4820],'var(--green-sage)','gmv-labels',v=>'$'+v.toLocaleString());
+  buildChart('user-chart',[42,38,55,48,71,66,44,59,72,41,88,64,77,58],'var(--honey)','user-labels',v=>v+' users');
+  buildChart('admin-gmv-chart',[5200,4800,6100,5500,7800,6400,5100,6900,8200,5600,9100,7200,8400,6100],'var(--green-sage)',null,v=>'$'+v.toLocaleString());
+  // Live feed auto-update
+  const feedEntries=[
+    '⚡ <span class="au-actor">R***l</span> placed bid $1,300 on Art Deco Brooch<span class="audit-tag bid">BID</span>',
+    '👤 New user registered from Austin, TX<span class="audit-tag user">USER</span>',
+    '⚡ <span class="au-actor">D***a</span> placed max bid $5,000 on Vintage Rolex<span class="audit-tag bid">PROXY</span>',
+    '📦 Baxter Estate uploaded 4 new photos to Writing Desk<span class="audit-tag system">LISTING</span>',
+  ];
+  let fi=0;
+  setInterval(()=>{
+    const feed=el('live-feed');if(!feed)return;
+    const row=document.createElement('div');
+    row.className='audit-row';
+    row.innerHTML=`<div class="audit-time">Just now</div><div class="audit-icon"></div><div class="audit-text">${feedEntries[fi++%feedEntries.length]}</div>`;
+    feed.insertBefore(row,feed.firstChild);
+    if(feed.children.length>12)feed.removeChild(feed.lastChild);
+  },6000);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+});
+</script>
+</body>
+</html>

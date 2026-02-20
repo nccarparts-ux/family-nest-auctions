@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Victorian Mahogany Armchair — Family Nest Auctions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green-deep:   #2E5540;
+    --green-mid:    #3D6B4F;
+    --green-sage:   #6B8F71;
+    --green-light:  #A8C5A0;
+    --green-pale:   #E8F0E8;
+    --honey:        #C8A96E;
+    --honey-light:  #DFC28E;
+    --honey-pale:   #F5EDD8;
+    --cream:        #FAF7F2;
+    --cream-mid:    #F0EBE3;
+    --cream-dark:   #E2D9CE;
+    --charcoal:     #2C2C2C;
+    --text-mid:     #666;
+    --text-light:   #999;
+    --white:        #fff;
+    --red:          #B03030;
+    --orange:       #D4804A;
+    --r-sm:8px; --r-md:14px; --r-lg:22px;
+    --sh-xs:0 2px 8px rgba(44,44,44,.06);
+    --sh-sm:0 4px 18px rgba(44,44,44,.09);
+    --sh-md:0 8px 36px rgba(44,44,44,.13);
+    --sh-lg:0 16px 56px rgba(44,44,44,.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden}
+
+  /* ── HEADER ── */
+  header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-deep);box-shadow:0 2px 20px rgba(0,0,0,.2)}
+  .ribbon{background:var(--honey);padding:5px 36px;display:flex;justify-content:space-between;font-size:11.5px;font-weight:600;color:var(--green-deep)}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:0 36px;height:70px}
+  .logo-wrap{display:flex;align-items:center;gap:11px;text-decoration:none}
+  .logo-mark{width:40px;height:40px}
+  .logo-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--white)}
+  .logo-sub{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--honey)}
+  .nav-links{display:flex;gap:26px;list-style:none}
+  .nav-links a{font-size:13.5px;font-weight:500;color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
+  .nav-links a:hover{color:var(--honey)}
+  .nav-ctas{display:flex;gap:10px;align-items:center}
+  .btn-ghost{padding:8px 18px;border:1.5px solid rgba(255,255,255,.3);border-radius:var(--r-sm);color:var(--white);font-size:13px;font-weight:500;background:transparent;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
+  .btn-ghost:hover{border-color:var(--honey);color:var(--honey)}
+  .btn-honey{padding:9px 20px;background:var(--honey);border:none;border-radius:var(--r-sm);color:var(--green-deep);font-size:13px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
+  .btn-honey:hover{background:var(--honey-light);transform:translateY(-1px)}
+
+  /* ── MOBILE NAV ── */
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:none}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--green-deep);z-index:700;flex-direction:column;align-items:center;justify-content:center;gap:32px;opacity:0;pointer-events:none;transition:opacity .3s}
+  .mobile-menu.open{display:flex;opacity:1;pointer-events:all}
+  .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--white);text-decoration:none;transition:color .2s}
+  .mobile-menu a:hover{color:var(--honey)}
+  .mobile-menu-ctas{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
+  .mobile-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:var(--white);font-size:28px;cursor:pointer}
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb{background:var(--white);border-bottom:1px solid var(--cream-dark);padding:12px 36px;margin-top:108px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-light);flex-wrap:wrap}
+  .breadcrumb a{color:var(--green-mid);text-decoration:none;font-weight:500}
+  .breadcrumb a:hover{text-decoration:underline}
+  .breadcrumb .sep{color:var(--cream-dark)}
+
+  /* ── MAIN LAYOUT ── */
+  .page-wrap{max-width:1240px;margin:0 auto;padding:36px 36px 80px;display:grid;grid-template-columns:1fr 400px;gap:44px;align-items:start}
+
+  /* ── LEFT COLUMN ── */
+  .left-col{}
+
+  /* GALLERY */
+  .gallery{margin-bottom:32px}
+  .gallery-main{position:relative;background:var(--cream-mid);border-radius:var(--r-lg);overflow:hidden;height:460px;display:flex;align-items:center;justify-content:center;cursor:zoom-in;margin-bottom:12px;user-select:none}
+  .gallery-main-emoji{font-size:140px;transition:transform .3s;pointer-events:none}
+  .gallery-main:hover .gallery-main-emoji{transform:scale(1.06)}
+  .gallery-zoom-btn{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.9);border:none;border-radius:var(--r-sm);padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;color:var(--charcoal);display:flex;align-items:center;gap:6px;transition:all .2s;backdrop-filter:blur(4px)}
+  .gallery-zoom-btn:hover{background:var(--white);box-shadow:var(--sh-sm)}
+  .gallery-share{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.9);border:none;border-radius:var(--r-sm);padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;color:var(--charcoal);display:flex;align-items:center;gap:6px;transition:all .2s;backdrop-filter:blur(4px)}
+  .gallery-share:hover{background:var(--white);box-shadow:var(--sh-sm)}
+  .gallery-counter{position:absolute;bottom:14px;right:14px;background:rgba(0,0,0,.55);color:white;font-size:12px;font-weight:600;padding:5px 12px;border-radius:100px;backdrop-filter:blur(4px)}
+  .gallery-nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.9);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all .2s;backdrop-filter:blur(4px)}
+  .gallery-nav-btn:hover{background:var(--white);box-shadow:var(--sh-sm)}
+  .gallery-nav-btn.prev{left:14px}
+  .gallery-nav-btn.next{right:14px}
+  .gallery-thumbs{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+  .gallery-thumbs::-webkit-scrollbar{height:4px}
+  .gallery-thumbs::-webkit-scrollbar-track{background:var(--cream-mid)}
+  .gallery-thumbs::-webkit-scrollbar-thumb{background:var(--cream-dark);border-radius:4px}
+  .thumb{width:80px;height:80px;flex-shrink:0;border-radius:var(--r-sm);background:var(--cream-mid);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;border:2.5px solid transparent;transition:all .2s}
+  .thumb:hover{border-color:var(--green-sage)}
+  .thumb.active{border-color:var(--green-deep);box-shadow:0 0 0 2px var(--green-pale)}
+
+  /* LIGHTBOX */
+  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+  .lightbox.on{opacity:1;pointer-events:all}
+  .lightbox-inner{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:60px}
+  .lightbox-emoji{font-size:220px;animation:lbIn .3s ease}
+  @keyframes lbIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+  .lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.12);border:none;color:white;font-size:28px;width:48px;height:48px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+  .lightbox-close:hover{background:rgba(255,255,255,.22)}
+  .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:none;color:white;font-size:22px;width:52px;height:52px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+  .lightbox-nav:hover{background:rgba(255,255,255,.22)}
+  .lightbox-prev{left:24px}
+  .lightbox-next{right:24px}
+  .lightbox-counter{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.15);color:white;font-size:13px;font-weight:600;padding:6px 18px;border-radius:100px;backdrop-filter:blur(6px)}
+
+  /* ITEM INFO */
+  .item-info{margin-bottom:28px}
+  .item-estate-tag{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green-mid);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .item-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3.5vw,40px);font-weight:700;line-height:1.1;color:var(--charcoal);margin-bottom:12px}
+  .item-meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+  .meta-pill{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;padding:5px 13px;border-radius:100px;background:var(--cream-mid);color:var(--charcoal)}
+  .meta-pill.green{background:var(--green-pale);color:var(--green-deep)}
+  .meta-pill.honey{background:var(--honey-pale);color:#7a5a20}
+  .item-desc{font-size:15px;line-height:1.8;color:var(--text-mid);margin-bottom:20px}
+  .item-desc p{margin-bottom:12px}
+
+  /* CONDITION REPORT */
+  .section-card{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-xs);margin-bottom:20px}
+  .sc-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  .cond-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .cond-item{background:var(--cream);border-radius:var(--r-sm);padding:12px 14px}
+  .cond-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:4px}
+  .cond-val{font-size:14px;font-weight:600;color:var(--charcoal)}
+  .cond-val.good{color:#2a6040}
+  .cond-val.fair{color:#8a5a10}
+  .cond-badge-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .cond-badge{display:inline-flex;align-items:center;gap:6px;background:#E6F4EC;color:#2A6040;font-size:13px;font-weight:700;padding:6px 14px;border-radius:100px}
+
+  /* BID HISTORY */
+  .bid-history-list{display:flex;flex-direction:column;gap:0}
+  .bh-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--cream-mid);font-size:14px}
+  .bh-row:last-child{border-bottom:none}
+  .bh-user{display:flex;align-items:center;gap:8px}
+  .bh-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--green-deep),var(--green-sage));color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+  .bh-name{font-weight:600;color:var(--charcoal)}
+  .bh-time{font-size:12px;color:var(--text-light)}
+  .bh-amt{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--green-deep)}
+  .bh-amt.top{color:var(--honey)}
+  .bh-winner-tag{font-size:10px;font-weight:700;background:var(--honey-pale);color:#7a5a20;padding:2px 8px;border-radius:100px;margin-left:6px}
+
+  /* SELLER INFO */
+  .seller-card{background:var(--green-pale);border-radius:var(--r-lg);padding:22px;display:flex;gap:16px;align-items:flex-start}
+  .seller-avatar{width:52px;height:52px;min-width:52px;border-radius:50%;background:linear-gradient(135deg,var(--green-deep),var(--green-sage));color:white;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
+  .seller-name{font-size:16px;font-weight:700;color:var(--charcoal);margin-bottom:2px}
+  .seller-stats{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}
+  .ss-item{font-size:12.5px;color:var(--text-mid)}
+  .ss-item strong{color:var(--charcoal)}
+  .stars{color:var(--honey);font-size:13px}
+
+  /* ── RIGHT COLUMN — BID PANEL ── */
+  .bid-panel{position:sticky;top:100px;background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-md);overflow:hidden}
+
+  .bp-header{background:var(--green-deep);padding:20px 24px}
+  .bp-estate{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green-light);margin-bottom:4px}
+  .bp-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--white);line-height:1.25}
+
+  .bp-body{padding:22px 24px}
+
+  /* live bid display */
+  .bp-current{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px}
+  .bp-bid-lbl{font-size:11px;color:var(--text-light);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
+  .bp-bid-amt{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--charcoal);line-height:1;transition:all .3s}
+  .bp-bid-amt.flash{color:var(--green-mid);transform:scale(1.06)}
+  .bp-bid-ct{font-size:13px;color:var(--text-mid);margin-top:2px}
+
+  /* countdown */
+  .bp-countdown{background:var(--cream);border-radius:var(--r-md);padding:14px 16px;margin-bottom:18px;display:flex;gap:0;justify-content:space-between}
+  .countdown-unit{text-align:center;flex:1}
+  .cu-num{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--charcoal);line-height:1}
+  .cu-num.urgent{color:var(--red)}
+  .cu-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);margin-top:2px}
+  .cu-sep{font-size:24px;color:var(--cream-dark);align-self:center;padding-bottom:14px}
+
+  /* cost breakdown */
+  .bp-cost{background:var(--cream);border-left:3px solid var(--green-sage);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:13px 15px;margin-bottom:18px}
+  .bp-cost-hd{font-weight:700;color:var(--green-deep);font-size:12.5px;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+  .bc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text-mid);padding:2.5px 0}
+  .bc-row.total{font-weight:700;color:var(--green-deep);border-top:1px solid var(--cream-dark);margin-top:7px;padding-top:7px}
+
+  /* proxy bid toggle */
+  .proxy-toggle{margin-bottom:18px}
+  .proxy-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .proxy-label{font-size:13.5px;font-weight:700;color:var(--charcoal)}
+  .proxy-label small{display:block;font-size:11.5px;font-weight:400;color:var(--text-mid);margin-top:1px}
+  .toggle-switch{position:relative;width:44px;height:24px;cursor:pointer}
+  .toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+  .toggle-track{position:absolute;inset:0;background:var(--cream-dark);border-radius:12px;transition:background .3s}
+  .toggle-switch input:checked + .toggle-track{background:var(--green-mid)}
+  .toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+  .toggle-switch input:checked ~ .toggle-thumb{transform:translateX(20px)}
+
+  .proxy-input-wrap{display:none}
+  .proxy-input-wrap.show{display:block}
+  .proxy-input-inner{background:var(--honey-pale);border-radius:var(--r-sm);padding:12px 14px;margin-top:8px}
+  .proxy-info{font-size:12px;color:#7a5a20;margin-bottom:8px;line-height:1.5}
+  .bp-input-group{display:flex;align-items:center;gap:0;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);overflow:hidden;background:var(--white)}
+  .bp-input-prefix{padding:12px 14px;background:var(--cream);font-size:16px;font-weight:700;color:var(--text-mid);border-right:1.5px solid var(--cream-dark)}
+  .bp-input-group input{flex:1;border:none;outline:none;padding:12px 14px;font-size:18px;font-weight:700;font-family:'Cormorant Garamond',serif;color:var(--charcoal);background:transparent}
+
+  /* quick bid buttons */
+  .quick-bids{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .qb-btn{flex:1;min-width:70px;padding:8px;background:var(--cream);border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--charcoal);cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;text-align:center}
+  .qb-btn:hover{border-color:var(--green-mid);background:var(--green-pale);color:var(--green-deep)}
+  .qb-btn.selected{border-color:var(--green-deep);background:var(--green-pale);color:var(--green-deep)}
+
+  /* place bid btn */
+  .btn-place-bid{width:100%;padding:16px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-md);font-size:16px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;margin-bottom:12px;letter-spacing:.02em}
+  .btn-place-bid:hover{background:var(--green-mid);transform:translateY(-1px);box-shadow:0 6px 24px rgba(46,85,64,.35)}
+
+  /* notify me */
+  .notify-section{border-top:1px solid var(--cream-mid);padding-top:16px;margin-top:4px}
+  .notify-hd{font-size:13px;font-weight:700;color:var(--charcoal);margin-bottom:10px}
+  .notify-options{display:flex;flex-direction:column;gap:8px}
+  .notify-option{display:flex;align-items:center;justify-content:space-between;background:var(--cream);border-radius:var(--r-sm);padding:10px 13px;cursor:pointer;transition:background .2s}
+  .notify-option:hover{background:var(--cream-mid)}
+  .no-left{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;color:var(--charcoal)}
+  .no-icon{font-size:16px}
+  .no-toggle{width:36px;height:20px;position:relative;cursor:pointer;flex-shrink:0}
+  .no-toggle input{opacity:0;width:0;height:0;position:absolute}
+  .no-track{position:absolute;inset:0;background:var(--cream-dark);border-radius:10px;transition:background .3s}
+  .no-toggle input:checked+.no-track{background:var(--green-mid)}
+  .no-thumb{position:absolute;top:2px;left:2px;width:16px;height:16px;background:white;border-radius:50%;transition:transform .3s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .no-toggle input:checked~.no-thumb{transform:translateX(16px)}
+
+  .notify-email-form{margin-top:12px;display:none}
+  .notify-email-form.show{display:block}
+  .nei-row{display:flex;gap:8px}
+  .nei-input{flex:1;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);padding:10px 13px;font-size:13.5px;font-family:'Jost',sans-serif;color:var(--charcoal);outline:none;transition:border-color .2s}
+  .nei-input:focus{border-color:var(--green-mid)}
+  .btn-notify{padding:10px 16px;background:var(--honey);color:var(--green-deep);border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;white-space:nowrap;transition:all .2s}
+  .btn-notify:hover{background:var(--honey-light)}
+
+  /* watchlist / share */
+  .bp-actions-row{display:flex;gap:10px;margin-top:12px}
+  .btn-watch-bp{flex:1;padding:11px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13.5px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--charcoal);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+  .btn-watch-bp:hover{border-color:var(--honey);color:var(--honey)}
+  .btn-share-bp{flex:1;padding:11px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13.5px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--charcoal);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+  .btn-share-bp:hover{border-color:var(--green-sage);color:var(--green-mid)}
+
+  /* ── RELATED ITEMS ── */
+  .related-sec{max-width:1240px;margin:0 auto;padding:0 36px 80px}
+  .related-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--charcoal);margin-bottom:24px}
+  .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+  .rel-card{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm);transition:all .3s;cursor:pointer;text-decoration:none;display:block}
+  .rel-card:hover{transform:translateY(-5px);box-shadow:var(--sh-lg)}
+  .rel-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:56px}
+  .rel-body{padding:16px}
+  .rel-estate{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green-mid);margin-bottom:4px}
+  .rel-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--charcoal);margin-bottom:8px;line-height:1.3}
+  .rel-footer{display:flex;justify-content:space-between;align-items:center}
+  .rel-bid{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal)}
+  .rel-time{font-size:12px;color:var(--text-light)}
+  .rel-time.u{color:var(--red)}
+
+  /* ── FOOTER ── */
+  footer{background:#1a2e20;padding:36px;text-align:center;color:rgba(255,255,255,.5);font-size:13px}
+  footer a{color:var(--honey);text-decoration:none;margin:0 10px}
+
+  /* ── TOAST ── */
+  .toast{position:fixed;bottom:22px;right:22px;background:var(--charcoal);color:white;padding:14px 20px;border-radius:var(--r-md);font-size:13.5px;max-width:290px;box-shadow:var(--sh-lg);border-left:4px solid var(--honey);transform:translateX(140%);transition:transform .3s;z-index:9999}
+  .toast.on{transform:none}
+  .toast strong{color:var(--honey);display:block;margin-bottom:3px}
+
+  /* ── CONFIRM OVERLAY ── */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+  .overlay.on{opacity:1;pointer-events:all}
+  .modal{background:var(--white);border-radius:var(--r-lg);padding:36px;max-width:460px;width:100%;position:relative;transform:translateY(18px) scale(.97);transition:all .3s}
+  .overlay.on .modal{transform:none}
+  .modal-x{position:absolute;top:14px;right:14px;width:30px;height:30px;background:var(--cream-mid);border:none;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+  .modal h2{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--charcoal);margin-bottom:6px}
+  .modal .sub{font-size:14px;color:var(--text-mid);margin-bottom:22px}
+  .modal-summary{background:var(--cream);border-radius:var(--r-sm);padding:16px;margin-bottom:20px}
+  .ms-row{display:flex;justify-content:space-between;font-size:13.5px;color:var(--text-mid);padding:3px 0}
+  .ms-total{display:flex;justify-content:space-between;font-weight:700;font-size:15px;color:var(--green-deep);border-top:1px solid var(--cream-dark);margin-top:8px;padding-top:8px}
+  .modal-agree{font-size:12.5px;color:var(--text-mid);margin-bottom:18px;line-height:1.6}
+  .modal-agree a{color:var(--green-mid);text-decoration:none}
+  .btn-confirm{width:100%;padding:14px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:15.5px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-confirm:hover{background:var(--green-mid)}
+  .btn-cancel{width:100%;padding:11px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-weight:500;font-family:'Jost',sans-serif;cursor:pointer;color:var(--text-mid);transition:all .2s;margin-top:8px}
+  .btn-cancel:hover{border-color:var(--red);color:var(--red)}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px){
+    .ribbon{display:none}
+    .breadcrumb{margin-top:70px}
+    .nav-links,.nav-ctas{display:none}
+    .hamburger{display:flex}
+    .page-wrap{grid-template-columns:1fr;padding:20px 18px 60px}
+    .bid-panel{position:static}
+    .gallery-main{height:300px}
+    .gallery-main-emoji{font-size:90px}
+    .lightbox-emoji{font-size:120px}
+    .cond-grid{grid-template-columns:1fr}
+    .related-sec{padding:0 18px 60px}
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="ribbon">
+    <span>📞 (678) 658-3083 &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="157c7b737a557374787c796c7b706661746076617c7a7b663b767a78">[email&#160;protected]</a></span>
+    <span>⭐ 5-Star Rated &nbsp;·&nbsp; Transparent Pricing &nbsp;·&nbsp; Trusted Nationwide</span>
+  </div>
+  <nav>
+    <a href="family-nest-auctions.html" class="logo-wrap">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="8" fill="#C8A96E"/>
+        <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#2E5540"/>
+        <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#6B8F71" opacity=".75"/>
+        <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#A8C5A0" stroke-width="1.1" fill="none" opacity=".8"/>
+      </svg>
+      <div>
+        <div class="logo-name">Family Nest Auctions</div>
+        <div class="logo-sub">Estate Sale Bidding Platform</div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="family-nest-auctions.html#auctions">Live Auctions</a></li>
+      <li><a href="family-nest-auctions.html#how">How It Works</a></li>
+      <li><a href="family-nest-auctions.html#why">Why Us</a></li>
+      <li><a href="#">Sell With Us</a></li>
+      <li><a href="#">Locations</a></li>
+    </ul>
+    <div class="nav-ctas">
+      <button class="btn-ghost" onclick="toast('Sign in coming soon!','👤 Account')">Sign In</button>
+      <button class="btn-honey" onclick="toast('Registration coming soon!','🏡 Join Free')">Start Bidding Free</button>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="family-nest-auctions.html#auctions" onclick="toggleMenu()">Live Auctions</a>
+  <a href="family-nest-auctions.html#how" onclick="toggleMenu()">How It Works</a>
+  <a href="family-nest-auctions.html#why" onclick="toggleMenu()">Why Us</a>
+  <a href="#" onclick="toggleMenu()">Sell With Us</a>
+  <a href="#" onclick="toggleMenu()">Locations</a>
+  <div class="mobile-menu-ctas">
+    <button class="btn-ghost" style="font-size:16px;padding:12px 32px" onclick="toggleMenu()">Sign In</button>
+    <button class="btn-honey" style="font-size:16px;padding:12px 32px" onclick="toggleMenu()">Start Bidding Free</button>
+  </div>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="family-nest-auctions.html">Home</a>
+  <span class="sep">›</span>
+  <a href="#">Live Auctions</a>
+  <span class="sep">›</span>
+  <a href="#">Henderson Estate — Atlanta, GA</a>
+  <span class="sep">›</span>
+  <span>Victorian Carved Mahogany Armchair</span>
+</div>
+
+<!-- MAIN PAGE -->
+<div class="page-wrap">
+
+  <!-- LEFT: Gallery + Details -->
+  <div class="left-col">
+
+    <!-- PHOTO GALLERY -->
+    <div class="gallery">
+      <div class="gallery-main" id="gallery-main" onclick="openLightbox(currentImg)">
+        <div class="gallery-main-emoji" id="gallery-emoji">🪑</div>
+        <button class="gallery-share" onclick="event.stopPropagation();shareItem()">📤 Share</button>
+        <button class="gallery-zoom-btn" onclick="event.stopPropagation();openLightbox(currentImg)">🔍 Zoom</button>
+        <div class="gallery-counter" id="gallery-counter">1 / 6</div>
+        <button class="gallery-nav-btn prev" onclick="event.stopPropagation();prevImg()">‹</button>
+        <button class="gallery-nav-btn next" onclick="event.stopPropagation();nextImg()">›</button>
+      </div>
+      <div class="gallery-thumbs" id="gallery-thumbs">
+        <div class="thumb active" onclick="setImg(0)">🪑</div>
+        <div class="thumb" onclick="setImg(1)">🔍</div>
+        <div class="thumb" onclick="setImg(2)">🪵</div>
+        <div class="thumb" onclick="setImg(3)">🧵</div>
+        <div class="thumb" onclick="setImg(4)">🏷️</div>
+        <div class="thumb" onclick="setImg(5)">📏</div>
+      </div>
+    </div>
+
+    <!-- ITEM INFO -->
+    <div class="item-info">
+      <div class="item-estate-tag">📍 Henderson Estate · Atlanta, GA · Sale #4821</div>
+      <h1 class="item-title">Victorian Carved Mahogany Armchair, c.1890</h1>
+      <div class="item-meta-row">
+        <span class="meta-pill green">✅ Excellent Condition</span>
+        <span class="meta-pill honey">🏺 Furniture &amp; Seating</span>
+        <span class="meta-pill">📦 Ships Nationwide</span>
+        <span class="meta-pill">🤖 AI-Verified Description</span>
+      </div>
+      <div class="item-desc">
+        <p>A magnificent example of late Victorian craftsmanship, this hand-carved mahogany armchair dates to approximately 1890. The piece features intricate floral and foliate carvings along the crest rail and arm terminals, characteristic of the period's ornate aesthetic sensibility.</p>
+        <p>The original horsehair and velvet upholstery has been expertly reupholstered in a period-appropriate deep burgundy velvet, preserving the chair's authentic silhouette while providing comfortable modern seating. All four legs retain their original brass casters in working condition.</p>
+        <p>Provenance: Acquired by the Henderson family circa 1920 from an Atlanta estate auction. Has remained in continuous family possession for over 100 years.</p>
+      </div>
+    </div>
+
+    <!-- CONDITION REPORT -->
+    <div class="section-card">
+      <div class="sc-title">🔎 Condition Report</div>
+      <div class="cond-badge-row">
+        <span class="cond-badge">✅ Excellent</span>
+        <span style="font-size:13px;color:var(--text-mid)">Professionally assessed by Family Nest team</span>
+      </div>
+      <div class="cond-grid">
+        <div class="cond-item"><div class="cond-label">Frame</div><div class="cond-val good">Excellent — No damage</div></div>
+        <div class="cond-item"><div class="cond-label">Carvings</div><div class="cond-val good">Excellent — Crisp detail</div></div>
+        <div class="cond-item"><div class="cond-label">Upholstery</div><div class="cond-val good">Excellent — Professionally restored</div></div>
+        <div class="cond-item"><div class="cond-label">Casters</div><div class="cond-val good">Good — All 4 functional</div></div>
+        <div class="cond-item"><div class="cond-label">Finish</div><div class="cond-val fair">Fair — Minor patina, age-appropriate</div></div>
+        <div class="cond-item"><div class="cond-label">Joinery</div><div class="cond-val good">Excellent — Tight, no wobble</div></div>
+      </div>
+      <div style="margin-top:14px;padding:12px 14px;background:var(--honey-pale);border-radius:var(--r-sm);font-size:13px;color:#7a5a20;line-height:1.6">
+        <strong>Disclosure:</strong> Minor surface patina consistent with age. One small (2mm) chip on rear leg, shown in photo 5. Does not affect structural integrity or aesthetics from standard viewing angles.
+      </div>
+    </div>
+
+    <!-- ITEM DETAILS -->
+    <div class="section-card">
+      <div class="sc-title">📐 Item Specifications</div>
+      <div class="cond-grid">
+        <div class="cond-item"><div class="cond-label">Dimensions</div><div class="cond-val">37"H × 26"W × 28"D</div></div>
+        <div class="cond-item"><div class="cond-label">Weight</div><div class="cond-val">~28 lbs</div></div>
+        <div class="cond-item"><div class="cond-label">Material</div><div class="cond-val">Solid Mahogany, Velvet</div></div>
+        <div class="cond-item"><div class="cond-label">Period</div><div class="cond-val">Victorian, c. 1890</div></div>
+        <div class="cond-item"><div class="cond-label">Origin</div><div class="cond-val">English, likely London</div></div>
+        <div class="cond-item"><div class="cond-label">Item #</div><div class="cond-val">#FNA-4821-0047</div></div>
+      </div>
+    </div>
+
+    <!-- BID HISTORY -->
+    <div class="section-card">
+      <div class="sc-title">📊 Bid History <span style="font-size:14px;font-weight:400;color:var(--text-light);font-family:'Jost',sans-serif" id="bid-hist-count">(18 bids)</span></div>
+      <div class="bid-history-list" id="bid-history">
+        <div class="bh-row"><div class="bh-user"><div class="bh-av">J★</div><div><div class="bh-name">J***n <span class="bh-winner-tag">Leading</span></div><div class="bh-time">2 min ago</div></div></div><div class="bh-amt top" id="top-bid">$187</div></div>
+        <div class="bh-row"><div class="bh-user"><div class="bh-av">M</div><div><div class="bh-name">M***e</div><div class="bh-time">11 min ago</div></div></div><div class="bh-amt">$175</div></div>
+        <div class="bh-row"><div class="bh-user"><div class="bh-av">R</div><div><div class="bh-name">R***d</div><div class="bh-time">24 min ago</div></div></div><div class="bh-amt">$160</div></div>
+        <div class="bh-row"><div class="bh-user"><div class="bh-av">S</div><div><div class="bh-name">S***h</div><div class="bh-time">45 min ago</div></div></div><div class="bh-amt">$145</div></div>
+        <div class="bh-row"><div class="bh-user"><div class="bh-av">T</div><div><div class="bh-name">T***s</div><div class="bh-time">1h 12min ago</div></div></div><div class="bh-amt">$130</div></div>
+        <div class="bh-row"><div class="bh-user"><div class="bh-av">A</div><div><div class="bh-name">A***a</div><div class="bh-time">1h 48min ago</div></div></div><div class="bh-amt">$110</div></div>
+      </div>
+      <div style="text-align:center;margin-top:14px"><button style="background:transparent;border:none;color:var(--green-mid);font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif" onclick="toast('Showing all 18 bids','Bid History')">Show all 18 bids ↓</button></div>
+    </div>
+
+    <!-- SELLER -->
+    <div class="section-card">
+      <div class="sc-title">🏡 About the Seller</div>
+      <div class="seller-card">
+        <div class="seller-avatar">H</div>
+        <div style="flex:1">
+          <div class="seller-name">Henderson Estate Sales · Atlanta, GA</div>
+          <div><span class="stars">★★★★★</span> <span style="font-size:13px;color:var(--text-mid)">4.9 rating · Member since 2021</span></div>
+          <div class="seller-stats">
+            <div class="ss-item"><strong>312</strong> items sold</div>
+            <div class="ss-item"><strong>98.7%</strong> positive feedback</div>
+            <div class="ss-item">Ships in <strong>3–5 days</strong></div>
+            <div class="ss-item"><strong>Insured</strong> shipping available</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /left-col -->
+
+  <!-- RIGHT: BID PANEL -->
+  <div class="bid-panel">
+    <div class="bp-header">
+      <div class="bp-estate">📍 Henderson Estate · Atlanta, GA</div>
+      <div class="bp-title">Victorian Carved Mahogany Armchair</div>
+    </div>
+    <div class="bp-body">
+
+      <!-- Current bid -->
+      <div class="bp-current">
+        <div>
+          <div class="bp-bid-lbl">Current Bid</div>
+          <div class="bp-bid-amt" id="bp-bid">$187</div>
+          <div class="bp-bid-ct" id="bp-bid-ct">18 bids · You are not the leader</div>
+        </div>
+        <button onclick="toggleWatch(this)" style="background:transparent;border:none;font-size:24px;cursor:pointer;padding:4px" title="Add to watchlist">🤍</button>
+      </div>
+
+      <!-- Countdown -->
+      <div class="bp-countdown">
+        <div class="countdown-unit"><div class="cu-num" id="cd-h">01</div><div class="cu-lbl">Hours</div></div>
+        <div class="cu-sep">:</div>
+        <div class="countdown-unit"><div class="cu-num urgent" id="cd-m">42</div><div class="cu-lbl">Minutes</div></div>
+        <div class="cu-sep">:</div>
+        <div class="countdown-unit"><div class="cu-num urgent" id="cd-s">18</div><div class="cu-lbl">Seconds</div></div>
+      </div>
+
+      <!-- Full cost breakdown -->
+      <div class="bp-cost">
+        <div class="bp-cost-hd">💡 Your Full Estimated Cost</div>
+        <div class="bc-row"><span>Current bid</span><span id="cost-bid">$187.00</span></div>
+        <div class="bc-row"><span>Buyer's premium (15%)</span><span id="cost-prem">$28.05</span></div>
+        <div class="bc-row"><span>Est. shipping to your ZIP</span><span id="cost-ship">~$65.00</span></div>
+        <div class="bc-row total"><span>Estimated total</span><span id="cost-total">~$280</span></div>
+      </div>
+
+      <!-- Quick bid buttons -->
+      <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:8px">Quick Bid</div>
+      <div class="quick-bids">
+        <div class="qb-btn" onclick="selectBid(this,200)">$200</div>
+        <div class="qb-btn" onclick="selectBid(this,225)">$225</div>
+        <div class="qb-btn" onclick="selectBid(this,250)">$250</div>
+        <div class="qb-btn" onclick="selectBid(this,300)">$300</div>
+      </div>
+
+      <!-- Proxy/max bid toggle -->
+      <div class="proxy-toggle">
+        <div class="proxy-hd">
+          <div class="proxy-label">Proxy (Max) Bidding
+            <small>Set a max — we'll bid for you automatically</small>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="proxy-toggle" onchange="toggleProxy(this)">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="proxy-input-wrap" id="proxy-wrap">
+          <div class="proxy-input-inner">
+            <div class="proxy-info">💡 We'll automatically bid on your behalf up to your maximum — only bidding what's needed to stay in the lead. You'll be notified if outbid above your max.</div>
+            <div class="bp-input-group">
+              <div class="bp-input-prefix">$</div>
+              <input type="number" id="proxy-amount" placeholder="Enter max bid" min="200" oninput="updateCosts(this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-place-bid" onclick="openConfirm()">Place Bid — Confirm Full Cost</button>
+
+      <!-- Email notifications -->
+      <div class="notify-section">
+        <div class="notify-hd">🔔 Notifications for This Item</div>
+        <div class="notify-options">
+          <div class="notify-option">
+            <div class="no-left"><span class="no-icon">📧</span>Email if outbid</div>
+            <label class="no-toggle" onclick="checkEmailForm()">
+              <input type="checkbox" id="notif-outbid" checked>
+              <div class="no-track"></div>
+              <div class="no-thumb"></div>
+            </label>
+          </div>
+          <div class="notify-option">
+            <div class="no-left"><span class="no-icon">⏰</span>Reminder 1 hour before end</div>
+            <label class="no-toggle" onclick="checkEmailForm()">
+              <input type="checkbox" id="notif-remind">
+              <div class="no-track"></div>
+              <div class="no-thumb"></div>
+            </label>
+          </div>
+          <div class="notify-option">
+            <div class="no-left"><span class="no-icon">🎉</span>Notify if I win</div>
+            <label class="no-toggle" onclick="checkEmailForm()">
+              <input type="checkbox" id="notif-win" checked>
+              <div class="no-track"></div>
+              <div class="no-thumb"></div>
+            </label>
+          </div>
+          <div class="notify-option">
+            <div class="no-left"><span class="no-icon">📦</span>Shipping updates</div>
+            <label class="no-toggle">
+              <input type="checkbox" id="notif-ship" checked>
+              <div class="no-track"></div>
+              <div class="no-thumb"></div>
+            </label>
+          </div>
+        </div>
+        <div class="notify-email-form" id="email-form">
+          <div style="font-size:12px;color:var(--text-mid);margin:10px 0 8px">Enter your email to receive notifications:</div>
+          <div class="nei-row">
+            <input class="nei-input" type="email" placeholder="you@email.com" id="notif-email">
+            <button class="btn-notify" onclick="saveNotifications()">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bp-actions-row">
+        <button class="btn-watch-bp" id="watch-btn" onclick="toggleWatchlist()">🤍 Watchlist</button>
+        <button class="btn-share-bp" onclick="shareItem()">📤 Share</button>
+      </div>
+
+    </div>
+  </div><!-- /bid-panel -->
+
+</div><!-- /page-wrap -->
+
+<!-- RELATED ITEMS -->
+<div class="related-sec">
+  <div class="related-title">More from Henderson Estate</div>
+  <div class="related-grid">
+    <a class="rel-card" href="auction-item-detail.html">
+      <div class="rel-img" style="background:linear-gradient(135deg,#f8f0e0,#f0e4c0)">🪔</div>
+      <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Antique Tiffany-Style Table Lamp</div><div class="rel-footer"><div class="rel-bid">$340</div><div class="rel-time">4h left</div></div></div>
+    </a>
+    <a class="rel-card" href="auction-item-detail.html">
+      <div class="rel-img" style="background:linear-gradient(135deg,#f0e8f4,#e0d0e8)">🏺</div>
+      <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Hand-Knotted Persian Wool Rug, 8×10</div><div class="rel-footer"><div class="rel-bid">$215</div><div class="rel-time">1d left</div></div></div>
+    </a>
+    <a class="rel-card" href="auction-item-detail.html">
+      <div class="rel-img" style="background:linear-gradient(135deg,#e8f0e8,#d0e4d0)">🖊️</div>
+      <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Victorian Mahogany Writing Desk</div><div class="rel-footer"><div class="rel-bid">$520</div><div class="rel-time u">2h left</div></div></div>
+    </a>
+    <a class="rel-card" href="auction-item-detail.html">
+      <div class="rel-img" style="background:linear-gradient(135deg,#f8f4e8,#f0e8d0)">🪞</div>
+      <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Gilded Victorian Wall Mirror, 36"</div><div class="rel-footer"><div class="rel-bid">$890</div><div class="rel-time">3d left</div></div></div>
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="family-nest-auctions.html">Home</a>
+  <a href="#">Live Auctions</a>
+  <a href="#">Privacy Policy</a>
+  <a href="#">Terms of Service</a>
+  <div style="margin-top:14px">© 2026 Family Nest Estate Solutions. All rights reserved.</div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <div class="lightbox-emoji" id="lb-emoji">🪑</div>
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lbPrev()">‹</button>
+    <button class="lightbox-nav lightbox-next" onclick="lbNext()">›</button>
+    <div class="lightbox-counter" id="lb-counter">Photo 1 of 6</div>
+  </div>
+</div>
+
+<!-- CONFIRM OVERLAY -->
+<div class="overlay" id="confirm-overlay">
+  <div class="modal">
+    <button class="modal-x" onclick="closeConfirm()">✕</button>
+    <h2>Confirm Your Bid</h2>
+    <p class="sub">Please review your complete cost before confirming.</p>
+    <div class="modal-summary">
+      <div class="ms-row"><span>Item</span><span>Victorian Mahogany Armchair</span></div>
+      <div class="ms-row"><span>Your bid</span><span id="confirm-bid">$200</span></div>
+      <div class="ms-row"><span>Buyer's premium (15%)</span><span id="confirm-prem">$30.00</span></div>
+      <div class="ms-row"><span>Est. shipping</span><span>~$65.00</span></div>
+      <div class="ms-total"><span>Estimated total if you win</span><span id="confirm-total">~$295</span></div>
+    </div>
+    <div class="modal-agree">By confirming, you agree that this bid is binding if you win. See our <a href="#">Terms of Service</a> and <a href="#">Buyer Protection Policy</a> for details.</div>
+    <button class="btn-confirm" onclick="submitBid()">✓ Confirm Bid</button>
+    <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── GALLERY STATE (safe to declare outside DOMContentLoaded) ──
+const imgs   = ['🪑','🔍','🪵','🧵','🏷️','📏'];
+const labels = ['Main view','Detail — carvings','Wood grain','Upholstery','Label/markings','Dimensions'];
+let currentImg = 0;
+let liveBid    = 187;
+let bidCount   = 18;
+let selectedBid = 200;
+let watching   = false;
+let totalSecs  = 1*3600 + 42*60 + 18;
+let bni        = 0;
+const bidNames = ['K***a','P***l','D***n','W***e','C***s','B***y'];
+
+// ── SAFE HELPERS ──
+// Null-safe getElementById — prevents "Cannot set properties of null"
+function el(id){ return document.getElementById(id); }
+function setText(id, val){ const e=el(id); if(e) e.textContent=val; }
+function setClass(id, cls, on){ const e=el(id); if(e) e.classList.toggle(cls,on); }
+
+// ── TOAST (declared early so inline onclick handlers can call it before DOMContentLoaded) ──
+function toast(msg, title){
+  const t=el('the-toast');
+  if(!t) return;
+  setText('t-ttl', title||'');
+  setText('t-msg', msg);
+  t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),3800);
+}
+
+// ── GALLERY ──
+function setImg(i){
+  currentImg = i;
+  setText('gallery-emoji', imgs[i]);
+  setText('gallery-counter', (i+1)+' / '+imgs.length);
+  document.querySelectorAll('.thumb').forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  setText('lb-emoji', imgs[i]);
+  setText('lb-counter', 'Photo '+(i+1)+' of '+imgs.length+' — '+labels[i]);
+}
+function nextImg(){ setImg((currentImg+1)%imgs.length); }
+function prevImg(){ setImg((currentImg-1+imgs.length)%imgs.length); }
+
+// ── LIGHTBOX ──
+function openLightbox(i){
+  setImg(i);
+  const lb=el('lightbox'); if(lb) lb.classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){
+  const lb=el('lightbox'); if(lb) lb.classList.remove('on');
+  document.body.style.overflow='';
+}
+function lbNext(){ nextImg(); }
+function lbPrev(){ prevImg(); }
+
+// ── COSTS ──
+function updateCosts(bidAmt){
+  const bid  = parseFloat(bidAmt)||liveBid;
+  const prem = bid*0.15;
+  const total= bid+prem+65;
+  setText('cost-bid',   '$'+bid.toFixed(2));
+  setText('cost-prem',  '$'+prem.toFixed(2));
+  setText('cost-total', '~$'+Math.round(total));
+  // keep panel current bid display in sync
+  const bpEl = el('bp-bid'); if(bpEl) bpEl.textContent='$'+liveBid;
+}
+
+// ── QUICK BID ──
+function selectBid(btnEl, amt){
+  document.querySelectorAll('.qb-btn').forEach(b=>b.classList.remove('selected'));
+  btnEl.classList.add('selected');
+  selectedBid = amt;
+  updateCosts(amt);
+  const pa = el('proxy-amount'); if(pa && el('proxy-toggle') && el('proxy-toggle').checked) pa.value=amt;
+}
+
+// ── PROXY TOGGLE ──
+function toggleProxy(cb){
+  const wrap=el('proxy-wrap'); if(wrap) wrap.classList.toggle('show',cb.checked);
+}
+
+// ── CONFIRM MODAL ──
+function openConfirm(){
+  const bid   = selectedBid||liveBid+10;
+  const prem  = (bid*0.15).toFixed(2);
+  const total = Math.round(bid+bid*0.15+65);
+  setText('confirm-bid',   '$'+bid);
+  setText('confirm-prem',  '$'+prem);
+  setText('confirm-total', '~$'+total);
+  const ov=el('confirm-overlay'); if(ov) ov.classList.add('on');
+}
+function closeConfirm(){
+  const ov=el('confirm-overlay'); if(ov) ov.classList.remove('on');
+}
+function submitBid(){
+  closeConfirm();
+  setText('bp-bid-ct', bidCount+' bids · 🟢 You are leading!');
+  setText('watch-btn', '❤️ Watchlist');
+  toast('Your bid is confirmed. We\'ll alert you if outbid.','🎉 Bid Placed Successfully!');
+}
+
+// ── WATCHLIST ──
+function toggleWatchlist(){
+  watching=!watching;
+  setText('watch-btn', watching?'❤️ Watchlist':'🤍 Watchlist');
+  toast(watching?'Added to your watchlist!':'Removed from watchlist.', watching?'❤️ Watching':'Removed');
+}
+function toggleWatch(btn){
+  watching=!watching;
+  if(btn) btn.textContent=watching?'❤️':'🤍';
+  setText('watch-btn', watching?'❤️ Watchlist':'🤍 Watchlist');
+  toast(watching?'Added to your watchlist!':'Removed from watchlist.', watching?'❤️ Watching':'Removed');
+}
+
+// ── NOTIFICATIONS ──
+function checkEmailForm(){
+  setTimeout(()=>{
+    const ids=['notif-outbid','notif-remind','notif-win','notif-ship'];
+    const any=ids.some(id=>{ const e=el(id); return e&&e.checked; });
+    const form=el('email-form'); if(form) form.classList.toggle('show',any);
+  },50);
+}
+function saveNotifications(){
+  const emailEl=el('notif-email');
+  const email=emailEl?emailEl.value:'';
+  if(!email){ toast('Please enter your email address','⚠️ Email Required'); return; }
+  toast('Notifications saved for '+email,'🔔 Notifications Set!');
+}
+
+// ── SHARE ──
+function shareItem(){
+  if(navigator.share){
+    navigator.share({title:'Victorian Mahogany Armchair — Family Nest Auctions',url:window.location.href});
+  } else if(navigator.clipboard){
+    navigator.clipboard.writeText(window.location.href).then(()=>toast('Link copied to clipboard!','📤 Link Copied'));
+  } else {
+    toast('Copy this URL to share','📤 Share');
+  }
+}
+
+// ── MOBILE NAV ──
+function toggleMenu(){
+  const h=el('hamburger'), m=el('mobile-menu');
+  if(h) h.classList.toggle('open');
+  if(m) m.classList.toggle('open');
+  document.body.style.overflow=(m&&m.classList.contains('open'))?'hidden':'';
+}
+
+// ── DOM-DEPENDENT SETUP — runs only after full DOM is ready ──
+document.addEventListener('DOMContentLoaded', function(){
+
+  // Countdown timer
+  function updateCountdown(){
+    if(totalSecs>0) totalSecs--;
+    const h=Math.floor(totalSecs/3600), m=Math.floor((totalSecs%3600)/60), s=totalSecs%60;
+    setText('cd-h', String(h).padStart(2,'0'));
+    setText('cd-m', String(m).padStart(2,'0'));
+    setText('cd-s', String(s).padStart(2,'0'));
+    const urgent=h===0;
+    ['cd-h','cd-m','cd-s'].forEach(id=>setClass(id,'urgent',urgent));
+  }
+  setInterval(updateCountdown, 1000);
+
+  // Live bid simulation
+  function addLiveBid(){
+    if(Math.random()>.6){
+      liveBid += Math.floor(Math.random()*15)+8;
+      bidCount++;
+      const bidEl=el('bp-bid');
+      if(bidEl){ bidEl.textContent='$'+liveBid; bidEl.classList.add('flash'); setTimeout(()=>bidEl.classList.remove('flash'),400); }
+      updateCosts(liveBid);
+      setText('bp-bid-ct',       bidCount+' bids · You are not the leader');
+      setText('top-bid',         '$'+liveBid);
+      setText('bid-hist-count',  '('+bidCount+' bids)');
+      const hist=el('bid-history');
+      if(hist){
+        const row=document.createElement('div');
+        row.className='bh-row';
+        const name=bidNames[bni++%bidNames.length];
+        row.innerHTML=`<div class="bh-user"><div class="bh-av">${name[0]}</div><div><div class="bh-name">${name} <span class="bh-winner-tag">Leading</span></div><div class="bh-time">just now</div></div></div><div class="bh-amt top">$${liveBid}</div>`;
+        hist.querySelectorAll('.bh-winner-tag').forEach(t=>{ if(!row.contains(t)) t.remove(); });
+        hist.insertBefore(row, hist.firstChild);
+        if(hist.children.length>6) hist.removeChild(hist.lastChild);
+      }
+      toast('New bid: $'+liveBid+' — You\'ve been outbid!','⚡ Outbid Alert');
+    }
+  }
+  setInterval(addLiveBid, 7500);
+
+  // Confirm overlay click-outside to close
+  const ov=el('confirm-overlay');
+  if(ov) ov.addEventListener('click',e=>{ if(e.target===ov) closeConfirm(); });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown',e=>{
+    const lb=el('lightbox');
+    if(lb&&lb.classList.contains('on')){
+      if(e.key

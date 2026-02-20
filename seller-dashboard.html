@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seller Dashboard — Family Nest Auctions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-deep:#2E5540;--green-mid:#3D6B4F;--green-sage:#6B8F71;--green-light:#A8C5A0;--green-pale:#E8F0E8;
+  --honey:#C8A96E;--honey-light:#DFC28E;--honey-pale:#F5EDD8;
+  --cream:#FAF7F2;--cream-mid:#F0EBE3;--cream-dark:#E2D9CE;
+  --charcoal:#2C2C2C;--text-mid:#666;--text-light:#999;--white:#fff;
+  --red:#B03030;--red-pale:#FDECEA;--orange:#D4804A;--blue:#3B6CB0;--blue-pale:#EBF0FA;
+  --r-sm:8px;--r-md:14px;--r-lg:22px;
+  --sh-xs:0 2px 8px rgba(44,44,44,.06);--sh-sm:0 4px 18px rgba(44,44,44,.09);
+  --sh-md:0 8px 36px rgba(44,44,44,.13);--sh-lg:0 16px 56px rgba(44,44,44,.18);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden;display:flex;flex-direction:column;min-height:100vh}
+
+/* ── HEADER ── */
+header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-deep);box-shadow:0 2px 20px rgba(0,0,0,.2);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;gap:16px}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-mark{width:36px;height:36px}
+.logo-text .logo-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--white);line-height:1}
+.logo-text .logo-sub{font-size:8.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--honey)}
+.hd-center{flex:1;display:flex;justify-content:center}
+.hd-badge{background:rgba(200,169,110,.18);border:1px solid rgba(200,169,110,.35);color:var(--honey);font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;letter-spacing:.06em}
+.hd-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.hd-notif{position:relative;background:transparent;border:none;cursor:pointer;font-size:20px;color:rgba(255,255,255,.75);padding:4px}
+.hd-notif .badge{position:absolute;top:-2px;right:-2px;background:var(--red);color:white;font-size:9px;font-weight:700;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--green-deep)}
+.hd-avatar{width:34px;height:34px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid rgba(255,255,255,.2)}
+.hd-view-site{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:none;padding:7px 14px;border:1.5px solid rgba(255,255,255,.2);border-radius:var(--r-sm);transition:all .2s;font-family:'Jost',sans-serif;background:transparent;cursor:pointer}
+.hd-view-site:hover{border-color:var(--honey);color:var(--honey)}
+
+/* ── SIDEBAR ── */
+.app-body{display:flex;margin-top:68px;flex:1}
+.sidebar{width:240px;min-width:240px;background:var(--white);border-right:1px solid var(--cream-dark);height:calc(100vh - 68px);position:sticky;top:68px;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--cream-dark);border-radius:2px}
+.sidebar-section{padding:20px 0 8px}
+.sidebar-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-light);padding:0 20px;margin-bottom:6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13.5px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:all .2s;border-left:3px solid transparent;user-select:none;border:none;background:transparent;width:100%;text-align:left;font-family:'Jost',sans-serif}
+.nav-item:hover{background:var(--cream);color:var(--charcoal)}
+.nav-item.active{background:var(--green-pale);color:var(--green-deep);font-weight:700;border-left:3px solid var(--green-deep)}
+.nav-icon{font-size:16px;width:22px;flex-shrink:0;text-align:center}
+.nav-badge{margin-left:auto;background:var(--honey);color:var(--green-deep);font-size:10px;font-weight:700;padding:1px 7px;border-radius:100px}
+.nav-badge.red{background:var(--red);color:white}
+.sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--cream-mid)}
+.seller-score-card{background:var(--green-pale);border-radius:var(--r-md);padding:14px}
+.sc-label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green-mid);margin-bottom:6px}
+.sc-score{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--green-deep);line-height:1}
+.sc-stars{color:var(--honey);font-size:14px;margin-bottom:2px}
+.sc-sub{font-size:11.5px;color:var(--text-mid)}
+
+/* ── MAIN ── */
+.main{flex:1;padding:28px 32px 60px;overflow-y:auto;min-width:0}
+.page-header{margin-bottom:28px}
+.ph-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:6px}
+.ph-title{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3vw,36px);font-weight:700;color:var(--charcoal)}
+.ph-sub{font-size:14px;color:var(--text-mid)}
+.btn-primary{padding:11px 22px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:7px}
+.btn-primary:hover{background:var(--green-mid);transform:translateY(-1px);box-shadow:0 4px 14px rgba(46,85,64,.3)}
+.btn-secondary{padding:10px 18px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--charcoal);transition:all .2s}
+.btn-secondary:hover{border-color:var(--green-mid);color:var(--green-mid)}
+
+/* Tab panels */
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── STAT CARDS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--r-lg);padding:20px;box-shadow:var(--sh-xs);position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.stat-card.green::before{background:linear-gradient(90deg,var(--green-deep),var(--green-sage))}
+.stat-card.honey::before{background:linear-gradient(90deg,var(--honey),var(--honey-light))}
+.stat-card.blue::before{background:linear-gradient(90deg,var(--blue),#6B9FD4)}
+.stat-card.red::before{background:linear-gradient(90deg,var(--red),var(--orange))}
+.stat-icon{font-size:24px;margin-bottom:10px}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--charcoal);line-height:1;margin-bottom:3px}
+.stat-label{font-size:12px;color:var(--text-mid);font-weight:500}
+.stat-delta{font-size:11.5px;margin-top:6px;font-weight:600}
+.stat-delta.up{color:#2a6040}
+.stat-delta.down{color:var(--red)}
+
+/* ── SECTION CARD ── */
+.section-card{background:var(--white);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-xs);margin-bottom:22px}
+.sc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:10px;flex-wrap:wrap}
+.sc-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal)}
+.sc-link{font-size:13px;font-weight:600;color:var(--green-mid);background:transparent;border:none;cursor:pointer;font-family:'Jost',sans-serif}
+.sc-link:hover{text-decoration:underline}
+
+/* ── LISTING ROWS ── */
+.listing-row{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--cream-mid)}
+.listing-row:last-child{border-bottom:none}
+.listing-thumb{width:64px;height:64px;min-width:64px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:28px}
+.listing-content{flex:1;min-width:0}
+.listing-name{font-size:14.5px;font-weight:700;color:var(--charcoal);margin-bottom:3px;line-height:1.3}
+.listing-meta{font-size:12px;color:var(--text-mid);margin-bottom:6px}
+.listing-tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px}
+.tag.live{background:var(--green-pale);color:var(--green-deep)}
+.tag.draft{background:var(--cream-mid);color:var(--text-mid)}
+.tag.pending{background:var(--honey-pale);color:#7a5a20}
+.tag.sold{background:#d4edda;color:#2a6040}
+.tag.ended{background:var(--red-pale);color:var(--red)}
+.listing-right{text-align:right;flex-shrink:0}
+.listing-bid{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal)}
+.listing-bids{font-size:11.5px;color:var(--text-light)}
+.listing-time{font-size:12px;color:var(--text-mid);margin-top:2px}
+.listing-time.urgent{color:var(--red);font-weight:600}
+.listing-actions{display:flex;gap:6px;margin-top:8px;justify-content:flex-end}
+.act-btn{padding:5px 12px;font-size:12px;font-weight:600;border-radius:var(--r-sm);cursor:pointer;font-family:'Jost',sans-serif;border:1.5px solid;transition:all .2s}
+.act-btn.edit{border-color:var(--green-sage);color:var(--green-mid);background:transparent}
+.act-btn.edit:hover{background:var(--green-pale)}
+.act-btn.danger{border-color:var(--red);color:var(--red);background:transparent}
+.act-btn.danger:hover{background:var(--red-pale)}
+.act-btn.view{border-color:var(--cream-dark);color:var(--text-mid);background:transparent}
+.act-btn.view:hover{border-color:var(--charcoal);color:var(--charcoal)}
+
+/* ── UPLOAD FORM ── */
+.upload-form{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12.5px;font-weight:700;color:var(--charcoal);letter-spacing:.03em}
+.form-label .req{color:var(--red)}
+.form-input,.form-select,.form-textarea{border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);padding:10px 13px;font-size:14px;font-family:'Jost',sans-serif;color:var(--charcoal);outline:none;transition:border-color .2s;background:var(--white)}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--green-mid);box-shadow:0 0 0 3px var(--green-pale)}
+.form-textarea{min-height:100px;resize:vertical}
+.form-select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer}
+.form-hint{font-size:11.5px;color:var(--text-light);margin-top:1px}
+
+/* Photo upload zone */
+.photo-zone{border:2px dashed var(--cream-dark);border-radius:var(--r-lg);padding:36px;text-align:center;cursor:pointer;transition:all .3s;background:var(--cream)}
+.photo-zone:hover,.photo-zone.dragover{border-color:var(--green-sage);background:var(--green-pale)}
+.pz-icon{font-size:36px;margin-bottom:10px}
+.pz-title{font-size:15px;font-weight:700;color:var(--charcoal);margin-bottom:4px}
+.pz-sub{font-size:13px;color:var(--text-light)}
+.photo-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.photo-thumb-uploaded{width:80px;height:80px;border-radius:var(--r-sm);background:var(--cream-mid);display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;cursor:pointer;border:2px solid var(--cream-dark)}
+.photo-thumb-uploaded .remove-btn{position:absolute;top:-6px;right:-6px;background:var(--red);color:white;border:none;border-radius:50%;width:18px;height:18px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.photo-thumb-uploaded.primary{border-color:var(--green-deep)}
+.photo-primary-badge{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);background:var(--green-deep);color:white;font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;white-space:nowrap}
+
+/* Condition row */
+.cond-picker{display:flex;gap:10px;flex-wrap:wrap}
+.cond-opt{flex:1;min-width:100px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);padding:10px 12px;cursor:pointer;transition:all .2s;text-align:center}
+.cond-opt:hover{border-color:var(--green-sage)}
+.cond-opt.selected{border-color:var(--green-deep);background:var(--green-pale)}
+.cond-opt-dot{width:10px;height:10px;border-radius:50%;margin:0 auto 5px}
+.cond-opt-label{font-size:12.5px;font-weight:700;color:var(--charcoal)}
+.cond-opt-desc{font-size:10.5px;color:var(--text-light);margin-top:2px}
+
+/* AI assist button */
+.ai-btn{display:flex;align-items:center;gap:7px;padding:9px 16px;background:linear-gradient(135deg,var(--honey-pale),#ede8d8);border:1.5px solid var(--honey);border-radius:var(--r-sm);font-size:13px;font-weight:700;color:#7a5a20;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
+.ai-btn:hover{background:linear-gradient(135deg,var(--honey),var(--honey-light));color:var(--green-deep)}
+
+/* ── PAYOUTS ── */
+.payout-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:20px}
+.pay-card{background:var(--cream);border-radius:var(--r-md);padding:16px}
+.pay-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:5px}
+.pay-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--charcoal)}
+.pay-val.green{color:var(--green-deep)}
+.pay-sub{font-size:12px;color:var(--text-mid);margin-top:2px}
+
+.payout-table{width:100%;border-collapse:collapse}
+.payout-table th{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-light);padding:8px 10px;text-align:left;border-bottom:2px solid var(--cream-dark)}
+.payout-table td{font-size:13.5px;padding:12px 10px;border-bottom:1px solid var(--cream-mid);vertical-align:middle}
+.payout-table tr:last-child td{border-bottom:none}
+.payout-table tr:hover td{background:var(--cream)}
+.pay-status{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:100px}
+.pay-status.paid{background:#d4edda;color:#2a6040}
+.pay-status.pending{background:var(--honey-pale);color:#7a5a20}
+.pay-status.processing{background:var(--blue-pale);color:var(--blue)}
+
+/* ── ANALYTICS ── */
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px}
+.chart-card{background:var(--white);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-xs)}
+.chart-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--charcoal);margin-bottom:16px}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:120px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;background:var(--green-sage);transition:height .5s ease;cursor:pointer;position:relative}
+.bar:hover{background:var(--green-mid)}
+.bar-tooltip{position:absolute;top:-26px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
+.bar:hover .bar-tooltip{opacity:1}
+.bar-label{font-size:10px;color:var(--text-light);text-align:center}
+.mini-table{width:100%}
+.mt-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--cream-mid);font-size:13px}
+.mt-row:last-child{border-bottom:none}
+.mt-label{color:var(--text-mid)}
+.mt-val{font-weight:700;color:var(--charcoal)}
+
+/* ── SALE MANAGEMENT ── */
+.sale-card{background:var(--white);border-radius:var(--r-lg);padding:18px;box-shadow:var(--sh-xs);margin-bottom:14px;display:flex;gap:16px;align-items:flex-start}
+.sale-status-bar{width:5px;min-height:80px;border-radius:3px;flex-shrink:0}
+.sale-status-bar.live{background:linear-gradient(180deg,var(--green-deep),var(--green-sage))}
+.sale-status-bar.upcoming{background:linear-gradient(180deg,var(--honey),var(--honey-light))}
+.sale-status-bar.draft{background:var(--cream-dark)}
+.sale-content{flex:1;min-width:0}
+.sale-title{font-size:16px;font-weight:700;color:var(--charcoal);margin-bottom:3px}
+.sale-meta{font-size:12.5px;color:var(--text-mid);margin-bottom:10px}
+.sale-stats{display:flex;gap:16px;flex-wrap:wrap}
+.ss-item{font-size:12.5px;color:var(--text-mid)}
+.ss-item strong{color:var(--charcoal)}
+.sale-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;align-self:center}
+
+/* ── SHIPPING ── */
+.ship-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--cream-mid);font-size:13px}
+.ship-row:last-child{border-bottom:none}
+.ship-row.header{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-light);padding-bottom:6px}
+.ship-status{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:100px}
+.ship-status.shipped{background:#d4edda;color:#2a6040}
+.ship-status.pending{background:var(--honey-pale);color:#7a5a20}
+.ship-status.label{background:var(--blue-pale);color:var(--blue)}
+.btn-ship{padding:5px 13px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif;transition:background .2s}
+.btn-ship:hover{background:var(--green-mid)}
+
+/* ── REVIEWS ── */
+.review-row{padding:14px 0;border-bottom:1px solid var(--cream-mid)}
+.review-row:last-child{border-bottom:none}
+.review-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:10px;flex-wrap:wrap}
+.review-name{font-size:14px;font-weight:700;color:var(--charcoal)}
+.review-date{font-size:12px;color:var(--text-light)}
+.review-stars{color:var(--honey);font-size:14px;margin-bottom:5px}
+.review-text{font-size:13.5px;color:var(--text-mid);line-height:1.7}
+.review-item{font-size:12px;color:var(--text-light);margin-top:4px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--charcoal);color:white;padding:14px 20px;border-radius:var(--r-md);font-size:13.5px;max-width:290px;box-shadow:var(--sh-lg);border-left:4px solid var(--honey);transform:translateX(140%);transition:transform .3s;z-index:9999}
+.toast.on{transform:none}
+.toast strong{color:var(--honey);display:block;margin-bottom:3px}
+
+/* ── OVERLAY / MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.on{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:var(--r-lg);padding:32px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative;transform:translateY(16px);transition:transform .3s}
+.overlay.on .modal{transform:none}
+.modal-x{position:absolute;top:14px;right:14px;width:30px;height:30px;background:var(--cream-mid);border:none;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--charcoal);margin-bottom:6px}
+.modal .modal-sub{font-size:14px;color:var(--text-mid);margin-bottom:22px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .main{padding:18px 16px 60px}
+  .analytics-grid{grid-template-columns:1fr}
+  .upload-form{grid-template-columns:1fr}
+  .upload-form .form-group.full{grid-column:1}
+  .ship-row{grid-template-columns:1fr 1fr;gap:8px}
+  .ship-row.header{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="family-nest-auctions.html" class="logo-wrap">
+    <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+      <rect width="40" height="40" rx="8" fill="#C8A96E"/>
+      <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#2E5540"/>
+      <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#6B8F71" opacity=".75"/>
+      <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#A8C5A0" stroke-width="1.1" fill="none" opacity=".8"/>
+    </svg>
+    <div class="logo-text">
+      <div class="logo-name">Family Nest Auctions</div>
+      <div class="logo-sub">Seller Portal</div>
+    </div>
+  </a>
+  <div class="hd-center">
+    <span class="hd-badge">🟢 Henderson Estate — 3 Live Sales</span>
+  </div>
+  <div class="hd-right">
+    <button class="hd-notif" onclick="toast('3 new shipping reminders','🔔 Notifications')">🔔<span class="badge">3</span></button>
+    <a href="auction-browse.html" class="hd-view-site">← View Site</a>
+    <div class="hd-avatar" onclick="toast('Account settings coming soon','👤 Profile')">HS</div>
+  </div>
+</header>
+
+<div class="app-body">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <button class="nav-item active" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span>Dashboard</button>
+      <button class="nav-item" onclick="switchTab('analytics',this)"><span class="nav-icon">📈</span>Analytics</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Listings</div>
+      <button class="nav-item" onclick="switchTab('listings',this)"><span class="nav-icon">📦</span>My Listings<span class="nav-badge">24</span></button>
+      <button class="nav-item" onclick="switchTab('upload',this)"><span class="nav-icon">➕</span>Add New Item</button>
+      <button class="nav-item" onclick="switchTab('sales',this)"><span class="nav-icon">🏡</span>My Estate Sales</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Orders</div>
+      <button class="nav-item" onclick="switchTab('shipping',this)"><span class="nav-icon">🚚</span>Shipping<span class="nav-badge red">5</span></button>
+      <button class="nav-item" onclick="switchTab('payouts',this)"><span class="nav-icon">💰</span>Payouts</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Reputation</div>
+      <button class="nav-item" onclick="switchTab('reviews',this)"><span class="nav-icon">⭐</span>Reviews</button>
+      <button class="nav-item" onclick="switchTab('settings',this)"><span class="nav-icon">⚙️</span>Settings</button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="seller-score-card">
+        <div class="sc-label">Seller Score</div>
+        <div class="sc-stars">★★★★★</div>
+        <div class="sc-score">4.9</div>
+        <div class="sc-sub">Top 5% of sellers · 312 sales</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- ── OVERVIEW ── -->
+    <div class="tab-panel active" id="panel-overview">
+      <div class="page-header">
+        <div class="ph-top">
+          <div>
+            <div class="ph-title">Good morning, Henderson Estate 👋</div>
+            <div class="ph-sub">Thursday, February 19, 2026 · 3 sales active · 5 items need attention</div>
+          </div>
+          <button class="btn-primary" onclick="switchTab('upload',document.querySelector('[onclick*=upload]'))">➕ Add New Item</button>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card green">
+          <div class="stat-icon">💰</div>
+          <div class="stat-val">$12,840</div>
+          <div class="stat-label">Revenue This Month</div>
+          <div class="stat-delta up">↑ 18% vs last month</div>
+        </div>
+        <div class="stat-card honey">
+          <div class="stat-icon">📦</div>
+          <div class="stat-val">24</div>
+          <div class="stat-label">Active Listings</div>
+          <div class="stat-delta up">↑ 6 new this week</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-val">187</div>
+          <div class="stat-label">Total Bids Today</div>
+          <div class="stat-delta up">↑ 42% vs yesterday</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-icon">🚚</div>
+          <div class="stat-val">5</div>
+          <div class="stat-label">Awaiting Shipment</div>
+          <div class="stat-delta down">⚠️ Action required</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">👁️</div>
+          <div class="stat-val">3,420</div>
+          <div class="stat-label">Listing Views Today</div>
+          <div class="stat-delta up">↑ 12% vs yesterday</div>
+        </div>
+        <div class="stat-card honey">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-val">4.9</div>
+          <div class="stat-label">Seller Rating</div>
+          <div class="stat-delta up">↑ 312 reviews total</div>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div class="section-card" style="border-left:4px solid var(--red);padding-left:18px">
+        <div class="sc-head"><div class="sc-title">⚠️ Action Required</div></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--red-pale);border-radius:var(--r-sm);padding:11px 14px">
+            <div><span style="font-size:13.5px;font-weight:700;color:var(--red)">🚚 5 items need to ship</span><span style="font-size:12.5px;color:var(--text-mid);margin-left:8px">Sold 3–7 days ago — buyers waiting</span></div>
+            <button class="btn-primary" style="padding:7px 14px;font-size:12.5px" onclick="switchTab('shipping',null)">Ship Now →</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--honey-pale);border-radius:var(--r-sm);padding:11px 14px">
+            <div><span style="font-size:13.5px;font-weight:700;color:#7a5a20">⏰ 2 listings ending in under 1 hour</span><span style="font-size:12.5px;color:var(--text-mid);margin-left:8px">Victorian Chair · Art Deco Ring</span></div>
+            <button class="btn-secondary" style="padding:7px 14px;font-size:12.5px" onclick="switchTab('listings',null)">Monitor →</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--blue-pale);border-radius:var(--r-sm);padding:11px 14px">
+            <div><span style="font-size:13.5px;font-weight:700;color:var(--blue)">💬 1 buyer message unanswered</span><span style="font-size:12.5px;color:var(--text-mid);margin-left:8px">Question about the Persian rug dimensions</span></div>
+            <button class="btn-secondary" style="padding:7px 14px;font-size:12.5px" onclick="toast('Messages coming soon','💬 Messages')">Reply →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Listings -->
+      <div class="section-card">
+        <div class="sc-head">
+          <div class="sc-title">🔴 Live Now — Top Listings</div>
+          <button class="sc-link" onclick="switchTab('listings',null)">View all 24 →</button>
+        </div>
+        <div>
+          <div class="listing-row">
+            <div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div>
+            <div class="listing-content">
+              <div class="listing-name">Victorian Carved Mahogany Armchair, c.1890</div>
+              <div class="listing-meta">Henderson Estate · Listed 3 days ago · 18 bids · 1,240 views</div>
+              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span></div>
+            </div>
+            <div class="listing-right">
+              <div class="listing-bid">$187</div>
+              <div class="listing-bids">18 bids</div>
+              <div class="listing-time urgent">1h 42m left</div>
+              <div class="listing-actions">
+                <button class="act-btn view" onclick="toast('Opening listing…','👁️ View')">View</button>
+                <button class="act-btn edit" onclick="openEditModal('Victorian Armchair')">Edit</button>
+              </div>
+            </div>
+          </div>
+          <div class="listing-row">
+            <div class="listing-thumb" style="background:linear-gradient(135deg,#f8f0e0,#f0e4c0)">🪔</div>
+            <div class="listing-content">
+              <div class="listing-name">Antique Tiffany-Style Table Lamp</div>
+              <div class="listing-meta">Henderson Estate · Listed 2 days ago · 24 bids · 890 views</div>
+              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span></div>
+            </div>
+            <div class="listing-right">
+              <div class="listing-bid">$340</div>
+              <div class="listing-bids">24 bids</div>
+              <div class="listing-time">4h left</div>
+              <div class="listing-actions">
+                <button class="act-btn view" onclick="toast('Opening listing…','👁️ View')">View</button>
+                <button class="act-btn edit" onclick="openEditModal('Tiffany Lamp')">Edit</button>
+              </div>
+            </div>
+          </div>
+          <div class="listing-row">
+            <div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8f4,#e0d0e8)">🏺</div>
+            <div class="listing-content">
+              <div class="listing-name">Hand-Knotted Persian Wool Rug, 8×10</div>
+              <div class="listing-meta">Henderson Estate · Listed 1 day ago · 9 bids · 560 views</div>
+              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#d1ecf1;color:#0c5460">✔ Good</span><span class="tag pending">💬 Message pending</span></div>
+            </div>
+            <div class="listing-right">
+              <div class="listing-bid">$215</div>
+              <div class="listing-bids">9 bids</div>
+              <div class="listing-time">1d left</div>
+              <div class="listing-actions">
+                <button class="act-btn view" onclick="toast('Opening listing…','👁️ View')">View</button>
+                <button class="act-btn edit" onclick="openEditModal('Persian Rug')">Edit</button>
+              </div>
+            </div>
+          </div>
+          <div class="listing-row">
+            <div class="listing-thumb" style="background:linear-gradient(135deg,#e8ecf4,#d8dcec)">🍽️</div>
+            <div class="listing-content">
+              <div class="listing-name">Set of 12 Wedgwood Dinner Plates</div>
+              <div class="listing-meta">Baxter Estate · Listed today · 7 bids · 220 views</div>
+              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span><span class="tag" style="background:#e8f4ff;color:#3B6CB0">🆕 New listing</span></div>
+            </div>
+            <div class="listing-right">
+              <div class="listing-bid">$120</div>
+              <div class="listing-bids">7 bids</div>
+              <div class="listing-time">1d left</div>
+              <div class="listing-actions">
+                <button class="act-btn view" onclick="toast('Opening listing…','👁️ View')">View</button>
+                <button class="act-btn edit" onclick="openEditModal('Wedgwood Plates')">Edit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── UPLOAD NEW ITEM ── -->
+    <div class="tab-panel" id="panel-upload">
+      <div class="page-header">
+        <div class="ph-top">
+          <div>
+            <div class="ph-title">Add New Item</div>
+            <div class="ph-sub">List an item for auction — AI will help write the description from your photos</div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="btn-secondary" onclick="toast('Saved as draft','💾 Draft Saved')">Save Draft</button>
+            <button class="btn-primary" onclick="publishItem()">🚀 Publish Listing</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">📸 Photos</div><span style="font-size:12px;color:var(--text-light)">Upload up to 12 photos. First photo = main image.</span></div>
+        <div class="photo-zone" id="drop-zone" onclick="addPhotos()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
+          <div class="pz-icon">📷</div>
+          <div class="pz-title">Click to upload or drag & drop</div>
+          <div class="pz-sub">JPG, PNG, HEIC · Max 10MB each · Up to 12 photos</div>
+        </div>
+        <div class="photo-grid" id="photo-grid">
+          <div class="photo-thumb-uploaded primary" onclick="toast('Set as primary photo','⭐ Primary')">🪑<span class="photo-primary-badge">Primary</span><button class="remove-btn" onclick="event.stopPropagation();this.parentElement.remove()">✕</button></div>
+          <div class="photo-thumb-uploaded" onclick="toast('Set as primary photo','⭐ Primary')">🔍<button class="remove-btn" onclick="event.stopPropagation();this.parentElement.remove()">✕</button></div>
+          <div class="photo-thumb-uploaded" onclick="toast('Set as primary photo','⭐ Primary')">🪵<button class="remove-btn" onclick="event.stopPropagation();this.parentElement.remove()">✕</button></div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="sc-head">
+          <div class="sc-title">📝 Item Details</div>
+          <button class="ai-btn" onclick="aiGenerateDesc()">🤖 AI Generate Description</button>
+        </div>
+        <div class="upload-form">
+          <div class="form-group full">
+            <label class="form-label">Item Title <span class="req">*</span></label>
+            <input class="form-input" type="text" id="item-title" placeholder="e.g. Victorian Carved Mahogany Armchair, c.1890">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Description <span class="req">*</span></label>
+            <textarea class="form-textarea" id="item-desc" placeholder="Describe the item — period, materials, provenance, notable features…" style="min-height:130px"></textarea>
+            <div class="form-hint">💡 Click "AI Generate Description" above to auto-fill from your photos</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category <span class="req">*</span></label>
+            <select class="form-select">
+              <option value="">Select category…</option>
+              <option>Furniture &amp; Seating</option>
+              <option>Art &amp; Décor</option>
+              <option>Jewelry &amp; Watches</option>
+              <option>Lighting</option>
+              <option>Rugs &amp; Textiles</option>
+              <option>Silver &amp; China</option>
+              <option>Collectibles</option>
+              <option>Books &amp; Ephemera</option>
+              <option>Garden &amp; Outdoor</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estate Sale</label>
+            <select class="form-select">
+              <option>Henderson Estate — Atlanta, GA</option>
+              <option>Baxter Estate — Nashville, TN</option>
+              <option>+ Create New Sale</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Starting Bid <span class="req">*</span></label>
+            <input class="form-input" type="number" placeholder="$1" min="1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reserve Price <span style="font-size:11px;color:var(--text-light)">(optional)</span></label>
+            <input class="form-input" type="number" placeholder="Hidden minimum…">
+            <div class="form-hint">Auction won't complete below this amount</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Auction Duration <span class="req">*</span></label>
+            <select class="form-select">
+              <option>3 days</option>
+              <option selected>5 days</option>
+              <option>7 days</option>
+              <option>10 days</option>
+              <option>14 days</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dimensions</label>
+            <input class="form-input" type="text" placeholder='e.g. 37"H × 26"W × 28"D'>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Weight (for shipping calc)</label>
+            <input class="form-input" type="text" placeholder="e.g. 28 lbs">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Period / Date</label>
+            <input class="form-input" type="text" placeholder="e.g. Victorian, c.1890">
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">🔎 Condition</div></div>
+        <div class="cond-picker" id="cond-picker">
+          <div class="cond-opt selected" onclick="selectCond(this)">
+            <div class="cond-opt-dot" style="background:#d4edda;border-color:#2a6040"></div>
+            <div class="cond-opt-label">Excellent</div>
+            <div class="cond-opt-desc">Near perfect, minimal signs of age</div>
+          </div>
+          <div class="cond-opt" onclick="selectCond(this)">
+            <div class="cond-opt-dot" style="background:#d1ecf1;border-color:#0c5460"></div>
+            <div class="cond-opt-label">Good</div>
+            <div class="cond-opt-desc">Normal wear consistent with age</div>
+          </div>
+          <div class="cond-opt" onclick="selectCond(this)">
+            <div class="cond-opt-dot" style="background:#fff3cd;border-color:#856404"></div>
+            <div class="cond-opt-label">Fair</div>
+            <div class="cond-opt-desc">Visible wear, repairs, or damage</div>
+          </div>
+          <div class="cond-opt" onclick="selectCond(this)">
+            <div class="cond-opt-dot" style="background:#f8d7da;border-color:#842029"></div>
+            <div class="cond-opt-label">As-Is</div>
+            <div class="cond-opt-desc">Sold as-is, damage present</div>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <label class="form-label" style="margin-bottom:6px;display:block">Condition Notes <span style="font-size:11px;color:var(--text-light)">(required for Fair or As-Is)</span></label>
+          <textarea class="form-textarea" placeholder="Describe any damage, repairs, or notable wear — be specific. Buyers appreciate full disclosure." style="min-height:80px"></textarea>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">📦 Shipping</div></div>
+        <div class="upload-form">
+          <div class="form-group">
+            <label class="form-label">Shipping Method</label>
+            <select class="form-select">
+              <option>Seller arranges shipping</option>
+              <option>USPS Priority Mail</option>
+              <option>UPS Ground</option>
+              <option>FedEx</option>
+              <option>White Glove Delivery</option>
+              <option>Local Pickup Only</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Estimated Shipping Cost</label>
+            <input class="form-input" type="text" placeholder="e.g. $45–65 depending on ZIP">
+            <div class="form-hint">Shown to buyers before bidding (transparency!)</div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+              <input type="checkbox" checked style="width:16px;height:16px;accent-color:var(--green-deep)">
+              Offer shipping insurance (recommended)
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:flex-end;padding-top:8px">
+        <button class="btn-secondary" onclick="toast('Saved as draft','💾 Draft Saved')">Save Draft</button>
+        <button class="btn-primary" style="font-size:15px;padding:13px 28px" onclick="publishItem()">🚀 Publish Listing</button>
+      </div>
+    </div>
+
+    <!-- ── MY LISTINGS ── -->
+    <div class="tab-panel" id="panel-listings">
+      <div class="page-header">
+        <div class="ph-top">
+          <div><div class="ph-title">My Listings</div><div class="ph-sub">24 total · 18 live · 3 drafts · 3 ended</div></div>
+          <button class="btn-primary" onclick="switchTab('upload',null)">➕ Add New Item</button>
+        </div>
+      </div>
+      <!-- Filter row -->
+      <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+        <button class="act-btn edit" style="padding:7px 16px;font-size:13px" onclick="toast('Showing all','Filter')">All (24)</button>
+        <button class="act-btn view" style="padding:7px 16px;font-size:13px" onclick="toast('Filtered to live','Filter')">🟢 Live (18)</button>
+        <button class="act-btn view" style="padding:7px 16px;font-size:13px" onclick="toast('Filtered to drafts','Filter')">📝 Drafts (3)</button>
+        <button class="act-btn view" style="padding:7px 16px;font-size:13px" onclick="toast('Filtered to ended','Filter')">🏁 Ended (3)</button>
+      </div>
+      <div class="section-card" style="padding:0">
+        <div style="padding:18px 22px;border-bottom:1px solid var(--cream-mid)">
+          <input class="form-input" type="text" placeholder="🔍 Search your listings…" style="max-width:360px">
+        </div>
+        <div style="padding:0 22px">
+          <!-- repeat listing rows -->
+          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div><div class="listing-content"><div class="listing-name">Victorian Carved Mahogany Armchair, c.1890</div><div class="listing-meta">Henderson Estate · 18 bids · 1,240 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$187</div><div class="listing-bids">18 bids</div><div class="listing-time urgent">1h 42m</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Victorian Armchair')">Edit</button></div></div></div>
+          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f8f0e0,#f0e4c0)">🪔</div><div class="listing-content"><div class="listing-name">Antique Tiffany-Style Table Lamp</div><div class="listing-meta">Henderson Estate · 24 bids · 890 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span></div></div><div class="listing-right"><div class="listing-bid">$340</div><div class="listing-bids">24 bids</div><div class="listing-time">4h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Tiffany Lamp')">Edit</button></div></div></div>
+          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8f4,#e0d0e8)">🏺</div><div class="listing-content"><div class="listing-name">Hand-Knotted Persian Wool Rug, 8×10</div><div class="listing-meta">Henderson Estate · 9 bids · 560 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#d1ecf1;color:#0c5460">✔ Good</span></div></div><div class="listing-right"><div class="listing-bid">$215</div><div class="listing-bids">9 bids</div><div class="listing-time">1d left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Persian Rug')">Edit</button></div></div></div>
+          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#e8f0e8,#d0e4d0)">🖊️</div><div class="listing-content"><div class="listing-name">Victorian Mahogany Writing Desk</div><div class="listing-meta">Henderson Estate · 31 bids · 1,880 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$520</div><div class="listing-bids">31 bids</div><div class="listing-time urgent">2h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Writing Desk')">Edit</button></div></div></div>
+          <div class="listing-row"><div class="listing-thumb" style="background:var(--cream-mid)">📝</div><div class="listing-content"><div class="listing-name">1920s Mahogany Side Table — DRAFT</div><div class="listing-meta">Henderson Estate · Not published · Created yesterday</div><div class="listing-tags"><span class="tag draft">📝 Draft</span></div></div><div class="listing-right"><div class="listing-bid">—</div><div class="listing-bids">Not live</div><div class="listing-time">—</div><div class="listing-actions"><button class="act-btn edit" onclick="toast('Opening draft…','Edit Draft')">Edit</button><button class="act-btn danger" onclick="toast('Draft deleted','Deleted')">Delete</button></div></div></div>
+          <div class="listing-row"><div class="listing-thumb" style="background:var(--cream-mid)">🏆</div><div class="listing-content"><div class="listing-name">Art Deco Diamond Brooch — SOLD</div><div class="listing-meta">Morrison Collection · 55 bids · Final price: $1,340</div><div class="listing-tags"><span class="tag sold">✅ Sold</span></div></div><div class="listing-right"><div class="listing-bid">$1,340</div><div class="listing-bids">55 bids</div><div class="listing-time">Ended Feb 17</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening archive…','View Archive')">View</button></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SHIPPING ── -->
+    <div class="tab-panel" id="panel-shipping">
+      <div class="page-header">
+        <div class="ph-top">
+          <div><div class="ph-title">Shipping</div><div class="ph-sub">5 items need attention · Ship within your stated timeframe to maintain your seller rating</div></div>
+          <button class="btn-primary" onclick="toast('Bulk label generation coming soon','📦 Bulk Ship')">📦 Generate All Labels</button>
+        </div>
+      </div>
+      <div class="section-card" style="border-left:4px solid var(--red)">
+        <div class="sc-head"><div class="sc-title" style="color:var(--red)">🔴 Overdue — Ship Today</div></div>
+        <div class="ship-row header"><div>Item</div><div>Buyer</div><div>Sold For</div><div>Status</div><div></div></div>
+        <div class="ship-row"><div><strong>Art Deco Diamond Brooch</strong><div style="font-size:12px;color:var(--text-light)">Morrison Collection · Sold 7 days ago</div></div><div>J***n M. · Tampa, FL</div><div>$1,340</div><div><span class="ship-status pending">⏳ Pending</span></div><div><button class="btn-ship" onclick="toast('Label generated for Art Deco Brooch','📦 Label Created')">Print Label</button></div></div>
+        <div class="ship-row"><div><strong>Sterling Silver Tea Service</strong><div style="font-size:12px;color:var(--text-light)">Morrison Collection · Sold 5 days ago</div></div><div>R***l P. · Chicago, IL</div><div>$512</div><div><span class="ship-status pending">⏳ Pending</span></div><div><button class="btn-ship" onclick="toast('Label generated for Tea Service','📦 Label Created')">Print Label</button></div></div>
+      </div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">🟡 Ship This Week</div></div>
+        <div class="ship-row header"><div>Item</div><div>Buyer</div><div>Sold For</div><div>Status</div><div></div></div>
+        <div class="ship-row"><div><strong>Wedgwood Dinner Plates (Set/12)</strong><div style="font-size:12px;color:var(--text-light)">Baxter Estate · Sold 2 days ago</div></div><div>A***a K. · Seattle, WA</div><div>$165</div><div><span class="ship-status label">📄 Label Ready</span></div><div><button class="btn-ship" style="background:var(--blue)" onclick="toast('Tracking marked active','✅ Shipped')">Mark Shipped</button></div></div>
+        <div class="ship-row"><div><strong>Botanical Print Collection</strong><div style="font-size:12px;color:var(--text-light)">Carmichael Lot · Sold 3 days ago</div></div><div>D***s T. · Boston, MA</div><div>$98</div><div><span class="ship-status label">📄 Label Ready</span></div><div><button class="btn-ship" style="background:var(--blue)" onclick="toast('Tracking marked active','✅ Shipped')">Mark Shipped</button></div></div>
+      </div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">✅ Recently Shipped</div></div>
+        <div class="ship-row header"><div>Item</div><div>Buyer</div><div>Sold For</div><div>Status</div><div></div></div>
+        <div class="ship-row"><div><strong>Signed Impressionist Oil Painting</strong><div style="font-size:12px;color:var(--text-light)">Whitfield Gallery · Shipped Feb 16</div></div><div>M***e R. · New York, NY</div><div>$3,220</div><div><span class="ship-status shipped">✅ In Transit</span></div><div><button class="act-btn view" onclick="toast('USPS: 9400111899223847382910','📦 Tracking')">Track</button></div></div>
+        <div class="ship-row"><div><strong>Victorian Wall Mirror, 36"</strong><div style="font-size:12px;color:var(--text-light)">Henderson Estate · Shipped Feb 14</div></div><div>S***h B. · Nashville, TN</div><div>$1,020</div><div><span class="ship-status shipped">✅ Delivered</span></div><div><button class="act-btn view" onclick="toast('Delivered Feb 17 at 2:34 PM','✅ Delivered')">Details</button></div></div>
+      </div>
+    </div>
+
+    <!-- ── PAYOUTS ── -->
+    <div class="tab-panel" id="panel-payouts">
+      <div class="page-header">
+        <div class="ph-top">
+          <div><div class="ph-title">Payouts</div><div class="ph-sub">Payments processed within 3 business days of confirmed delivery</div></div>
+          <button class="btn-primary" onclick="toast('Payout requested — arrives in 2 business days','💰 Payout Requested')">💰 Request Payout</button>
+        </div>
+      </div>
+      <div class="payout-summary">
+        <div class="pay-card"><div class="pay-label">Available Balance</div><div class="pay-val green">$8,440</div><div class="pay-sub">Ready to withdraw</div></div>
+        <div class="pay-card"><div class="pay-label">Pending</div><div class="pay-val">$3,220</div><div class="pay-sub">Awaiting delivery confirm</div></div>
+        <div class="pay-card"><div class="pay-label">This Month</div><div class="pay-val">$12,840</div><div class="pay-sub">Before 15% platform fee</div></div>
+        <div class="pay-card"><div class="pay-label">Platform Fee (15%)</div><div class="pay-val" style="color:var(--red)">$1,926</div><div class="pay-sub">Buyer's premium split</div></div>
+        <div class="pay-card"><div class="pay-label">Net This Month</div><div class="pay-val green">$10,914</div><div class="pay-sub">After all fees</div></div>
+      </div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">Transaction History</div></div>
+        <table class="payout-table">
+          <thead><tr><th>Item</th><th>Sold</th><th>Final Price</th><th>Fee (15%)</th><th>Net</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Victorian Mahogany Armchair</strong><div style="font-size:11.5px;color:var(--text-light)">Henderson Estate</div></td><td>Feb 19</td><td>$210</td><td>$31.50</td><td>$178.50</td><td><span class="pay-status processing">⚙️ Processing</span></td></tr>
+            <tr><td><strong>Signed Impressionist Painting</strong></td><td>Feb 17</td><td>$3,220</td><td>$483</td><td>$2,737</td><td><span class="pay-status pending">⏳ Pending delivery</span></td></tr>
+            <tr><td><strong>Art Deco Diamond Brooch</strong></td><td>Feb 14</td><td>$1,340</td><td>$201</td><td>$1,139</td><td><span class="pay-status paid">✅ Paid</span></td></tr>
+            <tr><td><strong>Sterling Silver Tea Service</strong></td><td>Feb 12</td><td>$512</td><td>$76.80</td><td>$435.20</td><td><span class="pay-status paid">✅ Paid</span></td></tr>
+            <tr><td><strong>Victorian Wall Mirror, 36"</strong></td><td>Feb 10</td><td>$1,020</td><td>$153</td><td>$867</td><td><span class="pay-status paid">✅ Paid</span></td></tr>
+            <tr><td><strong>Chinese Export Porcelain Vase</strong></td><td>Feb 8</td><td>$1,265</td><td>$189.75</td><td>$1,075.25</td><td><span class="pay-status paid">✅ Paid</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── ANALYTICS ── -->
+    <div class="tab-panel" id="panel-analytics">
+      <div class="page-header">
+        <div class="ph-top">
+          <div><div class="ph-title">Analytics</div><div class="ph-sub">Last 30 days · Henderson Estate portfolio</div></div>
+          <select class="form-select" style="width:auto"><option>Last 30 days</option><option>Last 90 days</option><option>This year</option><option>All time</option></select>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card green"><div class="stat-icon">💰</div><div class="stat-val">$12,840</div><div class="stat-label">Total Revenue</div><div class="stat-delta up">↑ 18% MoM</div></div>
+        <div class="stat-card honey"><div class="stat-icon">🏆</div><div class="stat-val">47</div><div class="stat-label">Items Sold</div><div class="stat-delta up">↑ 12% MoM</div></div>
+        <div class="stat-card blue"><div class="stat-icon">👁️</div><div class="stat-val">42.8K</div><div class="stat-label">Total Views</div><div class="stat-delta up">↑ 34% MoM</div></div>
+        <div class="stat-card green"><div class="stat-icon">⚡</div><div class="stat-val">$273</div><div class="stat-label">Avg. Selling Price</div><div class="stat-delta up">↑ 5% MoM</div></div>
+      </div>
+      <div class="analytics-grid">
+        <div class="chart-card">
+          <div class="chart-title">Revenue — Last 8 Weeks</div>
+          <div class="bar-chart" id="rev-chart"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:6px" id="rev-labels"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Top Categories by Revenue</div>
+          <div class="mini-table">
+            <div class="mt-row"><span class="mt-label">🪑 Furniture</span><span class="mt-val">$5,840 (45%)</span></div>
+            <div class="mt-row"><span class="mt-label">🖼️ Art &amp; Décor</span><span class="mt-val">$3,220 (25%)</span></div>
+            <div class="mt-row"><span class="mt-label">💎 Jewelry</span><span class="mt-val">$1,852 (14%)</span></div>
+            <div class="mt-row"><span class="mt-label">🥄 Silver &amp; China</span><span class="mt-val">$1,027 (8%)</span></div>
+            <div class="mt-row"><span class="mt-label">🏺 Rugs</span><span class="mt-val">$901 (7%)</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="analytics-grid">
+        <div class="chart-card">
+          <div class="chart-title">Sell-Through Rate</div>
+          <div style="margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span style="color:var(--text-mid)">Items sold vs. listed</span><span style="font-weight:700;color:var(--green-deep)">87%</span></div>
+            <div style="background:var(--cream-dark);border-radius:4px;height:10px;overflow:hidden"><div style="width:87%;height:100%;background:linear-gradient(90deg,var(--green-deep),var(--green-sage));border-radius:4px"></div></div>
+          </div>
+          <div style="margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span style="color:var(--text-mid)">Items with 10+ bids</span><span style="font-weight:700;color:var(--honey)">62%</span></div>
+            <div style="background:var(--cream-dark);border-radius:4px;height:10px;overflow:hidden"><div style="width:62%;height:100%;background:linear-gradient(90deg,var(--honey),var(--honey-light));border-radius:4px"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span style="color:var(--text-mid)">Items above reserve</span><span style="font-weight:700;color:var(--blue)">94%</span></div>
+            <div style="background:var(--cream-dark);border-radius:4px;height:10px;overflow:hidden"><div style="width:94%;height:100%;background:linear-gradient(90deg,var(--blue),#6B9FD4);border-radius:4px"></div></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">Buyer Geography</div>
+          <div class="mini-table">
+            <div class="mt-row"><span class="mt-label">Florida</span><span class="mt-val">22%</span></div>
+            <div class="mt-row"><span class="mt-label">California</span><span class="mt-val">18%</span></div>
+            <div class="mt-row"><span class="mt-label">New York</span><span class="mt-val">15%</span></div>
+            <div class="mt-row"><span class="mt-label">Texas</span><span class="mt-val">11%</span></div>
+            <div class="mt-row"><span class="mt-label">Other states</span><span class="mt-val">34%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REVIEWS ── -->
+    <div class="tab-panel" id="panel-reviews">
+      <div class="page-header">
+        <div class="ph-top">
+          <div><div class="ph-title">Reviews</div><div class="ph-sub">4.9 overall · 312 reviews · Top 5% of sellers</div></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:22px;margin-bottom:22px;align-items:start">
+        <div class="section-card" style="text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:var(--charcoal);line-height:1">4.9</div>
+          <div style="color:var(--honey);font-size:22px;margin:4px 0">★★★★★</div>
+          <div style="font-size:13px;color:var(--text-mid)">312 reviews</div>
+          <div style="margin-top:14px;display:flex;flex-direction:column;gap:5px">
+            ${[['Shipping Speed','4.9'],['Item Accuracy','5.0'],['Communication','4.8'],['Packaging','4.9']].map(([l,v])=>`<div style="display:flex;align-items:center;gap:7px;font-size:12px"><span style="flex:1;text-align:left;color:var(--text-mid)">${l}</span><div style="flex:1;background:var(--cream-dark);border-radius:3px;height:6px;overflow:hidden"><div style="width:${(parseFloat(v)/5*100)}%;height:100%;background:var(--honey);border-radius:3px"></div></div><span style="font-weight:700;color:var(--charcoal)">${v}</span></div>`).join('')}
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="sc-head"><div class="sc-title">Recent Reviews</div></div>
+          <div>
+            <div class="review-row"><div class="review-head"><div><div class="review-name">Jennifer M.</div><div class="review-stars">★★★★★</div></div><div class="review-date">Feb 18, 2026</div></div><div class="review-text">Absolutely beautiful piece — arrived exactly as described, packed incredibly well. The condition photos were spot-on, no surprises. Will definitely buy from this seller again!</div><div class="review-item">Item: Victorian Carved Mahogany Armchair</div></div>
+            <div class="review-row"><div class="review-head"><div><div class="review-name">Robert P.</div><div class="review-stars">★★★★★</div></div><div class="review-date">Feb 16, 2026</div></div><div class="review-text">Fast shipping, extremely well packaged, item exactly as described. Best estate auction experience I've had. The price transparency upfront is a huge plus — no surprises at checkout.</div><div class="review-item">Item: Sterling Silver Tea Service</div></div>
+            <div class="review-row"><div class="review-head"><div><div class="review-name">Sarah K.</div><div class="review-stars">★★★★☆</div></div><div class="review-date">Feb 14, 2026</div></div><div class="review-text">Item was in great condition. Shipping took a couple extra days beyond the stated window, but seller communicated proactively about the delay. Very happy with the purchase.</div><div class="review-item">Item: Persian Wool Rug 8×10</div></div>
+            <div class="review-row"><div class="review-head"><div><div class="review-name">David T.</div><div class="review-stars">★★★★★</div></div><div class="review-date">Feb 11, 2026</div></div><div class="review-text">Top-notch seller. The signed painting was beyond what I expected — gallery quality packaging, certificate of authenticity included. This is how estate auctions should work.</div><div class="review-item">Item: Signed Impressionist Oil Painting</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ESTATE SALES ── -->
+    <div class="tab-panel" id="panel-sales">
+      <div class="page-header">
+        <div class="ph-top">
+          <div><div class="ph-title">My Estate Sales</div><div class="ph-sub">3 active · 2 upcoming · 8 completed</div></div>
+          <button class="btn-primary" onclick="toast('New sale creation coming soon','🏡 New Sale')">🏡 Create New Sale</button>
+        </div>
+      </div>
+      <div class="sale-card"><div class="sale-status-bar live"></div><div class="sale-content"><div class="sale-title">Henderson Estate — Atlanta, GA</div><div class="sale-meta">🟢 Live · Feb 15 – Feb 25, 2026 · 18 items listed</div><div class="sale-stats"><span class="ss-item">💰 <strong>$5,840</strong> sold so far</span><span class="ss-item">⚡ <strong>187</strong> bids today</span><span class="ss-item">👁️ <strong>12,400</strong> total views</span><span class="ss-item">📦 <strong>6</strong> items still live</span></div></div><div class="sale-actions"><button class="btn-secondary" onclick="toast('Opening sale manager…','🏡 Manage')">Manage</button><button class="btn-primary" onclick="switchTab('upload',null)">+ Add Items</button></div></div>
+      <div class="sale-card"><div class="sale-status-bar live"></div><div class="sale-content"><div class="sale-title">Morrison Collection — Savannah, GA</div><div class="sale-meta">🟢 Live · Feb 10 – Feb 20, 2026 · 12 items</div><div class="sale-stats"><span class="ss-item">💰 <strong>$4,210</strong> sold</span><span class="ss-item">⚡ <strong>94</strong> bids today</span><span class="ss-item">👁️ <strong>8,200</strong> views</span></div></div><div class="sale-actions"><button class="btn-secondary" onclick="toast('Opening sale manager…','🏡 Manage')">Manage</button></div></div>
+      <div class="sale-card"><div class="sale-status-bar upcoming"></div><div class="sale-content"><div class="sale-title">Baxter Estate — Nashville, TN</div><div class="sale-meta">🟡 Upcoming · Starts Feb 24, 2026 · 8 items ready, 4 drafts</div><div class="sale-stats"><span class="ss-item">📝 <strong>12</strong> total items</span><span class="ss-item">⏳ Starts in <strong>5 days</strong></span></div></div><div class="sale-actions"><button class="btn-secondary" onclick="toast('Editing sale details…','✏️ Edit')">Edit</button><button class="btn-primary" onclick="switchTab('upload',null)">+ Add Items</button></div></div>
+      <div class="sale-card"><div class="sale-status-bar draft"></div><div class="sale-content"><div class="sale-title">Carmichael Lot — Richmond, VA</div><div class="sale-meta">📝 Draft · Not yet scheduled · 2 items added</div><div class="sale-stats"><span class="ss-item">📝 <strong>2</strong> items so far</span></div></div><div class="sale-actions"><button class="btn-secondary" onclick="toast('Editing draft…','✏️ Edit')">Edit</button><button class="btn-danger" onclick="toast('Draft deleted','🗑️ Deleted')" style="padding:10px 18px;background:transparent;border:1.5px solid var(--red);color:var(--red);border-radius:var(--r-sm);font-size:13px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s">Delete</button></div></div>
+    </div>
+
+    <!-- ── SETTINGS ── -->
+    <div class="tab-panel" id="panel-settings">
+      <div class="page-header"><div class="ph-title">Account Settings</div><div class="ph-sub">Manage your seller profile, payout method, and notification preferences</div></div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">🏢 Business Profile</div></div>
+        <div class="upload-form">
+          <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" value="Henderson Estate Sales"></div>
+          <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" value="Sarah Henderson"></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value="(678) 658-3083"></div>
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="henderson@familynestauctions.com"></div>
+          <div class="form-group full"><label class="form-label">Business Address</label><input class="form-input" value="1234 Peachtree St NE, Atlanta, GA 30309"></div>
+          <div class="form-group full"><label class="form-label">Bio / About</label><textarea class="form-textarea">Family-owned estate liquidation service serving Atlanta and surrounding areas since 2014. We specialize in fine antiques, jewelry, and quality home furnishings from distinguished estate collections.</textarea></div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end">
+          <button class="btn-secondary">Cancel</button>
+          <button class="btn-primary" onclick="toast('Profile saved successfully','✅ Saved')">Save Changes</button>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">💳 Payout Method</div></div>
+        <div style="background:var(--green-pale);border-radius:var(--r-md);padding:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+          <div style="display:flex;align-items:center;gap:12px"><div style="font-size:24px">🏦</div><div><div style="font-weight:700;color:var(--charcoal)">Bank Account — Chase ···4521</div><div style="font-size:12.5px;color:var(--text-mid)">ACH transfer · 2–3 business days</div></div></div>
+          <button class="btn-secondary" onclick="toast('Bank update coming soon','💳 Update')">Update Bank</button>
+        </div>
+      </div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">🔔 Notification Settings</div></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          ${[['New bid on your listing','Email + SMS','notif-bid'],['Item sold','Email + SMS','notif-sold'],['Shipping reminder (3 days)','Email','notif-ship'],['Low-bid alert (ending soon)','Email','notif-low'],['New review received','Email','notif-review'],['Weekly performance digest','Email','notif-digest']].map(([l,sub,id])=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--cream-mid)"><div><div style="font-size:13.5px;font-weight:600;color:var(--charcoal)">${l}</div><div style="font-size:12px;color:var(--text-light)">${sub}</div></div><label style="position:relative;width:44px;height:24px;cursor:pointer;display:block"><input type="checkbox" checked style="opacity:0;width:0;height:0;position:absolute"><div style="position:absolute;inset:0;background:var(--green-mid);border-radius:12px"></div><div style="position:absolute;top:3px;left:23px;width:18px;height:18px;background:white;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.2)"></div></label></div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="overlay" id="edit-overlay">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <h2>Edit Listing</h2>
+    <p class="modal-sub" id="edit-subtitle">Editing item details</p>
+    <div class="form-group" style="margin-bottom:14px"><label class="form-label">Title</label><input class="form-input" id="edit-title"></div>
+    <div class="form-group" style="margin-bottom:14px"><label class="form-label">Reserve Price</label><input class="form-input" type="number" placeholder="Set or update reserve…"></div>
+    <div class="form-group" style="margin-bottom:14px"><label class="form-label">Condition Notes</label><textarea class="form-textarea" style="min-height:80px" placeholder="Update condition notes…"></textarea></div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="toast('Listing updated','✅ Saved');closeModal()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
+
+<script>
+function el(id){return document.getElementById(id)}
+function setText(id,v){const e=el(id);if(e)e.textContent=v}
+function toast(msg,title){
+  const t=el('the-toast');if(!t)return;
+  setText('t-ttl',title||'');setText('t-msg',msg);
+  t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3400);
+}
+
+// Tab switching
+function switchTab(name, btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const panel=el('panel-'+name);if(panel)panel.classList.add('active');
+  if(btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('.nav-item').forEach(n=>{
+      if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+name+"'")) n.classList.add('active');
+    });
+  }
+}
+
+// Condition picker
+function selectCond(opt){
+  document.querySelectorAll('.cond-opt').forEach(o=>o.classList.remove('selected'));
+  opt.classList.add('selected');
+}
+
+// Edit modal
+function openEditModal(name){
+  setText('edit-subtitle','Editing: '+name);
+  const ti=el('edit-title');if(ti)ti.value=name;
+  const ov=el('edit-overlay');if(ov)ov.classList.add('on');
+}
+function closeModal(){
+  const ov=el('edit-overlay');if(ov)ov.classList.remove('on');
+}
+el('edit-overlay').addEventListener('click',e=>{if(e.target===el('edit-overlay'))closeModal();});
+
+// Publish
+function publishItem(){
+  const title=el('item-title');
+  const name=title&&title.value?title.value:'new item';
+  toast('Listing published: '+name,'🚀 Live!');
+}
+
+// Fake photos
+function addPhotos(){
+  const emojis=['🖼️','🔎','🪵','🧵','📐','🏷️'];
+  const grid=el('photo-grid');if(!grid)return;
+  const existing=grid.querySelectorAll('.photo-thumb-uploaded').length;
+  if(existing>=12){toast('Max 12 photos per listing','⚠️ Max Photos');return;}
+  const div=document.createElement('div');
+  div.className='photo-thumb-uploaded';
+  div.innerHTML=emojis[existing%emojis.length]+'<button class="remove-btn" onclick="event.stopPropagation();this.parentElement.remove()">✕</button>';
+  div.onclick=()=>toast('Set as primary photo','⭐ Primary');
+  grid.appendChild(div);
+  toast('Photo added','📸 Uploaded');
+}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('dragover');
+  toast('Photo dropped and added','📸 Uploaded');
+  addPhotos();
+}
+
+// AI description
+function aiGenerateDesc(){
+  const btn=document.querySelector('.ai-btn');
+  if(btn){btn.textContent='🤖 Generating…';btn.disabled=true;}
+  setTimeout(()=>{
+    const desc=el('item-desc');
+    if(desc) desc.value='A magnificent example of late Victorian craftsmanship, this hand-carved mahogany armchair dates to approximately 1890. The piece features intricate floral and foliate carvings along the crest rail and arm terminals, characteristic of the period\'s ornate aesthetic sensibility.\n\nThe original horsehair and velvet upholstery has been expertly reupholstered in period-appropriate deep burgundy velvet, preserving the chair\'s authentic silhouette while providing comfortable modern seating. All four legs retain their original brass casters in working condition.\n\nProvenance: Acquired by the Henderson family circa 1920. Has remained in continuous family possession for over 100 years.';
+    const title=el('item-title');
+    if(title&&!title.value) title.value='Victorian Carved Mahogany Armchair, c.1890';
+    if(btn){btn.textContent='🤖 AI Generate Description';btn.disabled=false;}
+    toast('Description generated from your photos!','🤖 AI Complete');
+  },1800);
+}
+
+// Revenue chart
+document.addEventListener('DOMContentLoaded',()=>{
+  const vals=[3200,2800,4100,3600,4900,3800,5200,4600];
+  const labels=['Dec W3','Dec W4','Jan W1','Jan W2','Jan W3','Jan W4','Feb W1','Feb W2'];
+  const max=Math.max(...vals);
+  const chart=el('rev-chart'), lbls=el('rev-labels');
+  if(chart){
+    chart.innerHTML=vals.map((v,i)=>`
+      <div class="bar-wrap">
+        <div class="bar" style="height:${Math.round(v/max*100)}%;background:${i===vals.length-1?'var(--green-deep)':'var(--green-sage)'}">
+          <div class="bar-tooltip">$${v.toLocaleString()}</div>
+        </div>
+      </div>`).join('');
+  }
+  if(lbls){
+    lbls.innerHTML=labels.map(l=>`<div style="flex:1;font-size:9.5px;color:var(--text-light);text-align:center">${l}</div>`).join('');
+  }
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+});
+</script>
+</body>
+</html>
