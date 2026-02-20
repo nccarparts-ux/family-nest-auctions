@@ -354,12 +354,12 @@
       <li><a href="family-nest-auctions.html#auctions">Live Auctions</a></li>
       <li><a href="family-nest-auctions.html#how">How It Works</a></li>
       <li><a href="family-nest-auctions.html#why">Why Us</a></li>
-      <li><a href="#">Sell With Us</a></li>
+      <li><a href="seller-dashboard.html">Sell With Us</a></li>
       <li><a href="#">Locations</a></li>
     </ul>
     <div class="nav-ctas">
-      <button class="btn-ghost" onclick="toast('Sign in coming soon!','👤 Account')">Sign In</button>
-      <button class="btn-honey" onclick="toast('Registration coming soon!','🏡 Join Free')">Start Bidding Free</button>
+      <button class="btn-ghost" onclick="window.location.href='family-nest-auctions.html?login=1'">Sign In</button>
+      <button class="btn-honey" onclick="window.location.href='family-nest-auctions.html?register=1'">Start Bidding Free</button>
     </div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -385,7 +385,7 @@
 <div class="breadcrumb">
   <a href="family-nest-auctions.html">Home</a>
   <span class="sep">›</span>
-  <a href="#">Live Auctions</a>
+  <a href="auction-browse.html">Live Auctions</a>
   <span class="sep">›</span>
   <a href="#">Henderson Estate — Atlanta, GA</a>
   <span class="sep">›</span>
@@ -479,7 +479,7 @@
         <div class="bh-row"><div class="bh-user"><div class="bh-av">T</div><div><div class="bh-name">T***s</div><div class="bh-time">1h 12min ago</div></div></div><div class="bh-amt">$130</div></div>
         <div class="bh-row"><div class="bh-user"><div class="bh-av">A</div><div><div class="bh-name">A***a</div><div class="bh-time">1h 48min ago</div></div></div><div class="bh-amt">$110</div></div>
       </div>
-      <div style="text-align:center;margin-top:14px"><button style="background:transparent;border:none;color:var(--green-mid);font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif" onclick="toast('Showing all 18 bids','Bid History')">Show all 18 bids ↓</button></div>
+      <div style="text-align:center;margin-top:14px"><button style="background:transparent;border:none;color:var(--green-mid);font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif" onclick="var bh=document.getElementById('bid-history-full');if(bh){bh.style.display=bh.style.display==='none'?'block':'none';this.textContent=bh.style.display==='none'?'Show all 18 bids ↓':'Hide bids ↑'}">Show all 18 bids ↓</button></div>
     </div>
 
     <!-- SELLER -->
@@ -654,7 +654,7 @@
 <!-- FOOTER -->
 <footer>
   <a href="family-nest-auctions.html">Home</a>
-  <a href="#">Live Auctions</a>
+  <a href="auction-browse.html">Live Auctions</a>
   <a href="#">Privacy Policy</a>
   <a href="#">Terms of Service</a>
   <div style="margin-top:14px">© 2026 Family Nest Estate Solutions. All rights reserved.</div>
