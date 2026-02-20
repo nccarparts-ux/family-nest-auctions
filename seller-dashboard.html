@@ -278,6 +278,8 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
     .bar-chart{height:90px}
   }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/api.js"></script>
 </head>
 <body>
 
@@ -502,7 +504,24 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
           </div>
           <div style="display:flex;gap:10px">
             <button class="btn-secondary" onclick="toast('Saved as draft','💾 Draft Saved')">Save Draft</button>
-            <button class="btn-primary" onclick="publishItem()">🚀 Publish Listing</button>
+            <button class="btn-primary" onclick="(async()=>{
+  try{
+    var title=document.querySelector('[name=item-title]')?.value||document.querySelector('#item-title-input')?.value;
+    if(!title){alert('Please enter a title');return;}
+    var data={
+      title:title,
+      description:document.querySelector('#item-desc')?.value||'',
+      category:document.querySelector('#item-category')?.value||'Furniture',
+      condition:document.querySelector('[data-cond].selected')?.dataset.cond||'good',
+      startingBid:document.querySelector('#item-start-bid')?.value||'1',
+      endsAt:new Date(Date.now()+7*86400000).toISOString(),
+      startsAt:new Date().toISOString(),
+      status:'live'
+    };
+    var result=await FNA.Seller.createItem(data);
+    alert('✅ Item published! ID: '+result.id);
+  }catch(e){alert('Error: '+e.message);}
+})()" >🚀 Publish Listing</button>
           </div>
         </div>
       </div>
