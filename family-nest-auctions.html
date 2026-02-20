@@ -394,7 +394,7 @@
           <option>Electronics</option>
           <option>Kitchen &amp; Home</option>
         </select>
-        <button class="btn-search">🔍 Search</button>
+        <button class="btn-search" onclick="var q=document.querySelector('.search-bar input').value;window.location.href='auction-browse.html'+(q?'?q='+encodeURIComponent(q):'')">🔍 Search</button>
       </div>
       <div class="metrics">
         <div class="metric"><div class="num">12,<em>400+</em></div><div class="lbl">Active Listings</div></div>
@@ -642,8 +642,8 @@
         <a href="/cdn-cgi/l/email-protection#4e272028210e282f23272237202b3d3a2f3b2d3a2721203d602d2123">✉️ <span class="__cf_email__" data-cfemail="caa3a4aca58aacaba7a3a6b3a4afb9beabbfa9bea3a5a4b9e4a9a5a7">[email&#160;protected]</span></a>
       </div>
     </div>
-    <div class="foot-col"><h4>For Buyers</h4><ul><li><a href="#">Browse Live Auctions</a></li><li><a href="#">How Bidding Works</a></li><li><a href="#">Buyer Protection</a></li><li><a href="#">Shipping Info</a></li><li><a href="#">My Watchlist</a></li><li><a href="#">Purchase Archive</a></li></ul></div>
-    <div class="foot-col"><h4>For Sellers</h4><ul><li><a href="#">List Your Estate</a></li><li><a href="#">Seller Dashboard</a></li><li><a href="#">Pricing &amp; Fees</a></li><li><a href="#">Seller Verification</a></li><li><a href="#">Success Stories</a></li></ul></div>
+    <div class="foot-col"><h4>For Buyers</h4><ul><li><a href="auction-browse.html">Browse Live Auctions</a></li><li><a href="#">How Bidding Works</a></li><li><a href="#">Buyer Protection</a></li><li><a href="#">Shipping Info</a></li><li><a href="account-dashboard.html">My Watchlist</a></li><li><a href="account-dashboard.html">Purchase Archive</a></li></ul></div>
+    <div class="foot-col"><h4>For Sellers</h4><ul><li><a href="#">List Your Estate</a></li><li><a href="seller-dashboard.html">Seller Dashboard</a></li><li><a href="#">Pricing &amp; Fees</a></li><li><a href="#">Seller Verification</a></li><li><a href="#">Success Stories</a></li></ul></div>
     <div class="foot-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Locations</a></li><li><a href="#">Franchise Opportunities</a></li><li><a href="#">Blog</a></li><li><a href="#">Contact</a></li><li><a href="#">Accessibility</a></li></ul></div>
   </div>
   <div class="foot-bottom">
@@ -668,7 +668,7 @@
   <div class="ff"><label>Full Name</label><input type="text" placeholder="Your full name"></div>
   <div class="ff"><label>Email Address</label><input type="email" placeholder="you@email.com"></div>
   <div class="ff"><label>Create Password</label><input type="password" placeholder="Create a password"></div>
-  <button class="btn-m" onclick="closeOv('register');toast('Welcome to Family Nest Auctions! 🏡','✅ Account Created')">Create Free Account</button>
+  <button class="btn-m" onclick="window.location.href='account-dashboard.html'">Create Free Account</button>
   <div class="m-alt">Already a member? <a href="#" onclick="closeOv('register');openOv('login')">Sign in →</a></div>
 </div></div>
 
@@ -810,6 +810,14 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
 }); // end DOMContentLoaded
+
+
+// Auto-open modals from URL params (?login=1 or ?register=1)
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  if(p.get('login')) { window.addEventListener('load', function(){ openOv('login'); }); }
+  if(p.get('register')) { window.addEventListener('load', function(){ openOv('register'); }); }
+})();
 
 function toggleMobileMenu(){
   var h=document.getElementById('hamburger'), m=document.getElementById('mobile-nav');
