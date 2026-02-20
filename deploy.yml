@@ -1,0 +1,101 @@
+name: Claude Website Update
+
+on:
+  push:
+    branches:
+      - 'claude-update/**'
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  create-pr:
+    name: Create Preview PR
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/claude-update/')
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read update message
+        id: msg
+        run: |
+          if [ -f .claude-update-message.txt ]; then
+            echo "body<<EOF" >> $GITHUB_OUTPUT
+            cat .claude-update-message.txt >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "body=Claude website update" >> $GITHUB_OUTPUT
+          fi
+      - name: Create Pull Request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.ref.replace('refs/heads/', '')
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner, repo: context.repo.repo,
+              head: branch, state: 'open'
+            })
+            if (prs.length > 0) return
+            const title = branch.replace('claude-update/', '').replace(/-/g, ' ')
+            await github.rest.pulls.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: `🤖 Claude Update: ${title}`,
+              body: `${{ steps.msg.outputs.body }}\n\n---\n*Review the preview URL below, then merge to push live.*`,
+              head: branch, base: 'main',
+            })
+
+  preview:
+    name: Deploy Preview
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy Preview
+        id: vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-comment: false
+      - name: Comment preview links
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const url = '${{ steps.vercel.outputs.preview-url }}'
+            const pages = [
+              ['🏠 Homepage','family-nest-auctions.html'],
+              ['🔍 Browse','auction-browse.html'],
+              ['🪑 Item Detail','auction-item-detail.html'],
+              ['👤 Account','account-dashboard.html'],
+              ['🏡 Seller','seller-dashboard.html'],
+              ['🔐 Admin','admin-panel.html'],
+            ]
+            const links = pages.map(([n,p])=>`• [${n}](${url}/${p})`).join('\n')
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner, repo: context.repo.repo,
+              body: `## 🔍 Preview Ready\n\n**URL:** ${url}\n\n${links}\n\n---\n✅ Merge to go live · ❌ Close to discard`
+            })
+
+  production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy Production
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'

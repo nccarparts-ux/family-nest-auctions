@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --green-deep:#2E5540;--green-mid:#3D6B4F;--green-sage:#6B8F71;--green-light:#A8C5A0;--green-pale:#E8F0E8;
+  --green-deep:   #3A7A5C;--green-mid:    #4E9470;--green-sage:   #7DB88A;--green-light:  #B8D4AE;--green-pale:   #EEF7EE;
   --honey:#C8A96E;--honey-light:#DFC28E;--honey-pale:#F5EDD8;
   --cream:#FAF7F2;--cream-mid:#F0EBE3;--cream-dark:#E2D9CE;
   --charcoal:#2C2C2C;--text-mid:#666;--text-light:#999;--white:#fff;
@@ -252,6 +252,31 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
   .ship-row{grid-template-columns:1fr 1fr;gap:8px}
   .ship-row.header{display:none}
 }
+
+  @media(max-width:900px){
+    .sidebar{display:none}
+    .main{padding:16px 16px 60px}
+    .stat-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+    .analytics-grid{grid-template-columns:1fr}
+    .upload-form{grid-template-columns:1fr}
+    .upload-form .form-group.full{grid-column:1}
+    .ship-row{grid-template-columns:1fr 1fr;gap:8px;font-size:12.5px}
+    .ship-row.header{display:none}
+    .listing-row{flex-wrap:wrap;gap:8px}
+    .listing-right{flex-direction:row;align-items:center;gap:10px;width:100%}
+    .cond-picker{flex-direction:column}
+    .cond-opt{min-width:unset}
+    .payout-table{font-size:12px}
+    .payout-table th:nth-child(3),.payout-table td:nth-child(3){display:none}
+    .sale-card{flex-wrap:wrap}
+    .sale-actions{width:100%;justify-content:flex-start}
+  }
+  @media(max-width:500px){
+    .stat-grid{grid-template-columns:repeat(2,1fr)}
+    .page-header .ph-top{flex-direction:column;align-items:flex-start}
+    .payout-summary{grid-template-columns:repeat(2,1fr)}
+    .bar-chart{height:90px}
+  }
 </style>
 </head>
 <body>
@@ -261,9 +286,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
   <a href="family-nest-auctions.html" class="logo-wrap">
     <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
       <rect width="40" height="40" rx="8" fill="#C8A96E"/>
-      <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#2E5540"/>
-      <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#6B8F71" opacity=".75"/>
-      <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#A8C5A0" stroke-width="1.1" fill="none" opacity=".8"/>
+      <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#3A7A5C"/>
+      <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#7DB88A" opacity=".75"/>
+      <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#B8D4AE" stroke-width="1.1" fill="none" opacity=".8"/>
     </svg>
     <div class="logo-text">
       <div class="logo-name">Family Nest Auctions</div>
@@ -400,7 +425,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
             <div class="listing-content">
               <div class="listing-name">Victorian Carved Mahogany Armchair, c.1890</div>
               <div class="listing-meta">Henderson Estate · Listed 3 days ago · 18 bids · 1,240 views</div>
-              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span></div>
+              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span></div>
             </div>
             <div class="listing-right">
               <div class="listing-bid">$187</div>
@@ -417,7 +442,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
             <div class="listing-content">
               <div class="listing-name">Antique Tiffany-Style Table Lamp</div>
               <div class="listing-meta">Henderson Estate · Listed 2 days ago · 24 bids · 890 views</div>
-              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span></div>
+              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span></div>
             </div>
             <div class="listing-right">
               <div class="listing-bid">$340</div>
@@ -451,7 +476,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
             <div class="listing-content">
               <div class="listing-name">Set of 12 Wedgwood Dinner Plates</div>
               <div class="listing-meta">Baxter Estate · Listed today · 7 bids · 220 views</div>
-              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span><span class="tag" style="background:#e8f4ff;color:#3B6CB0">🆕 New listing</span></div>
+              <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span><span class="tag" style="background:#e8f4ff;color:#3B6CB0">🆕 New listing</span></div>
             </div>
             <div class="listing-right">
               <div class="listing-bid">$120</div>
@@ -654,10 +679,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
         </div>
         <div style="padding:0 22px">
           <!-- repeat listing rows -->
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div><div class="listing-content"><div class="listing-name">Victorian Carved Mahogany Armchair, c.1890</div><div class="listing-meta">Henderson Estate · 18 bids · 1,240 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$187</div><div class="listing-bids">18 bids</div><div class="listing-time urgent">1h 42m</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Victorian Armchair')">Edit</button></div></div></div>
+          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div><div class="listing-content"><div class="listing-name">Victorian Carved Mahogany Armchair, c.1890</div><div class="listing-meta">Henderson Estate · 18 bids · 1,240 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$187</div><div class="listing-bids">18 bids</div><div class="listing-time urgent">1h 42m</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Victorian Armchair')">Edit</button></div></div></div>
           <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f8f0e0,#f0e4c0)">🪔</div><div class="listing-content"><div class="listing-name">Antique Tiffany-Style Table Lamp</div><div class="listing-meta">Henderson Estate · 24 bids · 890 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span></div></div><div class="listing-right"><div class="listing-bid">$340</div><div class="listing-bids">24 bids</div><div class="listing-time">4h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Tiffany Lamp')">Edit</button></div></div></div>
           <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8f4,#e0d0e8)">🏺</div><div class="listing-content"><div class="listing-name">Hand-Knotted Persian Wool Rug, 8×10</div><div class="listing-meta">Henderson Estate · 9 bids · 560 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#d1ecf1;color:#0c5460">✔ Good</span></div></div><div class="listing-right"><div class="listing-bid">$215</div><div class="listing-bids">9 bids</div><div class="listing-time">1d left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Persian Rug')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#e8f0e8,#d0e4d0)">🖊️</div><div class="listing-content"><div class="listing-name">Victorian Mahogany Writing Desk</div><div class="listing-meta">Henderson Estate · 31 bids · 1,880 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#E8F0E8;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$520</div><div class="listing-bids">31 bids</div><div class="listing-time urgent">2h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Writing Desk')">Edit</button></div></div></div>
+          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#EEF7EE,#d0e4d0)">🖊️</div><div class="listing-content"><div class="listing-name">Victorian Mahogany Writing Desk</div><div class="listing-meta">Henderson Estate · 31 bids · 1,880 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$520</div><div class="listing-bids">31 bids</div><div class="listing-time urgent">2h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Writing Desk')">Edit</button></div></div></div>
           <div class="listing-row"><div class="listing-thumb" style="background:var(--cream-mid)">📝</div><div class="listing-content"><div class="listing-name">1920s Mahogany Side Table — DRAFT</div><div class="listing-meta">Henderson Estate · Not published · Created yesterday</div><div class="listing-tags"><span class="tag draft">📝 Draft</span></div></div><div class="listing-right"><div class="listing-bid">—</div><div class="listing-bids">Not live</div><div class="listing-time">—</div><div class="listing-actions"><button class="act-btn edit" onclick="toast('Opening draft…','Edit Draft')">Edit</button><button class="act-btn danger" onclick="toast('Draft deleted','Deleted')">Delete</button></div></div></div>
           <div class="listing-row"><div class="listing-thumb" style="background:var(--cream-mid)">🏆</div><div class="listing-content"><div class="listing-name">Art Deco Diamond Brooch — SOLD</div><div class="listing-meta">Morrison Collection · 55 bids · Final price: $1,340</div><div class="listing-tags"><span class="tag sold">✅ Sold</span></div></div><div class="listing-right"><div class="listing-bid">$1,340</div><div class="listing-bids">55 bids</div><div class="listing-time">Ended Feb 17</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening archive…','View Archive')">View</button></div></div></div>
         </div>
