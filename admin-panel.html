@@ -201,8 +201,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 .form-textarea{min-height:80px;resize:vertical}
 
 /* ── RESPONSIVE ── */
-@media(max-width:880px){.hamburger{display:flex}
-  .sidebar{display:none}
+@media(max-width:880px){.sidebar{display:none}
   .main{padding:16px 16px 60px}
   .analytics-row{grid-template-columns:1fr}
   .live-grid{grid-template-columns:1fr}
@@ -242,6 +241,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
   .mobile-menu-ctas{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
   .mobile-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:var(--white);font-size:32px;cursor:pointer;z-index:10000}
   .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:none;z-index:10000;position:relative}
+  @media(max-width:960px){.hamburger{display:flex!important}}
   .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
   .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
   .hamburger.open span:nth-child(2){opacity:0}
