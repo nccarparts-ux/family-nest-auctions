@@ -263,8 +263,7 @@
   footer{background:#1a2e20;padding:36px;text-align:center;color:rgba(255,255,255,.5);font-size:13px}
   footer a{color:var(--honey);text-decoration:none;margin:0 10px}
 
-  @media(max-width:960px){.hamburger{display:flex}
-    .ribbon,.nav-links{display:none}
+  @media(max-width:960px){.ribbon,.nav-links{display:none}
     
     .nav-right{gap:8px}
     .user-name{display:none}
@@ -317,6 +316,7 @@
   .mobile-menu-ctas{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
   .mobile-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:var(--white);font-size:32px;cursor:pointer;z-index:10000}
   .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:none;z-index:10000;position:relative}
+  @media(max-width:960px){.hamburger{display:flex!important}}
   .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
   .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
   .hamburger.open span:nth-child(2){opacity:0}
