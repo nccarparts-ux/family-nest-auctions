@@ -401,7 +401,10 @@ async function loadBrowseItems(filters = {}) {
       limit: 24
     })
 
-    if (countEl) countEl.textContent = `${items.length} item${items.length !== 1 ? 's' : ''}`
+    if (countEl) countEl.textContent = items.length
+    // Also update the top summary count
+    var topCount = document.getElementById('result-count')
+    if (topCount) topCount.textContent = items.length
 
     if (items.length === 0) {
       grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#999">No items match your filters.</div>'
