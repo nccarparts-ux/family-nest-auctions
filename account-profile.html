@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile — Family Nest Auctions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-deep:#3A7A5C;--green-mid:#4E9470;--green-sage:#7DB88A;--green-light:#B8D4AE;--green-pale:#EEF7EE;
+  --honey:#C8A96E;--honey-light:#DFC28E;--honey-pale:#F5EDD8;
+  --cream:#FAF7F2;--cream-mid:#F0EBE3;--cream-dark:#E2D9CE;
+  --charcoal:#2C2C2C;--text-mid:#666;--text-light:#999;--white:#fff;
+  --red:#B03030;--red-pale:#FDECEA;
+  --r-sm:8px;--r-md:14px;--r-lg:22px;
+  --sh-xs:0 2px 8px rgba(44,44,44,.06);--sh-sm:0 4px 18px rgba(44,44,44,.09);--sh-md:0 8px 36px rgba(44,44,44,.13);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden}
+header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-deep);box-shadow:0 2px 20px rgba(0,0,0,.2);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#fff;line-height:1}
+.logo-sub{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--honey)}
+.hd-right{display:flex;align-items:center;gap:12px}
+.btn-ghost{padding:8px 18px;border:1.5px solid rgba(255,255,255,.3);border-radius:var(--r-sm);color:#fff;font-size:13px;font-weight:500;background:transparent;cursor:pointer;font-family:'Jost',sans-serif;text-decoration:none;transition:all .2s}
+.btn-ghost:hover{border-color:var(--honey);color:var(--honey)}
+.hd-user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:5px 14px 5px 5px;cursor:pointer}
+.hd-avatar{width:30px;height:30px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.hd-uname{font-size:13px;font-weight:600;color:#fff}
+.page-wrap{max-width:900px;margin:0 auto;padding:100px 24px 80px}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--charcoal);margin-bottom:6px}
+.page-sub{font-size:14px;color:var(--text-mid);margin-bottom:32px}
+.profile-grid{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start}
+.sidebar-card{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-xs);text-align:center;position:sticky;top:88px}
+.avatar-wrap{position:relative;display:inline-block;margin-bottom:14px}
+.avatar-big{width:96px;height:96px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:36px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto;border:3px solid var(--green-light);overflow:hidden}
+.avatar-big img{width:100%;height:100%;object-fit:cover}
+.avatar-edit-btn{position:absolute;bottom:0;right:0;background:var(--green-deep);border:2px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:background .2s}
+.avatar-edit-btn:hover{background:var(--green-mid)}
+.profile-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:4px}
+.profile-email{font-size:12.5px;color:var(--text-mid);margin-bottom:14px;word-break:break-all}
+.member-badge{display:inline-block;background:var(--green-pale);color:var(--green-deep);font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:100px;margin-bottom:16px}
+.sidebar-nav{display:flex;flex-direction:column;gap:2px;margin-top:6px;text-align:left}
+.snav-item{display:block;padding:9px 12px;border-radius:var(--r-sm);font-size:13.5px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left;font-family:'Jost',sans-serif}
+.snav-item:hover{background:var(--cream);color:var(--charcoal)}
+.snav-item.active{background:var(--green-pale);color:var(--green-deep);font-weight:700}
+.main-col{display:flex;flex-direction:column;gap:22px}
+.section-card{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-xs)}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--cream-mid)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12px;font-weight:700;color:var(--charcoal);letter-spacing:.04em}
+.form-input{padding:10px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13.5px;font-family:'Jost',sans-serif;background:var(--white);color:var(--charcoal);transition:border-color .2s;width:100%}
+.form-input:focus{outline:none;border-color:var(--green-mid);box-shadow:0 0 0 3px var(--green-pale)}
+.form-input.error{border-color:var(--red)}
+.form-hint{font-size:11.5px;color:var(--text-light)}
+.btn-primary{padding:11px 22px;background:var(--green-deep);color:#fff;border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+.btn-primary:hover{background:var(--green-mid);transform:translateY(-1px)}
+.btn-secondary{padding:10px 18px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--charcoal);transition:all .2s}
+.btn-secondary:hover{border-color:var(--green-mid);color:var(--green-mid)}
+.btn-danger{padding:10px 18px;background:transparent;border:1.5px solid var(--red);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--red);transition:all .2s}
+.btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.tab-section{display:none}
+.tab-section.active{display:block}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--cream-mid)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{font-size:13.5px;font-weight:600;color:var(--charcoal)}
+.toggle-sub{font-size:12px;color:var(--text-light)}
+.toggle-switch{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:var(--cream-dark);border-radius:12px;transition:background .2s}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:transform .2s}
+.toggle-switch input:checked + .toggle-track{background:var(--green-mid)}
+.toggle-switch input:checked ~ .toggle-thumb{transform:translateX(20px)}
+.pm-card{display:flex;align-items:center;justify-content:space-between;padding:14px;background:var(--cream);border-radius:var(--r-md);margin-bottom:12px;flex-wrap:wrap;gap:10px}
+.pm-left{display:flex;align-items:center;gap:12px}
+.pm-icon{font-size:22px}
+.pm-name{font-size:13.5px;font-weight:700;color:var(--charcoal)}
+.pm-sub{font-size:12px;color:var(--text-mid)}
+.error-msg{color:var(--red);font-size:13px;margin-top:8px;display:none}
+.success-msg{color:var(--green-deep);font-size:13px;margin-top:8px;display:none}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--charcoal);color:#fff;padding:14px 20px;border-radius:var(--r-md);font-size:14px;font-weight:500;display:flex;gap:10px;align-items:center;box-shadow:var(--sh-md);z-index:9999;transform:translateY(80px);opacity:0;transition:all .35s;pointer-events:none}
+.toast.on{transform:translateY(0);opacity:1}
+.loading-state{text-align:center;padding:32px;color:var(--text-light);font-size:14px}
+@media(max-width:720px){.profile-grid{grid-template-columns:1fr}.sidebar-card{position:static}.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo-wrap" href="family-nest-auctions.html">
+    <svg class="logo-mark" viewBox="0 0 40 40" width="36" height="36"><rect width="40" height="40" rx="8" fill="#C8A96E"/><path d="M20 8L8 18v14h8v-8h8v8h8V18L20 8z" fill="#3A7A5C"/></svg>
+    <div><div class="logo-name">Family Nest</div><div class="logo-sub">Estate Auctions</div></div>
+  </a>
+  <div class="hd-right">
+    <a href="account-dashboard.html" class="btn-ghost">My Account</a>
+    <div class="hd-user-chip" id="hd-user-chip" style="display:none">
+      <div class="hd-avatar" id="hd-avatar-initials">?</div>
+      <span class="hd-uname" id="hd-uname">Loading…</span>
+    </div>
+  </div>
+</header>
+
+<div class="page-wrap">
+  <div class="page-title">My Profile</div>
+  <div class="page-sub" id="profile-sub">Manage your personal information, password, and preferences</div>
+
+  <div class="profile-grid">
+    <!-- Sidebar -->
+    <div class="sidebar-card">
+      <div class="avatar-wrap">
+        <div class="avatar-big" id="avatar-display">
+          <span id="avatar-initials">?</span>
+        </div>
+        <button class="avatar-edit-btn" onclick="document.getElementById('avatar-file-input').click()" title="Change photo">✎</button>
+        <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+      </div>
+      <div class="profile-name" id="sidebar-name">Loading…</div>
+      <div class="profile-email" id="sidebar-email">—</div>
+      <div class="member-badge" id="sidebar-member">Member</div>
+      <div class="sidebar-nav">
+        <button class="snav-item active" onclick="showSection('personal',this)">👤 Personal Info</button>
+        <button class="snav-item" onclick="showSection('password',this)">🔒 Password</button>
+        <button class="snav-item" onclick="showSection('notifications',this)">🔔 Notifications</button>
+        <button class="snav-item" onclick="showSection('payment',this)">💳 Payment Methods</button>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-col">
+
+      <!-- PERSONAL INFO -->
+      <div class="section-card tab-section active" id="section-personal">
+        <div class="sec-title">👤 Personal Information</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input class="form-input" id="pf-first" placeholder="First name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" id="pf-last" placeholder="Last name">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Display Name</label>
+            <input class="form-input" id="pf-display" placeholder="How you appear to others">
+            <span class="form-hint">Shown as "J***n M." on public listings.</span>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" id="pf-email" type="email" placeholder="your@email.com">
+            <span class="form-hint">Changing your email requires re-verification.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone (optional)</label>
+            <input class="form-input" id="pf-phone" placeholder="(555) 000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input class="form-input" id="pf-city" placeholder="Atlanta">
+          </div>
+          <div class="form-group">
+            <label class="form-label">State</label>
+            <input class="form-input" id="pf-state" placeholder="GA">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ZIP Code</label>
+            <input class="form-input" id="pf-zip" placeholder="30309">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Bio (optional)</label>
+            <textarea class="form-input" id="pf-bio" rows="3" placeholder="A little about yourself…" style="resize:vertical;min-height:80px"></textarea>
+          </div>
+        </div>
+        <div id="pf-error" class="error-msg"></div>
+        <div id="pf-success" class="success-msg"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="loadProfile()">Discard Changes</button>
+          <button class="btn-primary" id="pf-save-btn" onclick="savePersonalInfo(this)">Save Changes</button>
+        </div>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="section-card tab-section" id="section-password">
+        <div class="sec-title">🔒 Change Password</div>
+        <div style="display:flex;flex-direction:column;gap:14px;max-width:400px">
+          <div class="form-group">
+            <label class="form-label">Current Password</label>
+            <input class="form-input" id="pw-current" type="password" placeholder="Enter current password">
+          </div>
+          <div class="form-group">
+            <label class="form-label">New Password</label>
+            <input class="form-input" id="pw-new" type="password" placeholder="Minimum 8 characters">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm New Password</label>
+            <input class="form-input" id="pw-confirm" type="password" placeholder="Repeat new password">
+          </div>
+        </div>
+        <div id="pw-error" class="error-msg"></div>
+        <div id="pw-success" class="success-msg"></div>
+        <div class="btn-row">
+          <button class="btn-primary" id="pw-btn" onclick="changePassword(this)">Update Password</button>
+        </div>
+        <div style="margin-top:20px;padding:14px;background:var(--cream);border-radius:var(--r-md);font-size:13px;color:var(--text-mid)">
+          <strong style="display:block;color:var(--charcoal);margin-bottom:4px">Password requirements:</strong>
+          Minimum 8 characters · Mix of letters and numbers recommended · Avoid common passwords
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div class="section-card tab-section" id="section-notifications">
+        <div class="sec-title">🔔 Notification Preferences</div>
+        <div id="notif-rows">
+          <div class="toggle-row">
+            <div><div class="toggle-label">Outbid alerts</div><div class="toggle-sub">Get notified when someone outbids you</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-outbid" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Auction ending soon</div><div class="toggle-sub">1-hour reminder on watched items</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-remind" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Auction won</div><div class="toggle-sub">Confirmation when you win an item</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-win" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Item shipped</div><div class="toggle-sub">Tracking info when seller ships your item</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-ship" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">New items in categories I follow</div><div class="toggle-sub">Weekly digest of new estate listings</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-digest"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Marketing & promotions</div><div class="toggle-sub">Special offers and platform news</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-promo"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+          </div>
+        </div>
+        <div id="notif-error" class="error-msg"></div>
+        <div id="notif-success" class="success-msg"></div>
+        <div class="btn-row">
+          <button class="btn-primary" id="notif-btn" onclick="saveNotifPrefs(this)">Save Preferences</button>
+        </div>
+      </div>
+
+      <!-- PAYMENT METHODS -->
+      <div class="section-card tab-section" id="section-payment">
+        <div class="sec-title">💳 Payment Methods</div>
+        <div id="payment-list">
+          <div class="pm-card">
+            <div class="pm-left">
+              <div class="pm-icon">💳</div>
+              <div><div class="pm-name">Visa ending in 4521</div><div class="pm-sub">Expires 08/2027 · Default</div></div>
+            </div>
+            <button class="btn-danger" onclick="toast('Card removed','🗑️ Removed')">Remove</button>
+          </div>
+        </div>
+        <div style="margin-top:4px">
+          <button class="btn-secondary" onclick="toast('Card management coming soon — contact support to update payment methods','💳 Info')">+ Add Payment Method</button>
+        </div>
+        <div style="margin-top:20px;padding:14px;background:var(--honey-pale);border-radius:var(--r-md);font-size:13px;color:var(--text-mid)">
+          <strong style="color:var(--charcoal)">Buyer's Protection:</strong> All payments are secured and held until you confirm item receipt. If an item doesn't match the listing, you're fully covered by our buyer protection policy.
+        </div>
+      </div>
+
+    </div><!-- /main-col -->
+  </div><!-- /profile-grid -->
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="the-toast"><strong id="t-ttl"></strong>&nbsp;<span id="t-msg"></span></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/api.js"></script>
+<script>
+var SUPABASE_URL='https://hwsjgclteuezauveujit.supabase.co';
+var SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3c2pnY2x0ZXVlemF1dmV1aml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDg2MzcsImV4cCI6MjA4NzEyNDYzN30.DGMw527z7noRafOxJRdGB3ITSq1teQeS5dTSNwLqFsI';
+var _sb=null;
+function getSB(){if(!_sb)_sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);return _sb;}
+
+function el(id){return document.getElementById(id);}
+function setText(id,v){var e=el(id);if(e)e.textContent=v;}
+function toast(msg,title){
+  var t=el('the-toast');if(!t)return;
+  setText('t-ttl',title||'');setText('t-msg',msg);
+  t.classList.add('on');setTimeout(function(){t.classList.remove('on');},3600);
+}
+function escHtml(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function showError(id,msg){var e=el(id);if(e){e.textContent=msg;e.style.display='block';}}
+function hideMsg(id){var e=el(id);if(e)e.style.display='none';}
+
+// Section navigation
+function showSection(name,btn){
+  document.querySelectorAll('.tab-section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.snav-item').forEach(function(b){b.classList.remove('active');});
+  var s=el('section-'+name);if(s)s.classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+// Load profile from Supabase
+var _currentUser=null;
+async function loadProfile(){
+  var sb=getSB();
+  var {data:{user},error:authErr}=await sb.auth.getUser();
+  if(authErr||!user){
+    window.location.href='family-nest-auctions.html?login=1';
+    return;
+  }
+  _currentUser=user;
+  var {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).single();
+  var p=profile||{};
+  var fullName=p.full_name||user.user_metadata?.full_name||'';
+  var parts=fullName.trim().split(' ');
+  var firstName=parts[0]||'';
+  var lastName=parts.slice(1).join(' ')||'';
+  var initials=(firstName[0]||'?').toUpperCase()+(lastName[0]||'').toUpperCase();
+  var memberYear=new Date(user.created_at||Date.now()).getFullYear();
+
+  // Sidebar
+  setText('sidebar-name', fullName||user.email?.split('@')[0]||'User');
+  setText('sidebar-email', user.email||'');
+  setText('sidebar-member', 'Member since '+memberYear);
+  setText('avatar-initials', initials);
+  setText('hd-avatar-initials', initials[0]||'?');
+  setText('hd-uname', firstName||'Account');
+  el('hd-user-chip').style.display='flex';
+
+  // Avatar photo
+  var avatarDisplay=el('avatar-display');
+  if(p.avatar_url){
+    avatarDisplay.innerHTML='<img src="'+escHtml(p.avatar_url)+'" alt="Profile photo" id="avatar-initials">';
+  }
+
+  // Personal form
+  if(el('pf-first'))el('pf-first').value=firstName;
+  if(el('pf-last'))el('pf-last').value=lastName;
+  if(el('pf-display'))el('pf-display').value=p.display_name||fullName;
+  if(el('pf-email'))el('pf-email').value=user.email||'';
+  if(el('pf-phone'))el('pf-phone').value=p.phone||'';
+  if(el('pf-city'))el('pf-city').value=p.city||'';
+  if(el('pf-state'))el('pf-state').value=p.state||'';
+  if(el('pf-zip'))el('pf-zip').value=p.zip||'';
+  if(el('pf-bio'))el('pf-bio').value=p.bio||'';
+
+  // Notification prefs
+  var notifPrefs=p.notification_prefs||{};
+  ['outbid','remind','win','ship','digest','promo'].forEach(function(k){
+    var cb=el('notif-'+k);
+    if(cb) cb.checked=notifPrefs[k]!==false;
+  });
+}
+
+// Save personal info
+async function savePersonalInfo(btn){
+  hideMsg('pf-error');hideMsg('pf-success');
+  var first=(el('pf-first')&&el('pf-first').value.trim())||'';
+  var last=(el('pf-last')&&el('pf-last').value.trim())||'';
+  var display=(el('pf-display')&&el('pf-display').value.trim())||'';
+  var phone=(el('pf-phone')&&el('pf-phone').value.trim())||'';
+  var city=(el('pf-city')&&el('pf-city').value.trim())||'';
+  var state=(el('pf-state')&&el('pf-state').value.trim())||'';
+  var zip=(el('pf-zip')&&el('pf-zip').value.trim())||'';
+  var bio=(el('pf-bio')&&el('pf-bio').value.trim())||'';
+  if(!first){showError('pf-error','First name is required.');return;}
+  if(btn){btn.textContent='Saving…';btn.disabled=true;}
+  try {
+    var sb=getSB();
+    var fullName=first+(last?' '+last:'');
+    var {error}=await sb.from('profiles').upsert({
+      id:_currentUser.id,
+      full_name:fullName,
+      display_name:display||fullName,
+      phone, city, state, zip, bio,
+      updated_at:new Date().toISOString()
+    },{onConflict:'id'});
+    if(error)throw error;
+    setText('sidebar-name',fullName);
+    var initials=(first[0]||'?').toUpperCase()+(last[0]||'').toUpperCase();
+    setText('avatar-initials',initials);
+    setText('hd-avatar-initials',initials[0]||'?');
+    setText('hd-uname',first);
+    var succEl=el('pf-success');if(succEl){succEl.textContent='Profile saved successfully!';succEl.style.display='block';}
+    toast('Profile saved','✅ Saved');
+  } catch(e){showError('pf-error',(e&&e.message)||'Could not save profile.');}
+  if(btn){btn.textContent='Save Changes';btn.disabled=false;}
+}
+
+// Change password
+async function changePassword(btn){
+  hideMsg('pw-error');hideMsg('pw-success');
+  var curr=(el('pw-current')&&el('pw-current').value)||'';
+  var newPw=(el('pw-new')&&el('pw-new').value)||'';
+  var conf=(el('pw-confirm')&&el('pw-confirm').value)||'';
+  if(!newPw||newPw.length<8){showError('pw-error','Password must be at least 8 characters.');return;}
+  if(newPw!==conf){showError('pw-error','Passwords do not match.');return;}
+  if(btn){btn.textContent='Updating…';btn.disabled=true;}
+  try {
+    var sb=getSB();
+    var {error}=await sb.auth.updateUser({password:newPw});
+    if(error)throw error;
+    if(el('pw-current'))el('pw-current').value='';
+    if(el('pw-new'))el('pw-new').value='';
+    if(el('pw-confirm'))el('pw-confirm').value='';
+    var succEl=el('pw-success');if(succEl){succEl.textContent='Password updated successfully!';succEl.style.display='block';}
+    toast('Password updated','🔒 Updated');
+  } catch(e){showError('pw-error',(e&&e.message)||'Could not update password.');}
+  if(btn){btn.textContent='Update Password';btn.disabled=false;}
+}
+
+// Save notification preferences
+async function saveNotifPrefs(btn){
+  hideMsg('notif-error');hideMsg('notif-success');
+  var prefs={};
+  ['outbid','remind','win','ship','digest','promo'].forEach(function(k){
+    var cb=el('notif-'+k);prefs[k]=cb?cb.checked:false;
+  });
+  if(btn){btn.textContent='Saving…';btn.disabled=true;}
+  try {
+    var sb=getSB();
+    var {error}=await sb.from('profiles').update({notification_prefs:prefs,updated_at:new Date().toISOString()}).eq('id',_currentUser.id);
+    if(error)throw error;
+    var succEl=el('notif-success');if(succEl){succEl.textContent='Preferences saved!';succEl.style.display='block';}
+    toast('Preferences saved','🔔 Saved');
+  } catch(e){showError('notif-error',(e&&e.message)||'Could not save preferences.');}
+  if(btn){btn.textContent='Save Preferences';btn.disabled=false;}
+}
+
+// Upload avatar
+async function uploadAvatar(input){
+  if(!input.files||!input.files[0]) return;
+  var file=input.files[0];
+  var sb=getSB();
+  var ext=file.name.split('.').pop()||'jpg';
+  var path='avatars/'+_currentUser.id+'.'+ext;
+  var {error:upErr}=await sb.storage.from('avatars').upload(path,file,{upsert:true});
+  if(upErr){toast('Upload failed: '+upErr.message,'⚠️ Error');return;}
+  var {data:{publicUrl}}=sb.storage.from('avatars').getPublicUrl(path);
+  var {error:dbErr}=await sb.from('profiles').update({avatar_url:publicUrl}).eq('id',_currentUser.id);
+  if(dbErr){toast('Saved photo but could not update profile','⚠️');return;}
+  var avatarDisplay=el('avatar-display');
+  if(avatarDisplay) avatarDisplay.innerHTML='<img src="'+escHtml(publicUrl)+'" alt="Profile photo" style="width:100%;height:100%;object-fit:cover">';
+  toast('Profile photo updated','📸 Updated');
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  loadProfile();
+});
+</script>
+</body>
+</html>

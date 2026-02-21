@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages — Family Nest Auctions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-deep:#3A7A5C;--green-mid:#4E9470;--green-sage:#7DB88A;--green-light:#B8D4AE;--green-pale:#EEF7EE;
+  --honey:#C8A96E;--honey-light:#DFC28E;--honey-pale:#F5EDD8;
+  --cream:#FAF7F2;--cream-mid:#F0EBE3;--cream-dark:#E2D9CE;
+  --charcoal:#2C2C2C;--text-mid:#666;--text-light:#999;--white:#fff;
+  --red:#B03030;--red-pale:#FDECEA;
+  --r-sm:8px;--r-md:14px;--r-lg:22px;
+  --sh-xs:0 2px 8px rgba(44,44,44,.06);--sh-sm:0 4px 18px rgba(44,44,44,.09);--sh-md:0 8px 36px rgba(44,44,44,.13);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden;height:100vh;display:flex;flex-direction:column}
+header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-deep);box-shadow:0 2px 20px rgba(0,0,0,.2);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;flex-shrink:0}
+.logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#fff;line-height:1}
+.logo-sub{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--honey)}
+.hd-right{display:flex;align-items:center;gap:12px}
+.hd-nav-link{font-size:13.5px;font-weight:500;color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
+.hd-nav-link:hover{color:var(--honey)}
+.hd-user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:5px 14px 5px 5px;cursor:pointer}
+.hd-avatar{width:30px;height:30px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.hd-uname{font-size:13px;font-weight:600;color:#fff}
+.inbox-wrap{display:flex;height:calc(100vh - 68px);margin-top:68px}
+.convos-panel{width:320px;min-width:280px;background:var(--white);border-right:1px solid var(--cream-dark);display:flex;flex-direction:column;overflow:hidden}
+.cp-header{padding:16px 20px;border-bottom:1px solid var(--cream-mid);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cp-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--charcoal)}
+.unread-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px}
+.cp-search{padding:10px 16px;border-bottom:1px solid var(--cream-mid);flex-shrink:0}
+.search-input{width:100%;padding:8px 12px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal)}
+.search-input:focus{outline:none;border-color:var(--green-mid);background:#fff}
+.convos-list{flex:1;overflow-y:auto}
+.convos-list::-webkit-scrollbar{width:4px}
+.convos-list::-webkit-scrollbar-thumb{background:var(--cream-dark);border-radius:2px}
+.convo-item{display:flex;gap:12px;padding:14px 18px;cursor:pointer;border-bottom:1px solid var(--cream-mid);transition:background .15s;align-items:flex-start}
+.convo-item:hover{background:var(--cream)}
+.convo-item.active{background:var(--green-pale)}
+.convo-item.unread .convo-preview{font-weight:700;color:var(--charcoal)}
+.convo-item.unread .convo-name{font-weight:700}
+.convo-avatar{width:42px;height:42px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.convo-body{flex:1;min-width:0}
+.convo-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.convo-name{font-size:13.5px;font-weight:600;color:var(--charcoal)}
+.convo-time{font-size:11px;color:var(--text-light);white-space:nowrap}
+.convo-preview{font-size:12.5px;color:var(--text-mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.convo-item-ref{font-size:11.5px;color:var(--green-mid);font-weight:500;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--green-deep);flex-shrink:0;margin-top:5px}
+.thread-panel{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--cream)}
+.thread-header{padding:14px 24px;background:var(--white);border-bottom:1px solid var(--cream-dark);display:flex;align-items:center;gap:14px;flex-shrink:0}
+.thread-avatar{width:44px;height:44px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.thread-name{font-size:15px;font-weight:700;color:var(--charcoal)}
+.thread-item-ref{font-size:12.5px;color:var(--green-mid);font-weight:500}
+.thread-messages{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
+.thread-messages::-webkit-scrollbar{width:4px}
+.thread-messages::-webkit-scrollbar-thumb{background:var(--cream-dark);border-radius:2px}
+.msg-bubble{max-width:72%;display:flex;flex-direction:column;gap:4px}
+.msg-bubble.mine{align-self:flex-end;align-items:flex-end}
+.msg-bubble.theirs{align-self:flex-start;align-items:flex-start}
+.msg-content{padding:11px 15px;border-radius:var(--r-lg);font-size:13.5px;line-height:1.5}
+.msg-bubble.mine .msg-content{background:var(--green-deep);color:#fff;border-bottom-right-radius:4px}
+.msg-bubble.theirs .msg-content{background:var(--white);color:var(--charcoal);border-bottom-left-radius:4px;box-shadow:var(--sh-xs)}
+.msg-time{font-size:11px;color:var(--text-light);padding:0 4px}
+.compose-area{padding:16px 24px;background:var(--white);border-top:1px solid var(--cream-dark);display:flex;gap:10px;align-items:flex-end;flex-shrink:0}
+.compose-input{flex:1;padding:11px 16px;border:1.5px solid var(--cream-dark);border-radius:var(--r-lg);font-size:13.5px;font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);resize:none;max-height:120px;min-height:44px;line-height:1.5;transition:border-color .2s}
+.compose-input:focus{outline:none;border-color:var(--green-mid);background:#fff}
+.send-btn{padding:11px 20px;background:var(--green-deep);color:#fff;border:none;border-radius:var(--r-lg);font-size:13.5px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;white-space:nowrap}
+.send-btn:hover{background:var(--green-mid)}
+.send-btn:disabled{background:var(--cream-dark);cursor:not-allowed}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-light);gap:12px;padding:40px}
+.empty-icon{font-size:52px}
+.empty-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--charcoal)}
+.empty-sub{font-size:14px;text-align:center}
+.compose-btn{padding:11px 20px;background:var(--honey);color:var(--green-deep);border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif;margin-top:8px}
+.compose-btn:hover{background:var(--honey-light)}
+.no-convo{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-light);gap:8px}
+.new-convo-btn{padding:9px 20px;background:var(--green-deep);color:#fff;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif}
+.new-convo-btn:hover{background:var(--green-mid)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.on{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:var(--r-lg);padding:28px;width:min(480px,90vw);position:relative;box-shadow:var(--sh-lg)}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;margin-bottom:6px}
+.modal-sub{font-size:13.5px;color:var(--text-mid);margin-bottom:18px}
+.modal-x{position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-mid)}
+.form-group{margin-bottom:14px}
+.form-label{font-size:12px;font-weight:700;display:block;margin-bottom:4px}
+.form-input{width:100%;padding:10px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13.5px;font-family:'Jost',sans-serif;background:var(--white);color:var(--charcoal)}
+.form-input:focus{outline:none;border-color:var(--green-mid)}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--charcoal);color:#fff;padding:14px 20px;border-radius:var(--r-md);font-size:14px;font-weight:500;display:flex;gap:10px;align-items:center;box-shadow:var(--sh-md);z-index:9999;transform:translateY(80px);opacity:0;transition:all .35s;pointer-events:none}
+.toast.on{transform:translateY(0);opacity:1}
+@media(max-width:700px){.convos-panel{width:100%;position:fixed;top:68px;bottom:0;z-index:10;transform:translateX(0);transition:transform .3s}.convos-panel.hidden{transform:translateX(-100%)}.thread-panel{width:100%}}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo-wrap" href="family-nest-auctions.html">
+    <svg viewBox="0 0 40 40" width="36" height="36"><rect width="40" height="40" rx="8" fill="#C8A96E"/><path d="M20 8L8 18v14h8v-8h8v8h8V18L20 8z" fill="#3A7A5C"/></svg>
+    <div><div class="logo-name">Family Nest</div><div class="logo-sub">Estate Auctions</div></div>
+  </a>
+  <div class="hd-right">
+    <a href="auction-browse.html" class="hd-nav-link">Browse</a>
+    <a href="account-dashboard.html" class="hd-nav-link">My Account</a>
+    <div class="hd-user-chip" id="hd-user-chip" style="display:none">
+      <div class="hd-avatar" id="hd-initials">?</div>
+      <span class="hd-uname" id="hd-uname">Loading…</span>
+    </div>
+  </div>
+</header>
+
+<div class="inbox-wrap">
+
+  <!-- LEFT: Conversation list -->
+  <div class="convos-panel" id="convos-panel">
+    <div class="cp-header">
+      <span class="cp-title">Messages</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="unread-badge" id="unread-count" style="display:none">0</span>
+        <button class="new-convo-btn" onclick="openComposeModal()">+ New</button>
+      </div>
+    </div>
+    <div class="cp-search">
+      <input class="search-input" id="convo-search" placeholder="🔍 Search messages…" oninput="filterConvos(this.value)">
+    </div>
+    <div class="convos-list" id="convos-list">
+      <div style="text-align:center;padding:32px;color:var(--text-light)">Loading conversations…</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Thread view -->
+  <div class="thread-panel" id="thread-panel">
+    <div class="no-convo" id="no-convo-state">
+      <div class="empty-icon">💬</div>
+      <div class="empty-title">Your Messages</div>
+      <div class="empty-sub">Select a conversation on the left, or start a new one.<br>Ask sellers questions, coordinate shipping, or follow up on won items.</div>
+      <button class="compose-btn" onclick="openComposeModal()">+ Compose New Message</button>
+    </div>
+    <div id="thread-view" style="display:none;flex:1;flex-direction:column;overflow:hidden;display:none">
+      <div class="thread-header" id="thread-header">
+        <div class="thread-avatar" id="thread-avatar">?</div>
+        <div>
+          <div class="thread-name" id="thread-name">Loading…</div>
+          <div class="thread-item-ref" id="thread-item-ref">—</div>
+        </div>
+      </div>
+      <div class="thread-messages" id="thread-messages"></div>
+      <div class="compose-area">
+        <textarea class="compose-input" id="reply-input" placeholder="Type your message…" rows="1" onkeydown="handleReplyKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="send-btn" onclick="sendReply()">Send ↑</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- COMPOSE MODAL -->
+<div class="overlay" id="compose-overlay">
+  <div class="modal">
+    <button class="modal-x" onclick="closeComposeModal()">✕</button>
+    <h2>✉️ New Message</h2>
+    <p class="modal-sub">Send a message to a seller or about a specific item.</p>
+    <div class="form-group">
+      <label class="form-label">To (seller email or user ID)</label>
+      <input class="form-input" id="compose-to" placeholder="seller@example.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Item (optional — paste item title or ID)</label>
+      <input class="form-input" id="compose-item" placeholder="Victorian Mahogany Armchair">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message</label>
+      <textarea class="form-input" id="compose-body" rows="4" placeholder="Hi! I have a question about…" style="resize:vertical"></textarea>
+    </div>
+    <div id="compose-error" style="color:var(--red);font-size:13px;margin-bottom:10px;display:none"></div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="new-convo-btn" style="background:var(--cream-dark);color:var(--charcoal)" onclick="closeComposeModal()">Cancel</button>
+      <button class="send-btn" id="compose-send-btn" onclick="sendNewMessage(this)">Send Message</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="the-toast"><strong id="t-ttl"></strong>&nbsp;<span id="t-msg"></span></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="js/api.js"></script>
+<script>
+var SUPABASE_URL='https://hwsjgclteuezauveujit.supabase.co';
+var SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3c2pnY2x0ZXVlemF1dmV1aml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDg2MzcsImV4cCI6MjA4NzEyNDYzN30.DGMw527z7noRafOxJRdGB3ITSq1teQeS5dTSNwLqFsI';
+var _sb=null;
+function getSB(){if(!_sb)_sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);return _sb;}
+
+function el(id){return document.getElementById(id);}
+function setText(id,v){var e=el(id);if(e)e.textContent=v;}
+function escHtml(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function toast(msg,title){
+  var t=el('the-toast');if(!t)return;
+  setText('t-ttl',title||'');setText('t-msg',msg);
+  t.classList.add('on');setTimeout(function(){t.classList.remove('on');},3600);
+}
+
+var _currentUser=null;
+var _allConvos=[];
+var _activeConvoId=null;
+var _realtimeChannel=null;
+
+function timeAgo(dateStr){
+  if(!dateStr) return '';
+  var secs=Math.floor((Date.now()-new Date(dateStr).getTime())/1000);
+  if(secs<60) return 'just now';
+  var m=Math.floor(secs/60); if(m<60) return m+'m ago';
+  var h=Math.floor(m/60); if(h<24) return h+'h ago';
+  var d=Math.floor(h/24); if(d===1) return 'Yesterday';
+  if(d<7) return d+'d ago';
+  return new Date(dateStr).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+
+function autoResize(ta){
+  ta.style.height='auto';
+  ta.style.height=Math.min(ta.scrollHeight,120)+'px';
+}
+
+// Load all conversations for current user
+async function loadConversations(){
+  var sb=getSB();
+  var {data:{user},error:authErr}=await sb.auth.getUser();
+  if(authErr||!user){window.location.href='family-nest-auctions.html?login=1';return;}
+  _currentUser=user;
+
+  // Update header
+  var {data:profile}=await sb.from('profiles').select('full_name').eq('id',user.id).single();
+  var nm=profile?.full_name||user.email?.split('@')[0]||'User';
+  var initials=(nm[0]||'?').toUpperCase();
+  setText('hd-initials',initials);setText('hd-uname',nm.split(' ')[0]);
+  el('hd-user-chip').style.display='flex';
+
+  // Load messages grouped by conversation_id (or use from_user_id + to_user_id pairing)
+  var {data:msgs,error}=await sb.from('messages')
+    .select('*')
+    .or('from_user_id.eq.'+user.id+',to_user_id.eq.'+user.id)
+    .order('created_at',{ascending:false})
+    .limit(200);
+
+  if(error){
+    el('convos-list').innerHTML='<div style="text-align:center;padding:24px;color:var(--red)">Could not load messages: '+escHtml(error.message)+'</div>';
+    return;
+  }
+
+  if(!msgs||!msgs.length){
+    el('convos-list').innerHTML='<div style="text-align:center;padding:32px;color:var(--text-light);font-size:13.5px">No messages yet.<br>Start a conversation with a seller!</div>';
+    return;
+  }
+
+  // Group by conversation (other party + item_ref)
+  var convos={};
+  msgs.forEach(function(m){
+    var otherId=m.from_user_id===user.id?m.to_user_id:m.from_user_id;
+    var key=(otherId||'')+(m.item_ref?'::'+m.item_ref:'');
+    if(!convos[key]){
+      convos[key]={id:key,otherId,itemRef:m.item_ref||'',lastMsg:m,unread:0,msgs:[]};
+    }
+    convos[key].msgs.push(m);
+    if(m.to_user_id===user.id&&!m.read_at) convos[key].unread++;
+    if(new Date(m.created_at)>new Date(convos[key].lastMsg.created_at)) convos[key].lastMsg=m;
+  });
+  _allConvos=Object.values(convos);
+
+  // Load other users' names
+  var otherIds=[...new Set(_allConvos.map(function(c){return c.otherId;}).filter(Boolean))];
+  var namesMap={};
+  if(otherIds.length){
+    var {data:profiles}=await sb.from('profiles').select('id,full_name').in('id',otherIds);
+    (profiles||[]).forEach(function(p){namesMap[p.id]=p.full_name||'User';});
+  }
+  _allConvos.forEach(function(c){c.otherName=namesMap[c.otherId]||'User';});
+
+  var totalUnread=_allConvos.reduce(function(sum,c){return sum+c.unread;},0);
+  var badge=el('unread-count');
+  if(badge){if(totalUnread>0){badge.textContent=totalUnread;badge.style.display='inline';}else{badge.style.display='none';}}
+
+  renderConvoList(_allConvos);
+  subscribeToMessages();
+}
+
+function renderConvoList(convos){
+  var list=el('convos-list');if(!list)return;
+  if(!convos.length){
+    list.innerHTML='<div style="text-align:center;padding:24px;color:var(--text-light);font-size:13.5px">No conversations found.</div>';
+    return;
+  }
+  list.innerHTML=convos.map(function(c){
+    var initials=(c.otherName||'U')[0].toUpperCase();
+    var preview=c.lastMsg.body||'';
+    if(preview.length>60) preview=preview.slice(0,60)+'…';
+    var mine=c.lastMsg.from_user_id===_currentUser.id;
+    var unreadCls=c.unread>0?'unread':'';
+    var activeCls=c.id===_activeConvoId?'active':'';
+    return '<div class="convo-item '+unreadCls+' '+activeCls+'" onclick="openConvo(\''+escHtml(c.id)+'\')" data-id="'+escHtml(c.id)+'">'+
+      '<div class="convo-avatar">'+initials+'</div>'+
+      '<div class="convo-body">'+
+        '<div class="convo-row">'+
+          '<span class="convo-name">'+escHtml(c.otherName)+'</span>'+
+          '<span class="convo-time">'+timeAgo(c.lastMsg.created_at)+'</span>'+
+        '</div>'+
+        '<div class="convo-preview">'+(mine?'You: ':'')+escHtml(preview)+'</div>'+
+        (c.itemRef?'<div class="convo-item-ref">Re: '+escHtml(c.itemRef)+'</div>':'')+
+      '</div>'+
+      (c.unread>0?'<div class="unread-dot"></div>':'')+
+    '</div>';
+  }).join('');
+}
+
+function filterConvos(query){
+  if(!query.trim()){renderConvoList(_allConvos);return;}
+  var q=query.toLowerCase();
+  var filtered=_allConvos.filter(function(c){
+    return (c.otherName||'').toLowerCase().includes(q)||(c.itemRef||'').toLowerCase().includes(q)||(c.lastMsg.body||'').toLowerCase().includes(q);
+  });
+  renderConvoList(filtered);
+}
+
+async function openConvo(convoId){
+  _activeConvoId=convoId;
+  var convo=_allConvos.find(function(c){return c.id===convoId;});
+  if(!convo) return;
+
+  // Mark active in list
+  document.querySelectorAll('.convo-item').forEach(function(el){el.classList.toggle('active',el.dataset.id===convoId);});
+
+  // Show thread view
+  el('no-convo-state').style.display='none';
+  var tv=el('thread-view');tv.style.display='flex';tv.style.flexDirection='column';tv.style.flex='1';tv.style.overflow='hidden';
+
+  // Set header
+  setText('thread-name',convo.otherName);
+  setText('thread-avatar',(convo.otherName||'U')[0].toUpperCase());
+  setText('thread-item-ref',convo.itemRef?'Re: '+convo.itemRef:'Direct message');
+
+  // Load messages in this thread (newest last)
+  var sb=getSB();
+  var otherId=convo.otherId;
+  var {data:msgs,error}=await sb.from('messages')
+    .select('*')
+    .or('and(from_user_id.eq.'+_currentUser.id+',to_user_id.eq.'+otherId+'),and(from_user_id.eq.'+otherId+',to_user_id.eq.'+_currentUser.id+')')
+    .order('created_at',{ascending:true})
+    .limit(100);
+
+  var threadEl=el('thread-messages');
+  if(error){threadEl.innerHTML='<div style="color:var(--red);text-align:center;padding:20px">Could not load messages.</div>';return;}
+
+  var filtered=convo.itemRef?(msgs||[]).filter(function(m){return m.item_ref===convo.itemRef;}):(msgs||[]);
+  if(!filtered.length){
+    threadEl.innerHTML='<div style="text-align:center;color:var(--text-light);padding:20px;font-size:13px">No messages yet — say hello!</div>';
+  } else {
+    threadEl.innerHTML=filtered.map(function(m){
+      var mine=m.from_user_id===_currentUser.id;
+      var t=new Date(m.created_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+      return '<div class="msg-bubble '+(mine?'mine':'theirs')+'"><div class="msg-content">'+escHtml(m.body)+'</div><div class="msg-time">'+t+'</div></div>';
+    }).join('');
+    setTimeout(function(){threadEl.scrollTop=threadEl.scrollHeight;},50);
+  }
+
+  // Mark unread as read
+  if(convo.unread>0){
+    sb.from('messages').update({read_at:new Date().toISOString()})
+      .eq('to_user_id',_currentUser.id).eq('from_user_id',otherId).is('read_at',null).then(function(){
+        convo.unread=0;
+        var totalUnread=_allConvos.reduce(function(sum,c){return sum+c.unread;},0);
+        var badge=el('unread-count');
+        if(badge){if(totalUnread>0){badge.textContent=totalUnread;badge.style.display='inline';}else{badge.style.display='none';}}
+      });
+  }
+
+  // Store current other user for replies
+  el('reply-input').dataset.toId=otherId;
+  el('reply-input').dataset.itemRef=convo.itemRef||'';
+  el('reply-input').focus();
+}
+
+async function sendReply(){
+  var input=el('reply-input');
+  var body=(input&&input.value.trim())||'';
+  if(!body) return;
+  var toId=input.dataset.toId;
+  var itemRef=input.dataset.itemRef||'';
+  if(!toId){toast('No conversation selected','⚠️');return;}
+  var sb=getSB();
+  var {error}=await sb.from('messages').insert({
+    from_user_id:_currentUser.id,
+    to_user_id:toId,
+    body:body,
+    item_ref:itemRef||null,
+    created_at:new Date().toISOString()
+  });
+  if(error){toast('Could not send: '+error.message,'⚠️');return;}
+  input.value='';
+  input.style.height='auto';
+  // Add bubble locally
+  var threadEl=el('thread-messages');
+  var t=new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+  var div=document.createElement('div');
+  div.className='msg-bubble mine';
+  div.innerHTML='<div class="msg-content">'+escHtml(body)+'</div><div class="msg-time">'+t+'</div>';
+  threadEl.appendChild(div);
+  threadEl.scrollTop=threadEl.scrollHeight;
+}
+
+function handleReplyKey(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendReply();}
+}
+
+function subscribeToMessages(){
+  var sb=getSB();
+  if(_realtimeChannel) sb.removeChannel(_realtimeChannel);
+  _realtimeChannel=sb.channel('messages-inbox')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'to_user_id=eq.'+_currentUser.id},function(payload){
+      var msg=payload.new;
+      // Add to convos list
+      var convo=_allConvos.find(function(c){return c.otherId===msg.from_user_id;});
+      if(!convo){
+        var newConvo={id:(msg.from_user_id||'')+(msg.item_ref?'::'+msg.item_ref:''),otherId:msg.from_user_id,itemRef:msg.item_ref||'',lastMsg:msg,unread:1,otherName:'User',msgs:[msg]};
+        _allConvos.unshift(newConvo);
+      } else {
+        convo.lastMsg=msg; convo.unread++;
+      }
+      renderConvoList(_allConvos);
+      // If thread is open, add bubble
+      if(_activeConvoId&&convo&&convo.id===_activeConvoId){
+        var threadEl=el('thread-messages');
+        var t=new Date(msg.created_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});
+        var div=document.createElement('div');
+        div.className='msg-bubble theirs';
+        div.innerHTML='<div class="msg-content">'+escHtml(msg.body)+'</div><div class="msg-time">'+t+'</div>';
+        threadEl.appendChild(div);
+        threadEl.scrollTop=threadEl.scrollHeight;
+      } else {
+        toast('New message received','💬 Message');
+      }
+    })
+    .subscribe();
+}
+
+// Compose new message
+function openComposeModal(){el('compose-overlay').classList.add('on');}
+function closeComposeModal(){el('compose-overlay').classList.remove('on');}
+
+async function sendNewMessage(btn){
+  var to=(el('compose-to')&&el('compose-to').value.trim())||'';
+  var itemRef=(el('compose-item')&&el('compose-item').value.trim())||'';
+  var body=(el('compose-body')&&el('compose-body').value.trim())||'';
+  var errEl=el('compose-error');if(errEl)errEl.style.display='none';
+  if(!to){if(errEl){errEl.textContent='Please enter a recipient.';errEl.style.display='block';}return;}
+  if(!body){if(errEl){errEl.textContent='Please enter a message.';errEl.style.display='block';}return;}
+  if(btn){btn.textContent='Sending…';btn.disabled=true;}
+  try{
+    var sb=getSB();
+    // Look up recipient by email
+    var toUserId=to;
+    if(to.includes('@')){
+      var {data:rec}=await sb.from('profiles').select('id').eq('email',to).single();
+      if(rec) toUserId=rec.id;
+      else {
+        // Try auth — fallback: store by email as reference
+        toUserId=to;
+      }
+    }
+    var {error}=await sb.from('messages').insert({
+      from_user_id:_currentUser.id,
+      to_user_id:toUserId,
+      body:body,
+      item_ref:itemRef||null,
+      created_at:new Date().toISOString()
+    });
+    if(error) throw error;
+    closeComposeModal();
+    el('compose-to').value='';el('compose-item').value='';el('compose-body').value='';
+    toast('Message sent!','✉️ Sent');
+    await loadConversations();
+  } catch(e){
+    if(errEl){errEl.textContent=(e&&e.message)||'Could not send message.';errEl.style.display='block';}
+  }
+  if(btn){btn.textContent='Send Message';btn.disabled=false;}
+}
+
+el('compose-overlay').addEventListener('click',function(e){if(e.target===el('compose-overlay'))closeComposeModal();});
+
+document.addEventListener('DOMContentLoaded',function(){
+  loadConversations();
+});
+</script>
+</body>
+</html>
