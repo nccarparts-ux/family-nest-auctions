@@ -1,0 +1,19 @@
+# Utility / seeding scripts that contain secret keys — never commit these
+_supabase_setup.js
+_inspect_schema.js
+_fix_admin.js
+_fix_admin.py
+
+# Environment / secrets
+.env
+.env.local
+.env*.local
+*.secret.js
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
