@@ -337,9 +337,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
 </div>
 
 
-<!-- MOBILE NAV OVERLAY -->
-</div>
-
 
 <div class="app-body">
 
@@ -387,7 +384,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
             <div class="ph-title">Good morning, Henderson Estate 👋</div>
             <div class="ph-sub">Thursday, February 19, 2026 · 3 sales active · 5 items need attention</div>
           </div>
-          <button class="btn-primary" onclick="switchTab('upload',document.querySelector('[onclick*=upload]'))">➕ Add New Item</button>
+          <button class="btn-primary" onclick="switchTab('upload',null)">➕ Add New Item</button>
         </div>
       </div>
 
@@ -591,7 +588,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
           </div>
           <div class="form-group">
             <label class="form-label">Category <span class="req">*</span></label>
-            <select class="form-select">
+            <select class="form-select" id="item-category">
               <option value="">Select category…</option>
               <option>Furniture &amp; Seating</option>
               <option>Art &amp; Décor</option>
@@ -624,7 +621,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
           </div>
           <div class="form-group">
             <label class="form-label">Auction Duration <span class="req">*</span></label>
-            <select class="form-select">
+            <select class="form-select" id="item-duration">
               <option>3 days</option>
               <option selected>5 days</option>
               <option>7 days</option>
@@ -650,22 +647,22 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
       <div class="section-card">
         <div class="sc-head"><div class="sc-title">🔎 Condition</div></div>
         <div class="cond-picker" id="cond-picker">
-          <div class="cond-opt selected" onclick="selectCond(this)">
+          <div class="cond-opt selected" data-cond="excellent" onclick="selectCond(this)">
             <div class="cond-opt-dot" style="background:#d4edda;border-color:#2a6040"></div>
             <div class="cond-opt-label">Excellent</div>
             <div class="cond-opt-desc">Near perfect, minimal signs of age</div>
           </div>
-          <div class="cond-opt" onclick="document.querySelectorAll('.cond-opt').forEach(o=>o.classList.remove('selected'));this.classList.add('selected')" onclick="selectCond(this)">
+          <div class="cond-opt" data-cond="good" onclick="selectCond(this)">
             <div class="cond-opt-dot" style="background:#d1ecf1;border-color:#0c5460"></div>
             <div class="cond-opt-label">Good</div>
             <div class="cond-opt-desc">Normal wear consistent with age</div>
           </div>
-          <div class="cond-opt" onclick="document.querySelectorAll('.cond-opt').forEach(o=>o.classList.remove('selected'));this.classList.add('selected')" onclick="selectCond(this)">
+          <div class="cond-opt" data-cond="fair" onclick="selectCond(this)">
             <div class="cond-opt-dot" style="background:#fff3cd;border-color:#856404"></div>
             <div class="cond-opt-label">Fair</div>
             <div class="cond-opt-desc">Visible wear, repairs, or damage</div>
           </div>
-          <div class="cond-opt" onclick="document.querySelectorAll('.cond-opt').forEach(o=>o.classList.remove('selected'));this.classList.add('selected')" onclick="selectCond(this)">
+          <div class="cond-opt" data-cond="as-is" onclick="selectCond(this)">
             <div class="cond-opt-dot" style="background:#f8d7da;border-color:#842029"></div>
             <div class="cond-opt-label">As-Is</div>
             <div class="cond-opt-desc">Sold as-is, damage present</div>
@@ -877,7 +874,10 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
           <div style="color:var(--honey);font-size:22px;margin:4px 0">★★★★★</div>
           <div style="font-size:13px;color:var(--text-mid)">312 reviews</div>
           <div style="margin-top:14px;display:flex;flex-direction:column;gap:5px">
-            ${[['Shipping Speed','4.9'],['Item Accuracy','5.0'],['Communication','4.8'],['Packaging','4.9']].map(([l,v])=>`<div style="display:flex;align-items:center;gap:7px;font-size:12px"><span style="flex:1;text-align:left;color:var(--text-mid)">${l}</span><div style="flex:1;background:var(--cream-dark);border-radius:3px;height:6px;overflow:hidden"><div style="width:${(parseFloat(v)/5*100)}%;height:100%;background:var(--honey);border-radius:3px"></div></div><span style="font-weight:700;color:var(--charcoal)">${v}</span></div>`).join('')}
+            <div style="display:flex;align-items:center;gap:7px;font-size:12px"><span style="flex:1;text-align:left;color:var(--text-mid)">Shipping Speed</span><div style="flex:1;background:var(--cream-dark);border-radius:3px;height:6px;overflow:hidden"><div style="width:98%;height:100%;background:var(--honey);border-radius:3px"></div></div><span style="font-weight:700;color:var(--charcoal)">4.9</span></div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:12px"><span style="flex:1;text-align:left;color:var(--text-mid)">Item Accuracy</span><div style="flex:1;background:var(--cream-dark);border-radius:3px;height:6px;overflow:hidden"><div style="width:100%;height:100%;background:var(--honey);border-radius:3px"></div></div><span style="font-weight:700;color:var(--charcoal)">5.0</span></div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:12px"><span style="flex:1;text-align:left;color:var(--text-mid)">Communication</span><div style="flex:1;background:var(--cream-dark);border-radius:3px;height:6px;overflow:hidden"><div style="width:96%;height:100%;background:var(--honey);border-radius:3px"></div></div><span style="font-weight:700;color:var(--charcoal)">4.8</span></div>
+            <div style="display:flex;align-items:center;gap:7px;font-size:12px"><span style="flex:1;text-align:left;color:var(--text-mid)">Packaging</span><div style="flex:1;background:var(--cream-dark);border-radius:3px;height:6px;overflow:hidden"><div style="width:98%;height:100%;background:var(--honey);border-radius:3px"></div></div><span style="font-weight:700;color:var(--charcoal)">4.9</span></div>
           </div>
         </div>
         <div class="section-card">
