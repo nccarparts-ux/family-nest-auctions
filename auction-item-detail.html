@@ -53,17 +53,7 @@
   .btn-honey:hover{background:var(--honey-light);transform:translateY(-1px)}
 
   /* ── MOBILE NAV ── */
-  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:none}
-  .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
-  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-  .hamburger.open span:nth-child(2){opacity:0}
-  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-  .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--green-deep);z-index:700;flex-direction:column;align-items:center;justify-content:center;gap:32px;opacity:0;pointer-events:none;transition:opacity .3s}
-  .mobile-menu.open{display:flex;opacity:1;pointer-events:all}
-  .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--white);text-decoration:none;transition:color .2s}
-  .mobile-menu a:hover{color:var(--honey)}
-  .mobile-menu-ctas{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
-  .mobile-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:var(--white);font-size:28px;cursor:pointer}
+  
 
   /* ── BREADCRUMB ── */
   .breadcrumb{background:var(--white);border-bottom:1px solid var(--cream-dark);padding:12px 36px;margin-top:108px;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-light);flex-wrap:wrap}
@@ -290,11 +280,11 @@
   .btn-cancel:hover{border-color:var(--red);color:var(--red)}
 
   /* ── RESPONSIVE ── */
-  @media(max-width:900px){
+  @media(max-width:900px){.hamburger{display:flex}
     .ribbon{display:none}
     .breadcrumb{margin-top:70px;padding:10px 16px;font-size:12px}
     .nav-links,.nav-ctas{display:none}
-    .hamburger{display:flex}
+    
     .page-wrap{grid-template-columns:1fr;padding:16px 16px 60px;gap:20px}
     .bid-panel{position:static;border-radius:var(--r-lg)}
     .gallery-main{height:280px}
@@ -327,6 +317,21 @@
     .nei-row{flex-direction:column}
     .nei-input,.btn-notify{width:100%}
   }
+
+  /* ── MOBILE MENU OVERLAY ── */
+
+
+  .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--green-deep);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:28px;opacity:0;pointer-events:none;transition:opacity .3s}
+  .mobile-menu.open{display:flex;opacity:1;pointer-events:all}
+  .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--white);text-decoration:none}
+  .mobile-menu a:hover{color:var(--honey)}
+  .mobile-menu-ctas{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
+  .mobile-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:var(--white);font-size:32px;cursor:pointer;z-index:10000}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:none;z-index:10000;position:relative}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/api.js"></script>
@@ -363,26 +368,31 @@
       <button class="btn-ghost" onclick="window.location.href='family-nest-auctions.html?login=1'">Sign In</button>
       <button class="btn-honey" onclick="window.location.href='family-nest-auctions.html?register=1'">Start Bidding Free</button>
     </div>
-    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
 </header>
 
-<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
   <button class="mobile-close" onclick="toggleMenu()">✕</button>
-  <a href="family-nest-auctions.html#auctions" onclick="toggleMenu()">Live Auctions</a>
+  <a href="family-nest-auctions.html" onclick="toggleMenu()">Home</a>
+  <a href="auction-browse.html" onclick="toggleMenu()">Live Auctions</a>
   <a href="family-nest-auctions.html#how" onclick="toggleMenu()">How It Works</a>
-  <a href="family-nest-auctions.html#why" onclick="toggleMenu()">Why Us</a>
-  <a href="#" onclick="toggleMenu()">Sell With Us</a>
-  <a href="#" onclick="toggleMenu()">Locations</a>
+  <a href="seller-dashboard.html" onclick="toggleMenu()">Sell With Us</a>
+  <a href="account-dashboard.html" onclick="toggleMenu()">My Account</a>
   <div class="mobile-menu-ctas">
-    <button class="btn-ghost" style="font-size:16px;padding:12px 32px" onclick="toggleMenu()">Sign In</button>
-    <button class="btn-honey" style="font-size:16px;padding:12px 32px" onclick="toggleMenu()">Start Bidding Free</button>
+    <button onclick="toggleMenu();window.location.href='family-nest-auctions.html?register=1'" style="width:220px;padding:14px;background:var(--honey);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif">Start Bidding Free</button>
+    <button onclick="toggleMenu();window.location.href='family-nest-auctions.html?login=1'" style="width:220px;padding:13px;background:transparent;border:2px solid rgba(255,255,255,.5);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:white;font-family:'Jost',sans-serif">Sign In</button>
   </div>
 </div>
 
+
+<!-- MOBILE NAV OVERLAY -->
+</div>
+
+
+<!-- MOBILE MENU -->
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
   <a href="family-nest-auctions.html">Home</a>
@@ -540,8 +550,17 @@
         <div class="bc-row total"><span>Estimated total</span><span id="cost-total">~$280</span></div>
       </div>
 
+      <!-- Custom bid input -->
+      <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:8px">Your Bid</div>
+      <div class="bp-input-group" style="margin-bottom:12px">
+        <div class="bp-input-prefix">$</div>
+        <input type="number" id="custom-bid-amount" placeholder="Enter your bid amount" min="1"
+          oninput="updateCosts(this.value)"
+          style="flex:1;border:none;outline:none;padding:12px 14px;font-size:18px;font-weight:700;font-family:'Cormorant Garamond',serif;color:var(--charcoal);background:transparent">
+      </div>
+
       <!-- Quick bid buttons -->
-      <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:8px">Quick Bid</div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-light);margin-bottom:8px">Quick Select</div>
       <div class="quick-bids">
         <div class="qb-btn" onclick="selectBid(this,200)">$200</div>
         <div class="qb-btn" onclick="selectBid(this,225)">$225</div>
@@ -580,24 +599,24 @@
         <div class="notify-options">
           <div class="notify-option">
             <div class="no-left"><span class="no-icon">📧</span>Email if outbid</div>
-            <label class="no-toggle" onclick="checkEmailForm()">
-              <input type="checkbox" id="notif-outbid" checked>
+            <label class="no-toggle" onclick="saveNotifications()">
+              <input type="checkbox" id="notif-outbid" checked onchange="saveNotifications()">
               <div class="no-track"></div>
               <div class="no-thumb"></div>
             </label>
           </div>
           <div class="notify-option">
             <div class="no-left"><span class="no-icon">⏰</span>Reminder 1 hour before end</div>
-            <label class="no-toggle" onclick="checkEmailForm()">
-              <input type="checkbox" id="notif-remind">
+            <label class="no-toggle" onclick="saveNotifications()">
+              <input type="checkbox" id="notif-remind" onchange="saveNotifications()">
               <div class="no-track"></div>
               <div class="no-thumb"></div>
             </label>
           </div>
           <div class="notify-option">
             <div class="no-left"><span class="no-icon">🎉</span>Notify if I win</div>
-            <label class="no-toggle" onclick="checkEmailForm()">
-              <input type="checkbox" id="notif-win" checked>
+            <label class="no-toggle" onclick="saveNotifications()">
+              <input type="checkbox" id="notif-win" checked onchange="saveNotifications()">
               <div class="no-track"></div>
               <div class="no-thumb"></div>
             </label>
@@ -605,7 +624,7 @@
           <div class="notify-option">
             <div class="no-left"><span class="no-icon">📦</span>Shipping updates</div>
             <label class="no-toggle">
-              <input type="checkbox" id="notif-ship" checked>
+              <input type="checkbox" id="notif-ship" checked onchange="saveNotifications()">
               <div class="no-track"></div>
               <div class="no-thumb"></div>
             </label>
@@ -695,7 +714,15 @@
 <!-- TOAST -->
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  if(!h||!m)return;
+  h.classList.toggle('open');
+  m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+}
+</script><script>
 // ── GALLERY STATE (safe to declare outside DOMContentLoaded) ──
 const imgs   = ['🪑','🔍','🪵','🧵','🏷️','📏'];
 const labels = ['Main view','Detail — carvings','Wood grain','Upholstery','Label/markings','Dimensions'];
@@ -767,6 +794,9 @@ function selectBid(btnEl, amt){
   btnEl.classList.add('selected');
   selectedBid = amt;
   updateCosts(amt);
+  // Also populate the custom bid input
+  var ci=document.getElementById('custom-bid-amount');
+  if(ci) ci.value=amt;
   const pa = el('proxy-amount'); if(pa && el('proxy-toggle') && el('proxy-toggle').checked) pa.value=amt;
 }
 
@@ -777,10 +807,18 @@ function toggleProxy(cb){
 
 // ── CONFIRM MODAL ──
 function openConfirm(){
-  const bid   = selectedBid||liveBid+10;
-  const prem  = (bid*0.15).toFixed(2);
-  const total = Math.round(bid+bid*0.15+65);
-  setText('confirm-bid',   '$'+bid);
+  // Read from custom input first, fall back to quick-select
+  var ci=document.getElementById('custom-bid-amount');
+  var amount = ci&&ci.value ? parseFloat(ci.value) : (selectedBid||null);
+  if(!amount||amount<1){ toast('Please enter a bid amount first','⚠️ Enter amount'); return; }
+  // Proxy max
+  var pt=el('proxy-toggle'), pi=el('proxy-amount');
+  window._pendingBid = amount;
+  window._pendingMax = (pt&&pt.checked&&pi&&pi.value) ? parseFloat(pi.value) : null;
+  // Update confirm modal
+  const prem  = (amount*0.15).toFixed(2);
+  const total = Math.round(amount+amount*0.15+65);
+  setText('confirm-bid',   '$'+amount);
   setText('confirm-prem',  '$'+prem);
   setText('confirm-total', '~$'+total);
   const ov=el('confirm-overlay'); if(ov) ov.classList.add('on');
@@ -789,11 +827,36 @@ function closeConfirm(){
   const ov=el('confirm-overlay'); if(ov) ov.classList.remove('on');
 }
 function submitBid(){
-  closeConfirm();
-  setText('bp-bid-ct', bidCount+' bids · 🟢 You are leading!');
-  setText('watch-btn', '❤️ Watchlist');
-  toast('Your bid is confirmed. We\'ll alert you if outbid.','🎉 Bid Placed Successfully!');
+  var itemId=new URLSearchParams(window.location.search).get('id');
+  var amount=window._pendingBid;
+  var maxAmount=window._pendingMax||null;
+  if(!itemId){ toast('Could not find item','⚠️ Error'); closeConfirm(); return; }
+  if(!amount||amount<1){ toast('Enter a valid bid amount','⚠️ Error'); closeConfirm(); return; }
+  var btn=document.querySelector('[onclick*="submitBid"]');
+  if(btn){ btn.textContent='⏳ Placing…'; btn.disabled=true; }
+  FNA.Bidding.placeBid(itemId,amount,maxAmount)
+    .then(function(){
+      closeConfirm();
+      toast('Bid of $'+amount+' placed!','🎉 Bid Confirmed');
+      var bidEl=document.getElementById('bp-bid-amt');
+      if(bidEl) bidEl.textContent='$'+amount;
+      var ci=document.getElementById('custom-bid-amount');
+      if(ci) ci.value='';
+      window._pendingBid=null; window._pendingMax=null;
+      if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
+    })
+    .catch(function(err){
+      closeConfirm();
+      if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
+      if(err.message&&err.message.toLowerCase().includes('sign')){
+        toast('Please sign in to bid','🔒 Sign In Required');
+        setTimeout(function(){ window.location.href='family-nest-auctions.html?login=1'; },1500);
+      } else {
+        toast(err.message||'Bid failed — please try again','⚠️ Error');
+      }
+    });
 }
+
 
 // ── WATCHLIST ──
 function toggleWatchlist(){
@@ -817,11 +880,34 @@ function checkEmailForm(){
   },50);
 }
 function saveNotifications(){
-  const emailEl=el('notif-email');
-  const email=emailEl?emailEl.value:'';
-  if(!email){ toast('Please enter your email address','⚠️ Email Required'); return; }
-  toast('Notifications saved for '+email,'🔔 Notifications Set!');
+  var outbid=document.getElementById('notif-outbid')?.checked||false;
+  var remind=document.getElementById('notif-remind')?.checked||false;
+  var win=document.getElementById('notif-win')?.checked||false;
+  var ship=document.getElementById('notif-ship')?.checked||false;
+  var email=document.getElementById('notif-email')?.value?.trim();
+  var itemId=new URLSearchParams(window.location.search).get('id');
+  var prefs={outbid,remind,win,ship};
+  FNA.Auth.getUser().then(function(user){
+    if(!user){
+      if(!email){ toast('Enter your email to get notified','📧 Email needed'); return; }
+      localStorage.setItem('fna_notif_email',email);
+      localStorage.setItem('fna_notif_prefs',JSON.stringify(prefs));
+      toast('Notifications saved for '+email,'🔔 Saved');
+      return;
+    }
+    var _sb=window.supabase.createClient(
+      'https://hwsjgclteuezauveujit.supabase.co',
+      'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+    );
+    _sb.from('profiles').update({notification_prefs:prefs}).eq('id',user.id)
+      .then(function(){ toast('Preferences saved!','🔔 Saved'); })
+      .catch(function(){ toast('Could not save preferences','⚠️ Error'); });
+    if(itemId&&(outbid||remind)){
+      _sb.from('watchlist').upsert({user_id:user.id,item_id:itemId},{onConflict:'user_id,item_id'}).then(function(){});
+    }
+  });
 }
+
 
 // ── SHARE ──
 function shareItem(){
@@ -835,12 +921,7 @@ function shareItem(){
 }
 
 // ── MOBILE NAV ──
-function toggleMenu(){
-  const h=el('hamburger'), m=el('mobile-menu');
-  if(h) h.classList.toggle('open');
-  if(m) m.classList.toggle('open');
-  document.body.style.overflow=(m&&m.classList.contains('open'))?'hidden':'';
-}
+
 
 // ── DOM-DEPENDENT SETUP — runs only after full DOM is ready ──
 document.addEventListener('DOMContentLoaded', function(){

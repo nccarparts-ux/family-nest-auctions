@@ -243,7 +243,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
 .modal .modal-sub{font-size:14px;color:var(--text-mid);margin-bottom:22px}
 
 /* ── RESPONSIVE ── */
-@media(max-width:900px){
+@media(max-width:900px){.hamburger{display:flex}
   .sidebar{display:none}
   .main{padding:18px 16px 60px}
   .analytics-grid{grid-template-columns:1fr}
@@ -277,6 +277,21 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
     .payout-summary{grid-template-columns:repeat(2,1fr)}
     .bar-chart{height:90px}
   }
+
+  /* ── MOBILE MENU OVERLAY ── */
+
+
+  .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--green-deep);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:28px;opacity:0;pointer-events:none;transition:opacity .3s}
+  .mobile-menu.open{display:flex;opacity:1;pointer-events:all}
+  .mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--white);text-decoration:none}
+  .mobile-menu a:hover{color:var(--honey)}
+  .mobile-menu-ctas{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
+  .mobile-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:var(--white);font-size:32px;cursor:pointer;z-index:10000}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:none;z-index:10000;position:relative}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/api.js"></script>
@@ -305,7 +320,26 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
     <a href="auction-browse.html" class="hd-view-site">← View Site</a>
     <div class="hd-avatar" onclick="toast('Account settings coming soon','👤 Profile')">HS</div>
   </div>
+<button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
 </header>
+
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="family-nest-auctions.html" onclick="toggleMenu()">Home</a>
+  <a href="auction-browse.html" onclick="toggleMenu()">Live Auctions</a>
+  <a href="family-nest-auctions.html#how" onclick="toggleMenu()">How It Works</a>
+  <a href="seller-dashboard.html" onclick="toggleMenu()">Sell With Us</a>
+  <a href="account-dashboard.html" onclick="toggleMenu()">My Account</a>
+  <div class="mobile-menu-ctas">
+    <button onclick="toggleMenu();window.location.href='family-nest-auctions.html?register=1'" style="width:220px;padding:14px;background:var(--honey);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif">Start Bidding Free</button>
+    <button onclick="toggleMenu();window.location.href='family-nest-auctions.html?login=1'" style="width:220px;padding:13px;background:transparent;border:2px solid rgba(255,255,255,.5);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:white;font-family:'Jost',sans-serif">Sign In</button>
+  </div>
+</div>
+
+
+<!-- MOBILE NAV OVERLAY -->
+</div>
+
 
 <div class="app-body">
 
@@ -581,11 +615,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
           </div>
           <div class="form-group">
             <label class="form-label">Starting Bid <span class="req">*</span></label>
-            <input class="form-input" type="number" placeholder="$1" min="1">
+            <input class="form-input" type="number" id="item-start-bid" placeholder="$1" min="1">
           </div>
           <div class="form-group">
             <label class="form-label">Reserve Price <span style="font-size:11px;color:var(--text-light)">(optional)</span></label>
-            <input class="form-input" type="number" placeholder="Hidden minimum…">
+            <input class="form-input" type="number" id="item-reserve" placeholder="Hidden minimum…">
             <div class="form-hint">Auction won't complete below this amount</div>
           </div>
           <div class="form-group">
@@ -600,15 +634,15 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
           </div>
           <div class="form-group">
             <label class="form-label">Dimensions</label>
-            <input class="form-input" type="text" placeholder='e.g. 37"H × 26"W × 28"D'>
+            <input class="form-input" type="text" id="item-dimensions" placeholder='e.g. 37"H × 26"W × 28"D'>
           </div>
           <div class="form-group">
             <label class="form-label">Weight (for shipping calc)</label>
-            <input class="form-input" type="text" placeholder="e.g. 28 lbs">
+            <input class="form-input" type="text" id="item-weight" placeholder="e.g. 28 lbs">
           </div>
           <div class="form-group">
             <label class="form-label">Period / Date</label>
-            <input class="form-input" type="text" placeholder="e.g. Victorian, c.1890">
+            <input class="form-input" type="text" id="item-period" placeholder="e.g. Victorian, c.1890">
           </div>
         </div>
       </div>
@@ -621,17 +655,17 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
             <div class="cond-opt-label">Excellent</div>
             <div class="cond-opt-desc">Near perfect, minimal signs of age</div>
           </div>
-          <div class="cond-opt" onclick="selectCond(this)">
+          <div class="cond-opt" onclick="document.querySelectorAll('.cond-opt').forEach(o=>o.classList.remove('selected'));this.classList.add('selected')" onclick="selectCond(this)">
             <div class="cond-opt-dot" style="background:#d1ecf1;border-color:#0c5460"></div>
             <div class="cond-opt-label">Good</div>
             <div class="cond-opt-desc">Normal wear consistent with age</div>
           </div>
-          <div class="cond-opt" onclick="selectCond(this)">
+          <div class="cond-opt" onclick="document.querySelectorAll('.cond-opt').forEach(o=>o.classList.remove('selected'));this.classList.add('selected')" onclick="selectCond(this)">
             <div class="cond-opt-dot" style="background:#fff3cd;border-color:#856404"></div>
             <div class="cond-opt-label">Fair</div>
             <div class="cond-opt-desc">Visible wear, repairs, or damage</div>
           </div>
-          <div class="cond-opt" onclick="selectCond(this)">
+          <div class="cond-opt" onclick="document.querySelectorAll('.cond-opt').forEach(o=>o.classList.remove('selected'));this.classList.add('selected')" onclick="selectCond(this)">
             <div class="cond-opt-dot" style="background:#f8d7da;border-color:#842029"></div>
             <div class="cond-opt-label">As-Is</div>
             <div class="cond-opt-desc">Sold as-is, damage present</div>
@@ -639,7 +673,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
         </div>
         <div style="margin-top:16px">
           <label class="form-label" style="margin-bottom:6px;display:block">Condition Notes <span style="font-size:11px;color:var(--text-light)">(required for Fair or As-Is)</span></label>
-          <textarea class="form-textarea" placeholder="Describe any damage, repairs, or notable wear — be specific. Buyers appreciate full disclosure." style="min-height:80px"></textarea>
+          <textarea class="form-textarea" id="item-condition-notes" placeholder="Describe any damage, repairs, or notable wear — be specific. Buyers appreciate full disclosure." style="min-height:80px"></textarea>
         </div>
       </div>
 
@@ -659,7 +693,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
           </div>
           <div class="form-group">
             <label class="form-label">Estimated Shipping Cost</label>
-            <input class="form-input" type="text" placeholder="e.g. $45–65 depending on ZIP">
+            <input class="form-input" type="text" id="item-shipping" placeholder="e.g. $45–65 depending on ZIP">
             <div class="form-hint">Shown to buyers before bidding (transparency!)</div>
           </div>
           <div class="form-group full">
@@ -673,7 +707,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
 
       <div style="display:flex;gap:12px;justify-content:flex-end;padding-top:8px">
         <button class="btn-secondary" onclick="toast('Saved as draft','💾 Draft Saved')">Save Draft</button>
-        <button class="btn-primary" style="font-size:15px;padding:13px 28px" onclick="publishItem()">🚀 Publish Listing</button>
+        <button class="btn-primary" style="font-size:15px;padding:13px 28px" onclick="publishListing()">🚀 Publish Listing</button>
       </div>
     </div>
 
@@ -1023,6 +1057,60 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 });
+
+function publishListing(){
+  var title = document.getElementById('item-title')?.value?.trim();
+  var desc = document.getElementById('item-desc')?.value?.trim();
+  var category = document.getElementById('item-category')?.value || 'Furniture';
+  var startBid = document.getElementById('item-start-bid')?.value;
+  var reserve = document.getElementById('item-reserve')?.value;
+  var duration = document.getElementById('item-duration')?.value || '7';
+  var period = document.getElementById('item-period')?.value || '';
+  var condNotes = document.getElementById('item-condition-notes')?.value || '';
+  var selected = document.querySelector('.cond-opt.selected');
+  var condition = selected ? selected.dataset.cond : 'good';
+
+  if(!title){ alert('Please enter an item title.'); return; }
+  if(!startBid || parseFloat(startBid) < 1){ alert('Please enter a starting bid of at least $1.'); return; }
+
+  var endsAt = new Date(Date.now() + parseInt(duration) * 86400000).toISOString();
+
+  var btn = document.querySelector('[onclick*="publishListing"]');
+  if(btn){ btn.textContent = '⏳ Publishing…'; btn.disabled = true; }
+
+  FNA.Seller.createItem({
+    title, description: desc, category, condition,
+    conditionNotes: condNotes, period,
+    startingBid: startBid,
+    reservePrice: reserve || null,
+    startsAt: new Date().toISOString(),
+    endsAt: endsAt,
+    status: 'live'
+  }).then(function(item){
+    if(btn){ btn.textContent = '🚀 Publish Listing'; btn.disabled = false; }
+    toast('Item published successfully! Item ID: ' + item.id.slice(0,8), '✅ Published');
+    // Clear form
+    document.getElementById('item-title').value = '';
+    document.getElementById('item-desc').value = '';
+    if(document.getElementById('item-start-bid')) document.getElementById('item-start-bid').value = '';
+    setTimeout(function(){ switchTab('listings', null); }, 2000);
+  }).catch(function(err){
+    if(btn){ btn.textContent = '🚀 Publish Listing'; btn.disabled = false; }
+    alert('Could not publish: ' + err.message + '\n\nMake sure you are signed in as a seller.');
+  });
+}
+
+
+
+
+
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  if(!h||!m)return;
+  h.classList.toggle('open');
+  m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+}
 </script>
 </body>
 </html>
