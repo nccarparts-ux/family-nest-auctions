@@ -491,7 +491,8 @@
         <div class="bh-row"><div class="bh-user"><div class="bh-av">T</div><div><div class="bh-name">T***s</div><div class="bh-time">1h 12min ago</div></div></div><div class="bh-amt">$130</div></div>
         <div class="bh-row"><div class="bh-user"><div class="bh-av">A</div><div><div class="bh-name">A***a</div><div class="bh-time">1h 48min ago</div></div></div><div class="bh-amt">$110</div></div>
       </div>
-      <div style="text-align:center;margin-top:14px"><button style="background:transparent;border:none;color:var(--green-mid);font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif" onclick="var bh=document.getElementById('bid-history-full');if(bh){bh.style.display=bh.style.display==='none'?'block':'none';this.textContent=bh.style.display==='none'?'Show all 18 bids ↓':'Hide bids ↑'}">Show all 18 bids ↓</button></div>
+      <div style="text-align:center;margin-top:14px"><button id="show-all-bids-btn" style="background:transparent;border:none;color:var(--green-mid);font-size:13.5px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif" onclick="showAllBids(this)">Show all bids ↓</button></div>
+      <div id="bid-history-full" style="display:none;margin-top:8px"></div>
     </div>
 
     <!-- SELLER -->
@@ -806,7 +807,20 @@ function toggleProxy(cb){
 }
 
 // ── CONFIRM MODAL ──
-function openConfirm(){
+async function openConfirm(){
+  // Auth check first — redirect to login if not signed in
+  try {
+    var user = await FNA.Auth.getUser();
+    if(!user){
+      toast('Please sign in to place a bid','🔒 Sign In Required');
+      setTimeout(function(){ window.location.href='family-nest-auctions.html?login=1'; },1500);
+      return;
+    }
+  } catch(e) {
+    toast('Please sign in to place a bid','🔒 Sign In Required');
+    setTimeout(function(){ window.location.href='family-nest-auctions.html?login=1'; },1500);
+    return;
+  }
   // Read from custom input first, fall back to quick-select
   var ci=document.getElementById('custom-bid-amount');
   var amount = ci&&ci.value ? parseFloat(ci.value) : (selectedBid||null);
@@ -922,6 +936,58 @@ function shareItem(){
 
 // ── MOBILE NAV ──
 
+// ── BID HISTORY (real Supabase data) ──
+function bidTimeAgo(dateStr){
+  if(!dateStr) return 'some time ago';
+  var secs=Math.floor((Date.now()-new Date(dateStr).getTime())/1000);
+  if(secs<60) return secs+'s ago';
+  var m=Math.floor(secs/60); if(m<60) return m+'m ago';
+  var h=Math.floor(m/60); if(h<24) return h+'h ago';
+  return Math.floor(h/24)+'d ago';
+}
+async function showAllBids(btn){
+  var fullEl=el('bid-history-full');
+  if(!fullEl) return;
+  // Toggle hide if already loaded
+  if(fullEl.dataset.loaded==='1'){
+    var hidden=fullEl.style.display==='none';
+    fullEl.style.display=hidden?'block':'none';
+    if(btn) btn.textContent=hidden?'Hide bids ↑':'Show all bids ↓';
+    return;
+  }
+  if(btn){ btn.textContent='Loading…'; btn.disabled=true; }
+  var itemId=new URLSearchParams(window.location.search).get('id');
+  if(!itemId){
+    fullEl.innerHTML='<div style="text-align:center;color:var(--text-light);padding:14px;font-size:13px">Open from the browse page to load bid history.</div>';
+    fullEl.style.display='block';
+    if(btn){ btn.textContent='Hide bids ↑'; btn.disabled=false; }
+    return;
+  }
+  try {
+    var history=await FNA.Items.getBidHistory(itemId);
+    if(!history||!history.length){
+      fullEl.innerHTML='<div style="text-align:center;color:var(--text-light);padding:14px;font-size:13px">No bids yet — be the first!</div>';
+    } else {
+      fullEl.innerHTML=history.map(function(b,i){
+        var nm=(b.profiles&&b.profiles.full_name)||'User';
+        var parts=nm.trim().split(' ');
+        var initials=(parts[0]||'U')[0].toUpperCase();
+        var masked=parts[0][0]+'***'+(parts.length>1?parts[parts.length-1][0]:'');
+        var isTop=i===0;
+        var amt=parseFloat(b.amount||b.bid_amount||0).toLocaleString('en-US',{style:'currency',currency:'USD',minimumFractionDigits:0});
+        return '<div class="bh-row"><div class="bh-user"><div class="bh-av">'+initials+'</div><div><div class="bh-name">'+masked+(isTop?' <span class="bh-winner-tag">Leading</span>':'')+'</div><div class="bh-time">'+bidTimeAgo(b.created_at)+'</div></div></div><div class="bh-amt'+(isTop?' top':'')+'">'+amt+'</div></div>';
+      }).join('');
+      setText('bid-hist-count','('+history.length+' bids)');
+    }
+    fullEl.dataset.loaded='1';
+    fullEl.style.display='block';
+    if(btn){ btn.textContent='Hide bids ↑'; btn.disabled=false; }
+  } catch(err){
+    fullEl.innerHTML='<div style="text-align:center;color:var(--red);padding:14px;font-size:13px">Could not load bid history — '+((err&&err.message)||'try again')+'</div>';
+    fullEl.style.display='block';
+    if(btn){ btn.textContent='Show all bids ↓'; btn.disabled=false; }
+  }
+}
 
 // ── DOM-DEPENDENT SETUP — runs only after full DOM is ready ──
 document.addEventListener('DOMContentLoaded', function(){

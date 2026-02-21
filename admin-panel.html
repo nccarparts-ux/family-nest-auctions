@@ -340,13 +340,13 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
       <div class="alert-strip blue"><strong>💡 Henderson Estate</strong> has 5 overdue shipments — automated reminder sent 12h ago.</div>
 
       <div class="stat-grid">
-        <div class="stat-card g"><div class="stat-icon">💰</div><div class="stat-val">$84,220</div><div class="stat-label">Platform GMV This Month</div><div class="stat-delta up">↑ 22% MoM</div></div>
-        <div class="stat-card h"><div class="stat-icon">📦</div><div class="stat-val">247</div><div class="stat-label">Active Listings</div><div class="stat-delta up">↑ 31 new today</div></div>
-        <div class="stat-card b"><div class="stat-icon">👥</div><div class="stat-val">12,408</div><div class="stat-label">Registered Buyers</div><div class="stat-delta up">↑ 184 this week</div></div>
-        <div class="stat-card g"><div class="stat-icon">🏡</div><div class="stat-val">18</div><div class="stat-label">Active Estate Sales</div><div class="stat-delta up">↑ 3 new sales</div></div>
-        <div class="stat-card h"><div class="stat-icon">⚡</div><div class="stat-val">2,840</div><div class="stat-label">Bids Today</div><div class="stat-delta up">↑ 18% vs yesterday</div></div>
+        <div class="stat-card g"><div class="stat-icon">💰</div><div class="stat-val" id="stat-gmv">$84,220</div><div class="stat-label">Platform GMV This Month</div><div class="stat-delta up">↑ 22% MoM</div></div>
+        <div class="stat-card h"><div class="stat-icon">📦</div><div class="stat-val" id="stat-listings">247</div><div class="stat-label">Active Listings</div><div class="stat-delta up" id="stat-listings-delta">↑ loading…</div></div>
+        <div class="stat-card b"><div class="stat-icon">👥</div><div class="stat-val" id="stat-buyers">12,408</div><div class="stat-label">Registered Buyers</div><div class="stat-delta up">↑ 184 this week</div></div>
+        <div class="stat-card g"><div class="stat-icon">🏡</div><div class="stat-val" id="stat-sales">18</div><div class="stat-label">Active Estate Sales</div><div class="stat-delta up">↑ 3 new sales</div></div>
+        <div class="stat-card h"><div class="stat-icon">⚡</div><div class="stat-val" id="stat-bids">2,840</div><div class="stat-label">Bids Today</div><div class="stat-delta up">↑ 18% vs yesterday</div></div>
         <div class="stat-card b"><div class="stat-icon">🏆</div><div class="stat-val">$12,630</div><div class="stat-label">Platform Revenue (15% fee)</div><div class="stat-delta up">↑ 22% MoM</div></div>
-        <div class="stat-card r"><div class="stat-icon">⚖️</div><div class="stat-val">3</div><div class="stat-label">Open Disputes</div><div class="stat-delta down">⚠️ Review needed</div></div>
+        <div class="stat-card r"><div class="stat-icon">⚖️</div><div class="stat-val" id="stat-disputes">3</div><div class="stat-label">Open Disputes</div><div class="stat-delta down">⚠️ Review needed</div></div>
         <div class="stat-card p"><div class="stat-icon">⭐</div><div class="stat-val">4.87</div><div class="stat-label">Platform Avg. Rating</div><div class="stat-delta up">↑ All-time high</div></div>
       </div>
 
@@ -438,13 +438,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
           <select class="tt-select"><option>All Roles</option><option>Buyer</option><option>Seller</option><option>Both</option></select>
         </div>
         <table class="data-table">
-          <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Joined</th><th>Total Bids</th><th>Total Spent</th><th>Actions</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Jennifer M.</strong><div style="font-size:11.5px;color:var(--text-light)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f19b949f9f98979483df9cb1949c90989ddf929e9c">[email&#160;protected]</a> · Tampa, FL</div></td><td>Buyer</td><td><span class="pill active">✅ Active</span></td><td>Jan 2025</td><td>142</td><td>$8,420</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Jennifer M.')">View</button><button class="tbl-action danger" onclick="toast('User suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
-            <tr><td><strong>Robert P.</strong><div style="font-size:11.5px;color:var(--text-light)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ccbee2bcadb8b8a9bebfa3a28ca9a1ada5a0e2afa3a1">[email&#160;protected]</a> · Chicago, IL</div></td><td>Buyer</td><td><span class="pill active">✅ Active</span></td><td>Mar 2025</td><td>87</td><td>$5,100</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Robert P.')">View</button><button class="tbl-action danger" onclick="toast('User suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
-            <tr><td><strong>Marcus T.</strong><div style="font-size:11.5px;color:var(--text-light)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="25480b514d4a4844561c1c654048444c490b464a48">[email&#160;protected]</a> · Dallas, TX</div></td><td>Buyer</td><td><span class="pill suspended">⚠️ Suspended</span></td><td>Jun 2025</td><td>23</td><td>$0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Marcus T.')">View</button><button class="tbl-action" onclick="toast('User reinstated','✅ Reinstated')">Reinstate</button><button class="tbl-action danger" onclick="toast('User banned','❌ Banned')">Ban</button></div></td></tr>
-            <tr><td><strong>Sarah K.</strong><div style="font-size:11.5px;color:var(--text-light)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ddaebcafbcb5f3b69db8b0bcb4b1f3beb2b0">[email&#160;protected]</a> · Seattle, WA</div></td><td>Buyer</td><td><span class="pill active">✅ Active</span></td><td>Aug 2024</td><td>264</td><td>$18,700</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Sarah K.')">View</button><button class="tbl-action danger" onclick="toast('User suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
-            <tr><td><strong>Anonymous_X771</strong><div style="font-size:11.5px;color:var(--text-light)">Email hidden · Flagged for shill bidding</div></td><td>Buyer</td><td><span class="pill banned">❌ Banned</span></td><td>Dec 2025</td><td>0</td><td>$0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('Anonymous_X771')">Details</button></div></td></tr>
+          <thead><tr><th>User</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="5" style="text-align:center;color:var(--text-light);padding:20px">Loading users from Supabase…</td></tr>
           </tbody>
         </table>
       </div>
@@ -454,20 +450,16 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
     <div class="tab-panel" id="panel-sellers">
       <div class="page-header">
         <div class="ph-row">
-          <div><div class="ph-title">Seller Management</div><div class="ph-sub">24 verified sellers · 3 pending approval</div></div>
-          <button class="btn-primary" onclick="toast('New seller onboarding coming soon','➕ New Seller')">➕ Onboard Seller</button>
+          <div><div class="ph-title">Seller Management</div><div id="sellers-sub" class="ph-sub">24 verified sellers · 3 pending approval</div></div>
+          <button class="btn-primary" onclick="openAddSellerModal()">➕ Onboard Seller</button>
         </div>
       </div>
       <div class="alert-strip honey"><strong>⏳ 3 sellers pending approval</strong> — background check complete, awaiting admin sign-off.</div>
       <div class="section-card">
         <table class="data-table">
-          <thead><tr><th>Seller</th><th>Status</th><th>Rating</th><th>Active Listings</th><th>GMV (30d)</th><th>Disputes</th><th>Actions</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Henderson Estate Sales</strong><div style="font-size:11.5px;color:var(--text-light)">Atlanta, GA · Member since 2021</div></td><td><span class="pill verified">✅ Verified</span></td><td>⭐ 4.9 (312)</td><td>24</td><td>$12,840</td><td>0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening seller profile…','View')">View</button><button class="tbl-action" onclick="switchTab('payouts',null)">Payouts</button></div></td></tr>
-            <tr><td><strong>Morrison Collection</strong><div style="font-size:11.5px;color:var(--text-light)">Savannah, GA · Member since 2022</div></td><td><span class="pill verified">✅ Verified</span></td><td>⭐ 5.0 (188)</td><td>12</td><td>$8,420</td><td>0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action" onclick="switchTab('payouts',null)">Payouts</button></div></td></tr>
-            <tr><td><strong>Whitfield Gallery</strong><div style="font-size:11.5px;color:var(--text-light)">Charleston, SC · Member since 2023</div></td><td><span class="pill verified">✅ Verified</span></td><td>⭐ 4.8 (94)</td><td>8</td><td>$6,100</td><td>1</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action danger" onclick="openDisputeModal('Whitfield dispute')">Dispute</button></div></td></tr>
-            <tr><td><strong>Carmichael Estate</strong><div style="font-size:11.5px;color:var(--text-light)">Richmond, VA · Member since 2024</div></td><td><span class="pill pending">⏳ Pending Review</span></td><td>⭐ 4.6 (22)</td><td>5</td><td>$1,840</td><td>2</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Seller approved','✅ Approved')">Approve</button><button class="tbl-action danger" onclick="toast('Seller suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
-            <tr><td><strong>Larson Collection</strong><div style="font-size:11.5px;color:var(--text-light)">Denver, CO · Member since 2024</div></td><td><span class="pill pending">⏳ Pending Review</span></td><td>⭐ 4.9 (41)</td><td>9</td><td>$4,200</td><td>0</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Seller approved','✅ Approved')">Approve</button><button class="tbl-action danger" onclick="toast('Seller suspended','⚠️ Suspended')">Suspend</button></div></td></tr>
+          <thead><tr><th>Seller</th><th>Status</th><th>Location</th><th>Active Listings</th><th>Applied</th><th>Actions</th></tr></thead>
+          <tbody id="sellers-tbody">
+            <tr><td colspan="6" style="text-align:center;color:var(--text-light);padding:20px">Loading sellers from Supabase…</td></tr>
           </tbody>
         </table>
       </div>
@@ -761,4 +753,126 @@ document.addEventListener('DOMContentLoaded',()=>{
   const feedEntries=[
     '⚡ <span class="au-actor">R***l</span> placed bid $1,300 on Art Deco Brooch<span class="audit-tag bid">BID</span>',
     '👤 New user registered from Austin, TX<span class="audit-tag user">USER</span>',
-    '⚡ <span class="au-actor">D***a</span> placed max bid $5,0
+    '⚡ <span class="au-actor">D***a</span> placed max bid $5,000 on Vintage Rolex<span class="audit-tag bid">BID</span>',
+    'Henderson Estate published new listing<span class="audit-tag system">LISTING</span>',
+    'Payout processed to Morrison Collection<span class="audit-tag system">PAYOUT</span>',
+  ];
+  var feedEl=el('live-feed');
+  var feedIdx=0;
+  if(feedEl){
+    setInterval(function(){
+      var row=document.createElement('div');
+      row.className='audit-row';
+      row.innerHTML='<div class="audit-time">Just now</div><div class="audit-icon">!</div><div class="audit-text">'+feedEntries[feedIdx%feedEntries.length]+'</div>';
+      feedEl.insertBefore(row,feedEl.firstChild);
+      if(feedEl.children.length>12) feedEl.removeChild(feedEl.lastChild);
+      feedIdx++;
+    },8000);
+  }
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+  loadAdminStats(); loadAdminSellers(); loadAdminUsers();
+});
+
+var _sbAdmin=null;
+function getAdminSB(){
+  if(!_sbAdmin) _sbAdmin=window.supabase.createClient(
+    'https://hwsjgclteuezauveujit.supabase.co',
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+  );
+  return _sbAdmin;
+}
+function escA(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+async function loadAdminStats(){
+  try{
+    var sb=getAdminSB();
+    var [r1,r2,r3,r4]=await Promise.all([
+      sb.from('items').select('*',{count:'exact',head:true}).eq('status','live'),
+      sb.from('profiles').select('*',{count:'exact',head:true}),
+      sb.from('estate_sales').select('*',{count:'exact',head:true}).in('status',['live','upcoming']),
+      sb.from('bids').select('*',{count:'exact',head:true}).gte('created_at',new Date().toISOString().slice(0,10))
+    ]);
+    if(r1.count!=null)setText('stat-listings',r1.count.toLocaleString());
+    if(r2.count!=null)setText('stat-buyers',r2.count.toLocaleString());
+    if(r3.count!=null)setText('stat-sales',r3.count.toLocaleString());
+    if(r4.count!=null)setText('stat-bids',r4.count.toLocaleString());
+    var d=el('stat-listings-delta');if(d&&r1.count!=null)d.textContent='Live right now';
+  }catch(e){}
+}
+
+async function loadAdminSellers(){
+  var sb=getAdminSB(); var tbody=el('sellers-tbody'); if(!tbody)return;
+  try{
+    var {data,error}=await sb.from('sellers').select('*').order('created_at',{ascending:false}).limit(50);
+    if(error)throw error;
+    if(!data||!data.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">No sellers in database yet.</td></tr>';return;}
+    var verified=data.filter(function(s){return s.is_verified;}).length;
+    var pending=data.filter(function(s){return !s.is_verified;}).length;
+    var subEl=el('sellers-sub');if(subEl)subEl.textContent=verified+' verified · '+pending+' pending approval';
+    tbody.innerHTML=data.map(function(s){
+      var sp=s.is_verified?'<span class="pill verified">✅ Verified</span>':(s.status==='suspended'?'<span class="pill suspended">⚠️ Suspended</span>':'<span class="pill pending">⏳ Pending</span>');
+      var yr=s.created_at?new Date(s.created_at).getFullYear():'—';
+      var sid=(s.id||'').replace(/'/g,"\'");
+      var acts=s.is_verified
+        ?'<button class="tbl-action danger" onclick="adminSuspendSeller(''+sid+'',this)">Suspend</button>'
+        :'<button class="tbl-action" onclick="adminApproveSeller(''+sid+'',this)">Approve</button> <button class="tbl-action danger" onclick="adminSuspendSeller(''+sid+'',this)">Reject</button>';
+      var loc=escA((s.city||'')+(s.state?', '+s.state:''));
+      return '<tr><td><strong>'+escA(s.business_name||'Unnamed')+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+loc+'</div></td><td>'+sp+'</td><td>'+loc+'</td><td>—</td><td>'+yr+'</td><td><div class="tbl-actions">'+acts+'</div></td></tr>';
+    }).join('');
+  }catch(e){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:20px">Error: '+((e&&e.message)||'unknown')+'</td></tr>';}
+}
+
+async function adminApproveSeller(id,btn){
+  if(!id)return;if(btn){btn.textContent='Approving…';btn.disabled=true;}
+  var {error}=await getAdminSB().from('sellers').update({is_verified:true,status:'active'}).eq('id',id);
+  if(error){toast('Error: '+error.message,'⚠️');if(btn){btn.textContent='Approve';btn.disabled=false;}return;}
+  toast('Seller approved','✅ Approved');loadAdminSellers();
+}
+async function adminSuspendSeller(id,btn){
+  if(!id)return;if(btn){btn.textContent='Suspending…';btn.disabled=true;}
+  var {error}=await getAdminSB().from('sellers').update({is_verified:false,status:'suspended'}).eq('id',id);
+  if(error){toast('Error: '+error.message,'⚠️');if(btn){btn.textContent='Suspend';btn.disabled=false;}return;}
+  toast('Seller suspended','⚠️');loadAdminSellers();
+}
+
+async function loadAdminUsers(){
+  var sb=getAdminSB(); var tbody=el('users-tbody'); if(!tbody)return;
+  try{
+    var {data,error}=await sb.from('profiles').select('*').order('created_at',{ascending:false}).limit(50);
+    if(error)throw error;
+    if(!data||!data.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">No users in database yet.</td></tr>';return;}
+    tbody.innerHTML=data.map(function(u){
+      var nm=escA(u.full_name||u.email||'Unknown');
+      var joined=u.created_at?new Date(u.created_at).toLocaleDateString('en-US',{month:'short',year:'numeric'}):'—';
+      var role=u.is_seller?'Seller':'Buyer';
+      var sp=u.status==='suspended'?'<span class="pill suspended">⚠️ Suspended</span>':'<span class="pill active">✅ Active</span>';
+      return '<tr><td><strong>'+nm+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+escA(u.email||u.id||'')+'</div></td><td>'+role+'</td><td>'+sp+'</td><td>'+joined+'</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal(''+nm.replace(/'/g,"\'")+'')" >View</button><button class="tbl-action danger" onclick="toast('Actioned','⚠️')">Suspend</button></div></td></tr>';
+    }).join('');
+  }catch(e){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--red);padding:20px">Error: '+((e&&e.message)||'unknown')+'</td></tr>';}
+}
+
+function openAddSellerModal(){
+  var body=el('modal-body');
+  setText('modal-title','➕ Onboard New Seller');
+  setText('modal-sub','Create a verified seller account.');
+  if(body) body.innerHTML='<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Email</label><input class="form-input" id="add-seller-email" type="email" placeholder="seller@email.com" style="width:100%"></div><div style="margin-bottom:12px"><label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">Business Name</label><input class="form-input" id="add-seller-name" placeholder="Henderson Estate Sales" style="width:100%"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px"><div><label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">City</label><input class="form-input" id="add-seller-city" placeholder="Atlanta" style="width:100%"></div><div><label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px">State</label><input class="form-input" id="add-seller-state" placeholder="GA" style="width:100%"></div></div><div id="add-seller-error" style="color:var(--red);font-size:13px;margin-bottom:10px;display:none"></div>';
+  el('modal-overlay').classList.add('on');
+}
+async function submitAddSeller(btn){
+  var email=(el('add-seller-email')&&el('add-seller-email').value.trim())||'';
+  var name=(el('add-seller-name')&&el('add-seller-name').value.trim())||'';
+  var city=(el('add-seller-city')&&el('add-seller-city').value.trim())||'';
+  var state=(el('add-seller-state')&&el('add-seller-state').value.trim())||'';
+  var errEl=el('add-seller-error');if(errEl)errEl.style.display='none';
+  if(!email||!name){if(errEl){errEl.textContent='Email and business name required.';errEl.style.display='block';}return;}
+  if(btn){btn.textContent='Creating…';btn.disabled=true;}
+  try{
+    var {error}=await getAdminSB().from('sellers').insert({business_name:name,city,state,is_verified:true,status:'active',contact_email:email,created_at:new Date().toISOString()});
+    if(error)throw error;
+    closeModal();toast('Seller created: '+email,'✅ Added');loadAdminSellers();
+  }catch(e){if(errEl){errEl.textContent=(e&&e.message)||'Could not create seller.';errEl.style.display='block';}}
+  if(btn){btn.textContent='Create Seller Account';btn.disabled=false;}
+}
+</script>
+</body>
+</html>
