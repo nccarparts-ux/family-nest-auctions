@@ -874,16 +874,182 @@ function toast(msg, title){
 
 // TAB SWITCHING
 function switchTab(name){
-  // deactivate all
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('on'); });
   document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('on'); });
-  // activate target
   var btn=$id('tab-'+name), panel=$id('panel-'+name);
   if(btn) btn.classList.add('on');
   if(panel) panel.classList.add('on');
-  // scroll to top of content
-  var dash=$id('panel-'+name);
-  if(dash) dash.scrollIntoView({behavior:'smooth',block:'nearest'});
+  // Load real data for each tab
+  if(name==='overview') loadOverviewData();
+  if(name==='bids') loadActiveBids();
+  if(name==='watchlist') loadWatchlist();
+  if(name==='won') loadWonItems();
+  if(name==='notifications') loadNotifications();
+  if(name==='profile') loadProfileTab();
+}
+
+// ── SUPABASE DATA LOADERS ─────────────────────────────────────
+var _sb2=null;
+function getSB(){
+  if(!_sb2)_sb2=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
+  return _sb2;
+}
+
+async function loadDashboardUser(){
+  try{
+    var user=await FNA.Auth.getUser();
+    if(!user)return;
+    var name=user.user_metadata?.full_name||user.email||'Member';
+    var first=name.split(' ')[0];
+    var initials=name.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+    var nameEl=document.querySelector('.ph-name');if(nameEl)nameEl.textContent=name;
+    var avEl=document.querySelector('.ph-avatar');if(avEl)avEl.textContent=initials;
+    var navNameEl=document.querySelector('.user-name');if(navNameEl)navNameEl.textContent=first;
+    var navAvEl=document.querySelector('.user-av');if(navAvEl)navAvEl.textContent=initials;
+    var metaEl=document.querySelector('.ph-meta');
+    if(metaEl)metaEl.innerHTML='<span>✉️ '+escHtml2(user.email||'')+'</span>';
+    // Load stat counts
+    var[bids,watchlist,won]=await Promise.all([
+      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id),
+      getSB().from('watchlist').select('id',{count:'exact',head:true}).eq('user_id',user.id),
+      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id).eq('is_winning',true)
+    ]);
+    var statNums=document.querySelectorAll('.ph-stat-num');
+    if(statNums[0])statNums[0].innerHTML=(bids.count||0)+'<em> Active</em>';
+    if(statNums[1])statNums[1].innerHTML=(won.count||0)+'<em> Items</em>';
+    if(statNums[3])statNums[3].innerHTML=(watchlist.count||0)+'<em> Saved</em>';
+  }catch(e){}
+}
+
+async function loadOverviewData(){
+  try{
+    var user=await FNA.Auth.getUser();if(!user)return;
+    var[activeBids,outbid,wonItems]=await Promise.all([
+      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id).eq('is_winning',true),
+      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id).eq('is_winning',false),
+      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id)
+    ]);
+    var cards=document.querySelectorAll('#panel-overview .sc-num');
+    if(cards[0])cards[0].textContent=activeBids.count||0;
+    if(cards[1])cards[1].textContent=outbid.count||0;
+    if(cards[2])cards[2].textContent=wonItems.count||0;
+    // Recent activity
+    var{data:recentBids}=await getSB().from('bids').select('amount,created_at,items(id,title,current_bid)').eq('bidder_id',user.id).order('created_at',{ascending:false}).limit(5);
+    var actList=document.querySelector('#panel-overview .activity-list');
+    if(actList&&recentBids&&recentBids.length){
+      actList.innerHTML=recentBids.map(function(b){
+        var item=b.items||{};
+        var timeAgo=getTimeAgo(b.created_at);
+        return '<div class="act-row"><div class="act-icon-wrap bid">⚡</div><div class="act-content"><div class="act-title">Bid on '+escHtml2(item.title||'item')+'</div><div class="act-detail">Your bid: $'+parseFloat(b.amount).toLocaleString()+'</div></div><div class="act-time">'+timeAgo+'</div><div class="act-amount green">$'+parseFloat(b.amount).toLocaleString()+'</div></div>';
+      }).join('');
+    }
+  }catch(e){}
+}
+
+async function loadActiveBids(){
+  try{
+    var user=await FNA.Auth.getUser();if(!user)return;
+    var{data}=await getSB().from('bids').select('amount,is_winning,created_at,items(id,title,current_bid,ends_at,status,current_bidder_id)').eq('bidder_id',user.id).order('created_at',{ascending:false}).limit(20);
+    var container=document.querySelector('#panel-bids .bids-list');
+    if(!container||!data)return;
+    if(!data.length){container.innerHTML='<div class="empty-panel"><div class="ep-icon">⚡</div><div class="ep-title">No Active Bids</div><div class="ep-sub">Browse live auctions and place your first bid!</div><button class="btn-browse" onclick="window.location.href=\'auction-browse.html\'">Browse Auctions</button></div>';return;}
+    var seen={};
+    var rows=data.filter(function(b){if(seen[b.items?.id])return false;seen[b.items?.id]=true;return true;});
+    container.innerHTML=rows.map(function(b){
+      var item=b.items||{};
+      var isLeading=item.current_bidder_id===user.id;
+      var countdown=FNA.UI.formatCountdown(item.ends_at);
+      var statusHtml=isLeading?'<span class="bid-status leading">✅ Leading</span>':'<span class="bid-status outbid">😬 Outbid — $'+parseFloat(item.current_bid||0).toLocaleString()+' leads</span>';
+      return '<div class="bid-row"><div class="bid-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div><div class="bid-content"><div class="bid-estate">'+escHtml2(item.title||'')+'</div><div class="bid-meta-row">'+statusHtml+'<span class="bid-meta-item">Your bid: <strong>$'+parseFloat(b.amount).toLocaleString()+'</strong></span></div></div><div class="bid-right"><div><div class="bid-current-lbl">Ends In</div><div class="bid-time'+(countdown.urgent?' urgent':'')+'">'+countdown.text+'</div></div><button class="btn-rebid" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'">View &amp; Bid</button></div></div>';
+    }).join('');
+  }catch(e){}
+}
+
+async function loadWatchlist(){
+  try{
+    var user=await FNA.Auth.getUser();if(!user)return;
+    var{data}=await getSB().from('watchlist').select('item_id,items(id,title,current_bid,ends_at,status)').eq('user_id',user.id).limit(20);
+    var container=document.querySelector('#panel-watchlist .watchlist-grid');
+    if(!container||!data)return;
+    if(!data.length){container.outerHTML='<div class="empty-panel"><div class="ep-icon">❤️</div><div class="ep-title">Watchlist is Empty</div><div class="ep-sub">Save items you\'re interested in to track them here.</div><button class="btn-browse" onclick="window.location.href=\'auction-browse.html\'">Browse Auctions</button></div>';return;}
+    container.innerHTML=data.map(function(w){
+      var item=w.items||{};
+      var countdown=FNA.UI.formatCountdown(item.ends_at);
+      return '<div class="wl-card" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'"><div class="wl-img">🪑</div><button class="wl-remove" onclick="event.stopPropagation();removeWatchItem(this)">✕</button><div class="wl-body"><div class="wl-name">'+escHtml2(item.title||'')+'</div><div class="wl-footer"><div class="wl-bid">$'+parseFloat(item.current_bid||0).toLocaleString()+'</div><div class="wl-time'+(countdown.urgent?' u':'')+'">'+countdown.text+'</div></div><button class="btn-bid-wl" onclick="event.stopPropagation();window.location.href=\'auction-item-detail.html?id='+item.id+'\'">View &amp; Bid</button></div></div>';
+    }).join('');
+  }catch(e){}
+}
+
+async function loadWonItems(){
+  try{
+    var user=await FNA.Auth.getUser();if(!user)return;
+    var{data}=await getSB().from('bids').select('amount,created_at,items(id,title,ends_at,status)').eq('bidder_id',user.id).eq('is_winning',true).order('created_at',{ascending:false}).limit(20);
+    var container=document.querySelector('#panel-won .won-list');
+    if(!container)return;
+    if(!data||!data.length){container.innerHTML='<div class="empty-panel"><div class="ep-icon">🏆</div><div class="ep-title">No Won Items Yet</div><div class="ep-sub">Items you win at auction will appear here.</div><button class="btn-browse" onclick="window.location.href=\'auction-browse.html\'">Browse Auctions</button></div>';return;}
+    container.innerHTML=data.map(function(b){
+      var item=b.items||{};
+      var date=new Date(b.created_at).toLocaleDateString();
+      return '<div class="won-row"><div class="won-thumb">🏆</div><div class="won-content"><div class="won-name">'+escHtml2(item.title||'')+'</div><div class="won-meta"><div class="won-meta-item">Won: <strong>'+date+'</strong></div><div class="won-meta-item">Paid: <strong>$'+parseFloat(b.amount).toLocaleString()+'</strong></div></div></div><div class="won-right"><div class="won-paid">Final price</div><div class="won-amt">$'+parseFloat(b.amount).toLocaleString()+'</div><span class="won-status-pill wsp-delivered">✅ Won</span></div></div>';
+    }).join('');
+  }catch(e){}
+}
+
+async function loadNotifications(){
+  try{
+    var user=await FNA.Auth.getUser();if(!user)return;
+    var{data,error}=await getSB().from('notifications').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20);
+    var container=document.querySelector('#panel-notifications .notif-list');
+    if(!container)return;
+    if(error||!data||!data.length){
+      container.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-mid)">No notifications yet.</div>';
+      return;
+    }
+    container.innerHTML=data.map(function(n){
+      return '<div class="notif-item'+(n.is_read?'':' unread')+'"><div class="ni-dot'+(n.is_read?' read':'')+'"></div><div class="ni-icon"><span>🔔</span></div><div class="ni-content"><div class="ni-title">'+escHtml2(n.title||'Notification')+'</div><div class="ni-body">'+escHtml2(n.body||'')+'</div><div class="ni-time">'+getTimeAgo(n.created_at)+'</div></div></div>';
+    }).join('');
+  }catch(e){}
+}
+
+async function loadProfileTab(){
+  try{
+    var user=await FNA.Auth.getUser();if(!user)return;
+    var nameInputs=document.querySelectorAll('#panel-profile input[type="text"], #panel-profile input[type="email"]');
+    if(nameInputs[0])nameInputs[0].value=user.user_metadata?.full_name||'';
+    if(nameInputs[1])nameInputs[1].value=user.email||'';
+  }catch(e){}
+}
+
+function getTimeAgo(dateStr){
+  var diff=(Date.now()-new Date(dateStr))/1000;
+  if(diff<60)return 'just now';
+  if(diff<3600)return Math.floor(diff/60)+' min ago';
+  if(diff<86400)return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
+function escHtml2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// Save profile
+async function saveProfile(){
+  try{
+    var user=await FNA.Auth.getUser();if(!user)return;
+    var inputs=document.querySelectorAll('#panel-profile input');
+    var fullName=inputs[0]?.value?.trim();
+    await getSB().from('profiles').upsert({user_id:user.id,full_name:fullName,email:user.email},{onConflict:'user_id'});
+    toast('Profile saved!','✅ Saved');
+  }catch(e){toast('Could not save profile','⚠️ Error');}
+}
+
+// Change password
+async function changePassword(){
+  var np=document.querySelector('#panel-profile input[placeholder="New password"]')?.value;
+  var cp=document.querySelector('#panel-profile input[placeholder="Confirm password"]')?.value;
+  if(!np||np!==cp){toast('Passwords do not match','⚠️ Error');return;}
+  if(np.length<6){toast('Password must be at least 6 characters','⚠️ Error');return;}
+  try{
+    await getSB().auth.updateUser({password:np});
+    toast('Password updated successfully!','🔐 Saved');
+  }catch(e){toast(e.message||'Could not update password','⚠️ Error');}
 }
 
 // NOTIFICATIONS

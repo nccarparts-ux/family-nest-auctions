@@ -360,9 +360,23 @@
       <li><a href="#">Locations</a></li>
     </ul>
 
-    <div class="nav-ctas">
+    <div class="nav-ctas" id="nav-ctas">
       <button class="btn-ghost" onclick="openOv('login')">Sign In</button>
       <button class="btn-honey" onclick="openOv('register')">Start Bidding Free</button>
+    </div>
+    <div id="nav-user" style="display:none;position:relative">
+      <div id="nav-user-chip" onclick="toggleUserMenu()" style="display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px 6px 6px;cursor:pointer;transition:all .2s">
+        <div id="nav-user-av" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--honey),var(--honey-light));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--green-deep)">U</div>
+        <span id="nav-user-name" style="font-size:13px;font-weight:600;color:var(--white)">Account</span>
+        <span style="color:rgba(255,255,255,.6);font-size:10px">▼</span>
+      </div>
+      <div id="nav-user-menu" style="display:none;position:absolute;top:48px;right:0;background:var(--white);border-radius:var(--r-md);box-shadow:var(--sh-lg);padding:8px;min-width:180px;z-index:999">
+        <a href="account-dashboard.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">👤 My Account</a>
+        <a href="seller-dashboard.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">🏡 Seller Dashboard</a>
+        <a href="messages.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">✉️ Messages</a>
+        <hr style="border:none;border-top:1px solid var(--cream-mid);margin:4px 0">
+        <button onclick="FNA.Auth.signOut()" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--red);border:none;background:transparent;cursor:pointer;border-radius:var(--r-sm);width:100%;text-align:left;font-family:'Jost',sans-serif;transition:background .15s" onmouseover="this.style.background='#FDECEA'" onmouseout="this.style.background='transparent'">🚪 Sign Out</button>
+      </div>
     </div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -415,20 +429,20 @@
       </div>
     </div>
 
-    <div class="hero-preview">
-      <div class="prev-card">
+    <div class="hero-preview" id="hero-preview">
+      <div class="prev-card" id="hero-featured-card">
         <div class="prev-img">🪑<div class="prev-tag">⭐ Featured Sale</div></div>
         <div class="prev-body">
-          <div class="prev-estate">📍 Atlanta, GA — Henderson Estate</div>
-          <div class="prev-title">Victorian Carved Mahogany Armchair, c.1890</div>
+          <div class="prev-estate" id="hero-estate">📍 Atlanta, GA — Henderson Estate</div>
+          <div class="prev-title" id="hero-title">Victorian Carved Mahogany Armchair, c.1890</div>
           <div class="prev-foot">
             <div><div class="prev-bid-lbl">Current Bid</div><div class="prev-bid" id="hero-bid">$187</div></div>
             <div><div class="prev-time-lbl">Ends In</div><div class="prev-time" id="hero-timer">02:14:38</div></div>
           </div>
-          <button class="btn-bid-prev" onclick="openOv('bid')">Bid — See Your Full Cost First</button>
+          <button class="btn-bid-prev" id="hero-bid-btn" onclick="openOv('bid')">Bid — See Your Full Cost First</button>
         </div>
       </div>
-      <div class="mini-grid">
+      <div class="mini-grid" id="hero-mini-grid">
         <div class="mini-tile" onclick="window.location.href='auction-item-detail.html'"><div class="mini-icon">🪔</div><div class="mini-name">Tiffany Lamp</div><div class="mini-price">$340</div><div class="mini-bids">24 bids · 4h left</div></div>
         <div class="mini-tile" onclick="window.location.href='auction-item-detail.html'"><div class="mini-icon">🏺</div><div class="mini-name">Antique Persian Rug</div><div class="mini-price">$215</div><div class="mini-bids">11 bids · 1d left</div></div>
         <div class="mini-tile" onclick="window.location.href='auction-item-detail.html'"><div class="mini-icon">💍</div><div class="mini-name">Estate Jewelry Set</div><div class="mini-price">$890</div><div class="mini-bids">67 bids · 2h left</div></div>
@@ -532,7 +546,7 @@
       <h2 class="sec-title">Families Trust <em>Family Nest</em></h2>
       <p class="sec-sub">Hear from buyers and sellers who've experienced estate auctions done the right way.</p>
     </div>
-    <div class="testi-grid">
+    <div class="testi-grid" id="reviews-grid">
       <div class="tc"><p class="tc-text">I won a beautiful sideboard and knew exactly what I'd pay before I clicked bid. Zero surprises at checkout. After years of uncertainty with other platforms, this was genuinely a revelation.</p><div class="tc-author"><div class="tc-av">M</div><div><div class="tc-name">Margaret T.</div><div class="tc-detail">⭐⭐⭐⭐⭐ Buyer · Tampa, FL</div></div></div></div>
       <div class="tc"><p class="tc-text">We listed my mother's entire estate and every single item sold. The seller dashboard is incredible — real-time bids, professional photos, everything handled with care. We'll absolutely be back.</p><div class="tc-author"><div class="tc-av">R</div><div><div class="tc-name">Robert &amp; Diana K.</div><div class="tc-detail">⭐⭐⭐⭐⭐ Seller · Atlanta, GA</div></div></div></div>
       <div class="tc"><p class="tc-text">The condition reports made all the difference. Bidding on a ring across the country — the photos, grading, and certificate scan gave me total confidence. Won it well under retail value.</p><div class="tc-author"><div class="tc-av">S</div><div><div class="tc-name">Sandra M.</div><div class="tc-detail">⭐⭐⭐⭐⭐ Buyer · Nashville, TN</div></div></div></div>
@@ -586,19 +600,21 @@
 <div class="overlay" id="ov-login"><div class="modal">
   <button class="modal-x" onclick="closeOv('login')">✕</button>
   <h2>Welcome Back</h2><p class="sub">Sign in to access your bids, watchlist, and purchase history.</p>
-  <div class="ff"><label>Email Address</label><input type="email" placeholder="you@email.com"></div>
-  <div class="ff"><label>Password</label><input type="password" placeholder="••••••••"></div>
-  <button class="btn-m" onclick="window.location.href='account-dashboard.html'">Sign In</button>
+  <div class="ff"><label>Email Address</label><input type="email" id="login-email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+  <div class="ff"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+  <div id="login-error" style="color:#B03030;font-size:13px;margin-bottom:8px;padding:8px 12px;background:#FDECEA;border-radius:6px;display:none"></div>
+  <button class="btn-m" id="login-btn" onclick="doSignIn()">Sign In</button>
   <div class="m-alt">New here? <a href="#" onclick="closeOv('login');openOv('register')">Create a free account →</a></div>
 </div></div>
 
 <div class="overlay" id="ov-register"><div class="modal">
   <button class="modal-x" onclick="closeOv('register')">✕</button>
   <h2>Start Bidding Free</h2><p class="sub">No credit card required. Browse and bid on thousands of estate items today.</p>
-  <div class="ff"><label>Full Name</label><input type="text" placeholder="Your full name"></div>
-  <div class="ff"><label>Email Address</label><input type="email" placeholder="you@email.com"></div>
-  <div class="ff"><label>Create Password</label><input type="password" placeholder="Create a password"></div>
-  <button class="btn-m" onclick="window.location.href='account-dashboard.html'">Create Free Account</button>
+  <div class="ff"><label>Full Name</label><input type="text" id="reg-name" placeholder="Your full name" onkeydown="if(event.key==='Enter')doRegister()"></div>
+  <div class="ff"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doRegister()"></div>
+  <div class="ff"><label>Create Password</label><input type="password" id="reg-password" placeholder="Create a password" onkeydown="if(event.key==='Enter')doRegister()"></div>
+  <div id="reg-error" style="color:#B03030;font-size:13px;margin-bottom:8px;padding:8px 12px;background:#FDECEA;border-radius:6px;display:none"></div>
+  <button class="btn-m" id="reg-btn" onclick="doRegister()">Create Free Account</button>
   <div class="m-alt">Already a member? <a href="#" onclick="closeOv('register');openOv('login')">Sign in →</a></div>
 </div></div>
 
@@ -616,13 +632,21 @@
   <button class="btn-m" onclick="closeOv('bid');toast('We\'ll notify you if outbid.','🎉 Bid Confirmed!')">Confirm Bid</button>
 </div></div>
 
-<div class="overlay" id="ov-seller"><div class="modal">
+<div class="overlay" id="ov-seller"><div class="modal" style="max-width:520px">
   <button class="modal-x" onclick="closeOv('seller')">✕</button>
-  <h2>List Your Estate</h2><p class="sub">Tell us about your estate and we'll connect you with a free consultation.</p>
-  <div class="ff"><label>Your Name</label><input type="text" placeholder="Full name"></div>
-  <div class="ff"><label>Phone Number</label><input type="tel" placeholder="(555) 000-0000"></div>
-  <div class="ff"><label>Estate Location</label><input type="text" placeholder="City, State"></div>
-  <button class="btn-m" onclick="closeOv('seller');toast('We\'ll be in touch within 24 hours!','✅ Request Received')">Request Free Consultation</button>
+  <h2>Become a Seller</h2><p class="sub">Apply to list your estate items on Family Nest Auctions. We'll review and respond within 48 hours.</p>
+  <div class="ff"><label>Business Name</label><input type="text" id="seller-business" placeholder="e.g. Henderson Estate Sales"></div>
+  <div class="ff"><label>Contact Name</label><input type="text" id="seller-contact" placeholder="Your full name"></div>
+  <div class="ff"><label>Phone Number</label><input type="tel" id="seller-phone" placeholder="(555) 000-0000"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="ff"><label>City</label><input type="text" id="seller-city" placeholder="City"></div>
+    <div class="ff"><label>State</label><input type="text" id="seller-state" placeholder="GA"></div>
+  </div>
+  <div class="ff"><label>Years in Business</label><input type="number" id="seller-years" placeholder="e.g. 5" min="0"></div>
+  <div class="ff"><label>Tell Us About Your Business</label><textarea id="seller-bio" style="width:100%;padding:11px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-family:'Jost',sans-serif;min-height:80px;outline:none;resize:vertical" placeholder="Describe your estate sales experience, specialties, and the types of items you sell…"></textarea></div>
+  <div id="seller-error" style="color:#B03030;font-size:13px;margin-bottom:8px;padding:8px 12px;background:#FDECEA;border-radius:6px;display:none"></div>
+  <div id="seller-success" style="color:#2a6040;font-size:13px;margin-bottom:8px;padding:8px 12px;background:#E6F4EC;border-radius:6px;display:none"></div>
+  <button class="btn-m" id="seller-btn" onclick="doSellerApply()">Submit Application</button>
 </div></div>
 
 <!-- TOAST + ACTIVITY -->
@@ -748,6 +772,166 @@ document.addEventListener('DOMContentLoaded', function(){
   if(p.get('login')) { window.addEventListener('load', function(){ openOv('login'); }); }
   if(p.get('register')) { window.addEventListener('load', function(){ openOv('register'); }); }
 })();
+
+// ── AUTH ──────────────────────────────────────────────────────
+async function doSignIn(){
+  var email=document.getElementById('login-email')?.value?.trim();
+  var pass=document.getElementById('login-password')?.value;
+  var errEl=document.getElementById('login-error');
+  var btn=document.getElementById('login-btn');
+  if(!email||!pass){if(errEl){errEl.textContent='Please enter your email and password.';errEl.style.display='block';}return;}
+  if(btn){btn.textContent='Signing in…';btn.disabled=true;}
+  if(errEl)errEl.style.display='none';
+  try{
+    await FNA.Auth.signIn({email,password:pass});
+    window.location.href='account-dashboard.html';
+  }catch(e){
+    var msg=e.message||'Sign in failed';
+    if(msg.toLowerCase().includes('invalid')||msg.toLowerCase().includes('not found')||msg.toLowerCase().includes('credentials')){
+      msg='No account found with that email, or your password is incorrect.';
+    }
+    if(errEl){errEl.textContent=msg;errEl.style.display='block';}
+    if(btn){btn.textContent='Sign In';btn.disabled=false;}
+  }
+}
+
+async function doRegister(){
+  var name=document.getElementById('reg-name')?.value?.trim();
+  var email=document.getElementById('reg-email')?.value?.trim();
+  var pass=document.getElementById('reg-password')?.value;
+  var errEl=document.getElementById('reg-error');
+  var btn=document.getElementById('reg-btn');
+  if(!name||!email||!pass){if(errEl){errEl.textContent='Please fill in all fields.';errEl.style.display='block';}return;}
+  if(pass.length<6){if(errEl){errEl.textContent='Password must be at least 6 characters.';errEl.style.display='block';}return;}
+  if(btn){btn.textContent='Creating account…';btn.disabled=true;}
+  if(errEl)errEl.style.display='none';
+  try{
+    await FNA.Auth.signUp({email,password:pass,fullName:name});
+    window.location.href='account-dashboard.html';
+  }catch(e){
+    if(errEl){errEl.textContent=e.message||'Registration failed. Please try again.';errEl.style.display='block';}
+    if(btn){btn.textContent='Create Free Account';btn.disabled=false;}
+  }
+}
+
+async function doSellerApply(){
+  var business=document.getElementById('seller-business')?.value?.trim();
+  var contact=document.getElementById('seller-contact')?.value?.trim();
+  var phone=document.getElementById('seller-phone')?.value?.trim();
+  var city=document.getElementById('seller-city')?.value?.trim();
+  var state=document.getElementById('seller-state')?.value?.trim();
+  var years=document.getElementById('seller-years')?.value;
+  var bio=document.getElementById('seller-bio')?.value?.trim();
+  var errEl=document.getElementById('seller-error');
+  var sucEl=document.getElementById('seller-success');
+  var btn=document.getElementById('seller-btn');
+  if(!business||!contact||!phone){if(errEl){errEl.textContent='Please fill in business name, contact name, and phone.';errEl.style.display='block';}return;}
+  if(errEl)errEl.style.display='none';
+  if(btn){btn.textContent='Submitting…';btn.disabled=true;}
+  try{
+    var user=await FNA.Auth.getUser();
+    if(!user){closeOv('seller');openOv('login');return;}
+    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
+    await _sb.from('sellers').insert({user_id:user.id,business_name:business,phone,city,state,business_bio:bio,is_verified:false,is_active:false});
+    if(sucEl){sucEl.textContent='Application submitted! We\'ll review and contact you within 48 hours.';sucEl.style.display='block';}
+    if(btn){btn.textContent='Application Submitted ✓';btn.disabled=true;}
+  }catch(e){
+    if(errEl){errEl.textContent=e.message||'Could not submit. Please try again.';errEl.style.display='block';}
+    if(btn){btn.textContent='Submit Application';btn.disabled=false;}
+  }
+}
+
+function toggleUserMenu(){
+  var m=document.getElementById('nav-user-menu');
+  if(m)m.style.display=m.style.display==='none'?'block':'none';
+}
+document.addEventListener('click',function(e){
+  var chip=document.getElementById('nav-user-chip');
+  var menu=document.getElementById('nav-user-menu');
+  if(menu&&chip&&!chip.contains(e.target)&&!menu.contains(e.target))menu.style.display='none';
+});
+
+async function checkAuthState(){
+  try{
+    var user=await FNA.Auth.getUser();
+    var ctas=document.getElementById('nav-ctas');
+    var userNav=document.getElementById('nav-user');
+    if(user){
+      if(ctas)ctas.style.display='none';
+      if(userNav)userNav.style.display='block';
+      var firstName=(user.user_metadata?.full_name||user.email||'Account').split(' ')[0];
+      var nameEl=document.getElementById('nav-user-name');
+      var avEl=document.getElementById('nav-user-av');
+      if(nameEl)nameEl.textContent=firstName;
+      if(avEl)avEl.textContent=firstName[0].toUpperCase();
+    }
+  }catch(e){}
+}
+
+// ── REVIEWS ───────────────────────────────────────────────────
+async function loadReviews(){
+  var grid=document.getElementById('reviews-grid');
+  if(!grid)return;
+  try{
+    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
+    var {data,error}=await _sb.from('reviews').select('*').order('created_at',{ascending:false}).limit(3);
+    if(error||!data||data.length===0)return;
+    grid.innerHTML=data.map(function(r){
+      var stars='⭐'.repeat(Math.min(5,Math.max(1,r.rating||5)));
+      var initials=(r.author_name||'A').split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+      return '<div class="tc"><p class="tc-text">'+escHtml(r.body||'')+'</p><div class="tc-author"><div class="tc-av">'+initials+'</div><div><div class="tc-name">'+escHtml(r.author_name||'')+'</div><div class="tc-detail">'+stars+' Buyer · '+escHtml(r.author_location||'')+'</div></div></div></div>';
+    }).join('');
+  }catch(e){}
+}
+
+// ── HERO DYNAMIC ITEMS ─────────────────────────────────────────
+async function loadHeroItems(){
+  try{
+    var items=await FNA.Items.getLive({sort:'bid_count',limit:5});
+    if(!items||items.length===0)return;
+    var featured=items[0];
+    var titleEl=document.getElementById('hero-title');
+    var bidEl=document.getElementById('hero-bid');
+    var estateEl=document.getElementById('hero-estate');
+    var btnEl=document.getElementById('hero-bid-btn');
+    if(titleEl)titleEl.textContent=featured.title;
+    if(bidEl)bidEl.textContent=FNA.UI.formatPrice(featured.current_bid||featured.starting_bid);
+    if(estateEl)estateEl.textContent='📍 '+(featured.sellers?.city||'')+', '+(featured.sellers?.state||'')+' — '+(featured.sellers?.business_name||'');
+    if(btnEl){btnEl.onclick=function(){window.location.href='auction-item-detail.html?id='+featured.id;};}
+    // Start countdown for featured item
+    var timerEl=document.getElementById('hero-timer');
+    if(timerEl&&featured.ends_at){
+      timerEl.dataset.endsAt=featured.ends_at;
+      function updateHeroTimer(){
+        var r=FNA.UI.formatCountdown(featured.ends_at);
+        timerEl.textContent=r.text;
+        if(r.urgent)timerEl.classList.add('soon');
+      }
+      updateHeroTimer();
+      setInterval(updateHeroTimer,1000);
+    }
+    // Mini grid
+    var miniGrid=document.getElementById('hero-mini-grid');
+    if(miniGrid&&items.length>1){
+      var cats={'Furniture':'🪑','Art':'🖼️','Jewelry':'💍','Watches':'⌚','Lighting':'🪔','Rugs':'🏺','Collectibles':'🏺','Silver':'🥄','Electronics':'📺'};
+      miniGrid.innerHTML=items.slice(1,5).map(function(item){
+        var icon=cats[item.category]||'🪑';
+        var bid=FNA.UI.formatPrice(item.current_bid||item.starting_bid);
+        var countdown=FNA.UI.formatCountdown(item.ends_at);
+        return '<div class="mini-tile" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'"><div class="mini-icon">'+icon+'</div><div class="mini-name">'+escHtml(item.title.substring(0,28))+'</div><div class="mini-price">'+bid+'</div><div class="mini-bids">'+item.bid_count+' bids · '+countdown.text+'</div></div>';
+      }).join('');
+    }
+  }catch(e){}
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// Call auth check and hero/review loaders on DOMContentLoaded
+document.addEventListener('DOMContentLoaded',function(){
+  checkAuthState();
+  loadHeroItems();
+  loadReviews();
+});
 
 
 
