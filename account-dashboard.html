@@ -1006,7 +1006,7 @@ async function loadNotifications(){
       return;
     }
     container.innerHTML=data.map(function(n){
-      return '<div class="notif-item'+(n.read?'':' unread')+'"><div class="ni-dot'+(n.read?' read':'')+'"></div><div class="ni-icon"><span>🔔</span></div><div class="ni-content"><div class="ni-title">'+escHtml2(n.title||'Notification')+'</div><div class="ni-body">'+escHtml2(n.body||'')+'</div><div class="ni-time">'+getTimeAgo(n.created_at)+'</div></div></div>';
+      return '<div class="notif-item'+(n.is_read?'':' unread')+'"><div class="ni-dot'+(n.is_read?' read':'')+'"></div><div class="ni-icon"><span>🔔</span></div><div class="ni-content"><div class="ni-title">'+escHtml2(n.title||'Notification')+'</div><div class="ni-body">'+escHtml2(n.body||'')+'</div><div class="ni-time">'+getTimeAgo(n.created_at)+'</div></div></div>';
     }).join('');
   }catch(e){}
 }
