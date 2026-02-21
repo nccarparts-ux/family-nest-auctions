@@ -1078,6 +1078,15 @@ function getSellerSB(){
   );
   return _sbSeller;
 }
+// Returns the sellers.id (UUID) for the current auth user
+async function getCurrentSellerId(){
+  var sb=getSellerSB();
+  var {data:{user}}=await sb.auth.getUser();
+  if(!user) throw new Error('Not signed in.');
+  var {data,error}=await sb.from('sellers').select('id').eq('user_id',user.id).single();
+  if(error||!data) throw new Error('No seller account found for this user.');
+  return data.id;
+}
 function addPhotos(){
   // Open native file picker
   var input=document.createElement('input');
@@ -1184,10 +1193,9 @@ async function requestPayout(btn){
   if(btn){ btn.textContent='⏳ Requesting…'; btn.disabled=true; }
   try {
     var sb=getSellerSB();
-    var {data:{user},error:authErr}=await sb.auth.getUser();
-    if(authErr||!user) throw new Error('Please sign in first.');
+    var sellerId=await getCurrentSellerId();
     var {error}=await sb.from('payout_requests').insert({
-      seller_id:user.id,
+      seller_id:sellerId,
       requested_at:new Date().toISOString(),
       status:'pending',
       note:'Requested via seller dashboard'
@@ -1262,12 +1270,15 @@ async function submitNewSale(btn){
   if(btn){ btn.textContent='Creating…'; btn.disabled=true; }
   try {
     var sb=getSellerSB();
-    var {data:{user},error:authErr}=await sb.auth.getUser();
-    if(authErr||!user) throw new Error('Please sign in first.');
+    var sellerId=await getCurrentSellerId();
+    var locParts=location.split(',').map(function(s){return s.trim();});
+    var locCity=locParts[0]||location;
+    var locState=locParts[1]||'';
     var {error}=await sb.from('estate_sales').insert({
-      seller_id:user.id,
+      seller_id:sellerId,
       name:name,
-      location:location,
+      location_city:locCity,
+      location_state:locState,
       description:desc,
       starts_at:startDate,
       ends_at:endDate,

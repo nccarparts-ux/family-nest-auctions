@@ -832,7 +832,7 @@ async function doSellerApply(){
     var user=await FNA.Auth.getUser();
     if(!user){closeOv('seller');openOv('login');return;}
     var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3c2pnY2x0ZXVlemF1dmV1aml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NDg2MzcsImV4cCI6MjA4NzEyNDYzN30.DGMw527z7noRafOxJRdGB3ITSq1teQeS5dTSNwLqFsI');
-    await _sb.from('sellers').insert({user_id:user.id,business_name:business,contact_name:contact,phone,city,state,bio,years_in_business:parseInt(years)||0,is_verified:false});
+    await _sb.from('sellers').insert({user_id:user.id,business_name:business,phone,city,state,business_bio:bio,is_verified:false,is_active:false});
     if(sucEl){sucEl.textContent='Application submitted! We\'ll review and contact you within 48 hours.';sucEl.style.display='block';}
     if(btn){btn.textContent='Application Submitted ✓';btn.disabled=true;}
   }catch(e){
