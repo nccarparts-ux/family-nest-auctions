@@ -1080,8 +1080,23 @@ async function loadItemData(){
     }
   }
   try{
-    var item = await FNA.Items.getById(id);
-    if(!item) return;
+    // Use getSB() directly — fresh client, no api.js singleton dependency
+    var _sb = getSB();
+    var{data:item, error:itemErr} = await _sb
+      .from('items')
+      .select('*,item_photos(storage_url,is_primary,display_order,caption),sellers(id,business_name,avg_rating,total_reviews,total_sales,city,state)')
+      .eq('id', id)
+      .maybeSingle();
+    if(itemErr){
+      console.error('Item load error:', itemErr.message, itemErr.code);
+      var errEl = el('bp-bid'); if(errEl) errEl.textContent = 'Load error';
+      return;
+    }
+    if(!item){
+      console.warn('Item not found:', id);
+      var notEl = el('bp-bid'); if(notEl) notEl.textContent = 'Not found';
+      return;
+    }
     realItemLoaded = true;
 
     // Update bidding globals so inline handlers use real values
@@ -1090,9 +1105,9 @@ async function loadItemData(){
 
     // Fallback: get TRUE highest bid from bids table in case items.current_bid is stale
     try{
-      var{data:topBid}=await getSB().from('bids').select('amount').eq('item_id',id).order('amount',{ascending:false}).limit(1).maybeSingle();
+      var{data:topBid}=await _sb.from('bids').select('amount').eq('item_id',id).order('amount',{ascending:false}).limit(1).maybeSingle();
       if(topBid && parseFloat(topBid.amount) > liveBid) liveBid = parseFloat(topBid.amount);
-    }catch(e0){}
+    }catch(_e){}
 
     // Real countdown from ends_at
     if(item.ends_at){
@@ -1167,7 +1182,8 @@ async function loadItemData(){
     }
 
     // ── Real bid history (first 6 rows) ──
-    var history = await FNA.Items.getBidHistory(id);
+    var{data:history} = await _sb.from('bids').select('amount,created_at,is_winning').eq('item_id',id).order('amount',{ascending:false}).limit(20);
+    history = history || [];
     if(history && history.length){
       var histEl = el('bid-history');
       if(histEl){
@@ -1188,9 +1204,9 @@ async function loadItemData(){
 
     // ── Check current user's watchlist & bid status ──
     try{
-      var user = await FNA.Auth.getUser();
+      var{data:{user}} = await _sb.auth.getUser();
       if(user){
-        var sb3 = getSB();
+        var sb3 = _sb;
         // Watchlist check
         var wlRes = await sb3.from('watchlist').select('id').eq('user_id',user.id).eq('item_id',id).maybeSingle();
         if(wlRes && wlRes.data){
@@ -1215,35 +1231,39 @@ async function loadItemData(){
     loadRelatedItems(id);
 
     // ── Live Supabase subscription — real-time bid updates ──
-    FNA.Items.subscribeToItem(id, function(updated){
-      liveBid  = parseFloat(updated.current_bid||0);
-      bidCount = updated.bid_count||0;
-      var bEl = el('bp-bid');
-      if(bEl){
-        bEl.textContent = '$'+liveBid.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-        bEl.classList.add('flash');
-        setTimeout(function(){ bEl.classList.remove('flash'); }, 400);
-      }
-      var premAmt = liveBid * (item.buyers_premium_pct||15) / 100;
-      setText('cost-bid',   '$'+liveBid.toFixed(2));
-      setText('cost-prem',  '$'+premAmt.toFixed(2));
-      setText('cost-total', '~$'+Math.round(liveBid+premAmt+(item.est_shipping_min||65)));
-      setText('bid-hist-count','('+bidCount+' bids)');
-      // Re-check whether THIS user is actually the winner (don't blindly say "outbid")
-      FNA.Auth.getUser().then(function(u){
-        if(!u) return;
-        getSB().from('bids').select('is_winning').eq('user_id',u.id).eq('item_id',id).eq('is_winning',true).maybeSingle().then(function(res){
-          var ctEl = el('bp-bid-ct');
-          if(!ctEl) return;
-          if(res && res.data){
-            ctEl.textContent = bidCount+' bids · ✅ You are still leading!';
-          } else {
-            ctEl.textContent = bidCount+' bids · 😬 You have been outbid — re-bid below!';
-            toast('⚡ You\'ve been outbid! Current bid: $'+liveBid.toLocaleString(),'⚡ Outbid Alert');
-          }
+    _sb.channel('item-'+id)
+      .on('postgres_changes',{event:'UPDATE',schema:'public',table:'items',filter:'id=eq.'+id}, function(payload){
+        var updated = payload.new;
+        liveBid  = parseFloat(updated.current_bid||0);
+        bidCount = updated.bid_count||0;
+        var bEl = el('bp-bid');
+        if(bEl){
+          bEl.textContent = '$'+liveBid.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+          bEl.classList.add('flash');
+          setTimeout(function(){ bEl.classList.remove('flash'); }, 400);
+        }
+        var premAmt = liveBid * (item.buyers_premium_pct||15) / 100;
+        setText('cost-bid',   '$'+liveBid.toFixed(2));
+        setText('cost-prem',  '$'+premAmt.toFixed(2));
+        setText('cost-total', '~$'+Math.round(liveBid+premAmt+(item.est_shipping_min||65)));
+        setText('bid-hist-count','('+bidCount+' bids)');
+        // Re-check whether THIS user is actually the winner
+        _sb.auth.getUser().then(function(res){
+          var u = res.data && res.data.user;
+          if(!u) return;
+          _sb.from('bids').select('is_winning').eq('user_id',u.id).eq('item_id',id).eq('is_winning',true).maybeSingle().then(function(bres){
+            var ctEl = el('bp-bid-ct');
+            if(!ctEl) return;
+            if(bres && bres.data){
+              ctEl.textContent = bidCount+' bids · ✅ You are still leading!';
+            } else {
+              ctEl.textContent = bidCount+' bids · 😬 You have been outbid — re-bid below!';
+              toast('⚡ You\'ve been outbid! Current bid: $'+liveBid.toLocaleString(),'⚡ Outbid Alert');
+            }
+          }).catch(function(){});
         }).catch(function(){});
-      }).catch(function(){});
-    });
+      })
+      .subscribe();
 
   }catch(err){
     console.warn('loadItemData error:', err);
