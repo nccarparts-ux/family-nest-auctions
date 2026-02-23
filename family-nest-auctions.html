@@ -787,7 +787,9 @@ async function doSignIn(){
     window.location.href='account-dashboard.html';
   }catch(e){
     var msg=e.message||'Sign in failed';
-    if(msg.toLowerCase().includes('invalid')||msg.toLowerCase().includes('not found')||msg.toLowerCase().includes('credentials')){
+    if(msg.toLowerCase().includes('email not confirmed')||msg.toLowerCase().includes('not confirmed')){
+      msg='Your email address hasn\'t been confirmed yet. Please check your inbox for a confirmation link, then try signing in again.';
+    } else if(msg.toLowerCase().includes('invalid')||msg.toLowerCase().includes('not found')||msg.toLowerCase().includes('credentials')){
       msg='No account found with that email, or your password is incorrect.';
     }
     if(errEl){errEl.textContent=msg;errEl.style.display='block';}
@@ -806,8 +808,19 @@ async function doRegister(){
   if(btn){btn.textContent='Creating account…';btn.disabled=true;}
   if(errEl)errEl.style.display='none';
   try{
-    await FNA.Auth.signUp({email,password:pass,fullName:name});
-    window.location.href='account-dashboard.html';
+    var result=await FNA.Auth.signUp({email,password:pass,fullName:name});
+    if(result&&result.session){
+      // Email confirmation is disabled — user is immediately signed in
+      window.location.href='account-dashboard.html';
+    } else {
+      // Email confirmation is required — tell the user to check their inbox
+      if(errEl){
+        errEl.style.color='var(--green-deep,#3A7A5C)';
+        errEl.textContent='Account created! Please check your email for a confirmation link, then sign in.';
+        errEl.style.display='block';
+      }
+      if(btn){btn.textContent='Check Your Email';btn.disabled=true;}
+    }
   }catch(e){
     if(errEl){errEl.textContent=e.message||'Registration failed. Please try again.';errEl.style.display='block';}
     if(btn){btn.textContent='Create Free Account';btn.disabled=false;}
