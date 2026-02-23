@@ -527,7 +527,7 @@
       <div class="bp-current">
         <div>
           <div class="bp-bid-lbl">Current Bid</div>
-          <div class="bp-bid-amt" id="bp-bid-amt" id="bp-bid">$187</div>
+          <div class="bp-bid-amt" id="bp-bid">$187</div>
           <div class="bp-bid-ct" id="bp-bid-ct">18 bids · You are not the leader</div>
         </div>
         <button onclick="toggleWatch(this)" style="background:transparent;border:none;font-size:24px;cursor:pointer;padding:4px" title="Add to watchlist">🤍</button>
@@ -860,7 +860,7 @@ async function submitBid(){
     if(!user){ closeConfirm(); toast('Please sign in to bid','🔒 Sign In Required'); setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500); return; }
     var sb=getSB();
     // Validate bid is above current
-    var{data:item,error:iErr}=await sb.from('items').select('current_bid,ends_at,status').eq('id',itemId).single();
+    var{data:item,error:iErr}=await sb.from('items').select('current_bid,ends_at,status,bid_count').eq('id',itemId).single();
     if(iErr||!item){ throw new Error('Could not load item details.'); }
     if(item.status!=='live'){ throw new Error('This auction has ended.'); }
     if(new Date(item.ends_at)<new Date()){ throw new Error('This auction has ended.'); }
@@ -1027,6 +1027,159 @@ async function showAllBids(btn){
   }
 }
 
+// ── REAL ITEM LOADER ──────────────────────────────────────────
+var realItemLoaded = false;
+
+async function loadItemData(){
+  var id = new URLSearchParams(window.location.search).get('id');
+  if(!id) return; // keep static demo when no ?id= param
+  try{
+    var item = await FNA.Items.getById(id);
+    if(!item) return;
+    realItemLoaded = true;
+
+    // Update bidding globals so inline handlers use real values
+    liveBid  = parseFloat(item.current_bid || item.starting_bid || 0);
+    bidCount = item.bid_count || 0;
+
+    // Real countdown from ends_at
+    if(item.ends_at){
+      totalSecs = Math.max(0, Math.floor((new Date(item.ends_at) - Date.now()) / 1000));
+    }
+
+    // ── Title & breadcrumb ──
+    setText('item-title', item.title);
+    var bpTitleEl = document.querySelector('.bp-title');
+    if(bpTitleEl) bpTitleEl.textContent = item.title;
+    document.title = item.title + ' — Family Nest Auctions';
+
+    // ── Estate label ──
+    if(item.estate_sales){
+      var loc = (item.estate_sales.location_city||'')+(item.estate_sales.location_state?', '+item.estate_sales.location_state:'');
+      var fullLoc = (item.estate_sales.name||'')+' · '+loc;
+      var esTag = document.querySelector('.item-estate-tag');
+      if(esTag) esTag.textContent = '📍 '+fullLoc;
+      var bpEst = document.querySelector('.bp-estate');
+      if(bpEst) bpEst.textContent = '📍 '+fullLoc;
+    }
+
+    // ── Bid amount + count ──
+    var bidEl = el('bp-bid');
+    if(bidEl) bidEl.textContent = '$'+liveBid.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+    setText('bp-bid-ct', bidCount+' bids · Place a bid below to join');
+    setText('bid-hist-count', '('+bidCount+' bids)');
+
+    // ── Cost breakdown ──
+    var premPct = item.buyers_premium_pct || 15;
+    var shipEst = item.est_shipping_min ? Math.round((item.est_shipping_min+(item.est_shipping_max||item.est_shipping_min))/2) : 65;
+    var prem = liveBid * premPct / 100;
+    setText('cost-bid',   '$'+liveBid.toFixed(2));
+    setText('cost-prem',  '$'+prem.toFixed(2));
+    setText('cost-total', '~$'+Math.round(liveBid+prem+shipEst));
+    var premRow = document.querySelector('.bc-row span:first-child + span:not(.total span)');
+    var premLbl = document.querySelector('#panel-bids .bc-row');
+    // update the premium label text if present
+    document.querySelectorAll('.bc-row').forEach(function(row){
+      if(row.querySelector('span') && row.querySelector('span').textContent.includes("premium")){
+        var spans = row.querySelectorAll('span');
+        if(spans[0]) spans[0].textContent = "Buyer's premium ("+premPct+"%)";
+      }
+    });
+
+    // ── Quick bid buttons — realistic increments above current bid ──
+    var steps = liveBid < 100 ? [10,25,50,100] : liveBid < 500 ? [25,50,100,200] : liveBid < 2000 ? [50,100,250,500] : [100,250,500,1000];
+    document.querySelectorAll('.qb-btn').forEach(function(btn, i){
+      var newAmt = Math.ceil(liveBid) + (steps[i]||steps[steps.length-1]);
+      btn.textContent = '$'+newAmt.toLocaleString();
+      btn.onclick = (function(a){ return function(){ selectBid(this, a); }; })(newAmt);
+    });
+
+    // ── Description ──
+    if(item.description){
+      var descEl = document.querySelector('.item-desc');
+      if(descEl){
+        var parts = item.description.split(/\n\n+/);
+        descEl.innerHTML = parts.map(function(p){ return '<p>'+escHtml(p.trim())+'</p>'; }).join('');
+      }
+    }
+
+    // ── Seller info ──
+    if(item.sellers){
+      var snEl = document.querySelector('.seller-name');
+      if(snEl) snEl.textContent = (item.sellers.business_name||'')+(item.sellers.city?' · '+item.sellers.city+(item.sellers.state?', '+item.sellers.state:''):'');
+      var saEl = document.querySelector('.seller-avatar');
+      if(saEl) saEl.textContent = (item.sellers.business_name||'S')[0].toUpperCase();
+    }
+
+    // ── Real bid history (first 6 rows) ──
+    var history = await FNA.Items.getBidHistory(id);
+    if(history && history.length){
+      var histEl = el('bid-history');
+      if(histEl){
+        histEl.innerHTML = history.slice(0,6).map(function(b,i){
+          var isTop = i===0;
+          var amt = '$'+parseFloat(b.amount||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+          return '<div class="bh-row"><div class="bh-user"><div class="bh-av">★</div><div>'+
+            '<div class="bh-name">Bidder #'+(i+1)+(isTop?' <span class="bh-winner-tag">Leading</span>':'')+'</div>'+
+            '<div class="bh-time">'+bidTimeAgo(b.created_at)+'</div></div></div>'+
+            '<div class="bh-amt'+(isTop?' top':'')+'"'+(isTop?' id="top-bid"':'')+'>'+amt+'</div></div>';
+        }).join('');
+      }
+      setText('bid-hist-count','('+history.length+' bids)');
+    } else {
+      var histEl2 = el('bid-history');
+      if(histEl2) histEl2.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);font-size:13px">No bids yet — be the first!</div>';
+    }
+
+    // ── Check current user's watchlist & bid status ──
+    try{
+      var user = await FNA.Auth.getUser();
+      if(user){
+        var sb3 = getSB();
+        // Watchlist check
+        var wlRes = await sb3.from('watchlist').select('id').eq('user_id',user.id).eq('item_id',id).maybeSingle();
+        if(wlRes && wlRes.data){
+          watching = true;
+          setText('watch-btn','❤️ Watchlist');
+          var heartBtn = document.querySelector('[title="Add to watchlist"]');
+          if(heartBtn) heartBtn.textContent = '❤️';
+        }
+        // User's bid status on this item
+        var myBidRes = await sb3.from('bids').select('amount,is_winning').eq('bidder_id',user.id).eq('item_id',id).order('created_at',{ascending:false}).limit(1);
+        var myBid = myBidRes.data && myBidRes.data[0];
+        var bidCtEl = el('bp-bid-ct');
+        if(bidCtEl){
+          if(myBid && myBid.is_winning) bidCtEl.textContent = bidCount+' bids · ✅ You are leading!';
+          else if(myBid) bidCtEl.textContent = bidCount+' bids · 😬 You have been outbid — re-bid below!';
+          else bidCtEl.textContent = bidCount+' bids · Place a bid below to join';
+        }
+      }
+    }catch(e2){}
+
+    // ── Live Supabase subscription — real-time bid updates ──
+    FNA.Items.subscribeToItem(id, function(updated){
+      liveBid  = parseFloat(updated.current_bid||0);
+      bidCount = updated.bid_count||0;
+      var bEl = el('bp-bid');
+      if(bEl){
+        bEl.textContent = '$'+liveBid.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+        bEl.classList.add('flash');
+        setTimeout(function(){ bEl.classList.remove('flash'); }, 400);
+      }
+      var premAmt = liveBid * (item.buyers_premium_pct||15) / 100;
+      setText('cost-bid',   '$'+liveBid.toFixed(2));
+      setText('cost-prem',  '$'+premAmt.toFixed(2));
+      setText('cost-total', '~$'+Math.round(liveBid+premAmt+(item.est_shipping_min||65)));
+      setText('bid-hist-count','('+bidCount+' bids)');
+      setText('bp-bid-ct', bidCount+' bids · 😬 You may have been outbid — check and re-bid!');
+      toast('New bid: $'+liveBid.toLocaleString(),'⚡ Live Bid Update');
+    });
+
+  }catch(err){
+    console.warn('loadItemData error:', err);
+  }
+}
+
 // ── DOM-DEPENDENT SETUP — runs only after full DOM is ready ──
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -1042,8 +1195,9 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   setInterval(updateCountdown, 1000);
 
-  // Live bid simulation
+  // Live bid simulation (disabled when a real item is loaded)
   function addLiveBid(){
+    if(realItemLoaded) return; // don't simulate when showing real auction
     if(Math.random()>.6){
       liveBid += Math.floor(Math.random()*15)+8;
       bidCount++;
@@ -1098,6 +1252,9 @@ document.addEventListener('DOMContentLoaded', function(){
       }
     }catch(e){}
   })();
+
+  // Load real item data from Supabase using ?id= URL param
+  loadItemData();
 
 });
 </script>
