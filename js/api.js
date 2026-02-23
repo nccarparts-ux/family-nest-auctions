@@ -86,7 +86,7 @@ const Items = {
       .from('items')
       .select(`
         *,
-        item_photos (storage_url, is_primary, sort_order),
+        item_photos (storage_url, is_primary, display_order, caption),
         sellers (id, business_name, avg_rating, total_reviews, total_sales, city, state)
       `)
       .eq('id', id)
