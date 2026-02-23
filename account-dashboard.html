@@ -910,9 +910,9 @@ async function loadDashboardUser(){
     if(metaEl)metaEl.innerHTML='<span>✉️ '+escHtml2(user.email||'')+'</span>';
     // Load stat counts
     var[bids,watchlist,won]=await Promise.all([
-      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id),
+      getSB().from('bids').select('id',{count:'exact',head:true}).eq('user_id',user.id),
       getSB().from('watchlist').select('id',{count:'exact',head:true}).eq('user_id',user.id),
-      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id).eq('is_winning',true)
+      getSB().from('bids').select('id',{count:'exact',head:true}).eq('user_id',user.id).eq('is_winning',true)
     ]);
     var statNums=document.querySelectorAll('.ph-stat-num');
     if(statNums[0])statNums[0].innerHTML=(bids.count||0)+'<em> Active</em>';
@@ -940,7 +940,7 @@ async function loadOverviewData(){
     // Fetch all user bids with item details — one query for everything
     var{data:allBids}=await getSB().from('bids')
       .select('amount,is_winning,created_at,items(id,title,current_bid,ends_at,status)')
-      .eq('bidder_id',user.id)
+      .eq('user_id',user.id)
       .order('created_at',{ascending:false})
       .limit(50);
 
@@ -1033,7 +1033,7 @@ async function loadOverviewData(){
 async function loadActiveBids(){
   try{
     var user=await FNA.Auth.getUser();if(!user)return;
-    var{data}=await getSB().from('bids').select('amount,is_winning,created_at,items(id,title,current_bid,ends_at,status)').eq('bidder_id',user.id).order('created_at',{ascending:false}).limit(20);
+    var{data}=await getSB().from('bids').select('amount,is_winning,created_at,items(id,title,current_bid,ends_at,status)').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20);
     var container=document.querySelector('#panel-bids .bids-list');
     if(!container||!data)return;
     if(!data.length){container.innerHTML='<div class="empty-panel"><div class="ep-icon">⚡</div><div class="ep-title">No Active Bids</div><div class="ep-sub">Browse live auctions and place your first bid!</div><button class="btn-browse" onclick="window.location.href=\'auction-browse.html\'">Browse Auctions</button></div>';return;}
@@ -1067,7 +1067,7 @@ async function loadWatchlist(){
 async function loadWonItems(){
   try{
     var user=await FNA.Auth.getUser();if(!user)return;
-    var{data}=await getSB().from('bids').select('amount,created_at,items(id,title,ends_at,status)').eq('bidder_id',user.id).eq('is_winning',true).order('created_at',{ascending:false}).limit(20);
+    var{data}=await getSB().from('bids').select('amount,created_at,items(id,title,ends_at,status)').eq('user_id',user.id).eq('is_winning',true).order('created_at',{ascending:false}).limit(20);
     var container=document.querySelector('#panel-won .won-list');
     if(!container)return;
     if(!data||!data.length){container.innerHTML='<div class="empty-panel"><div class="ep-icon">🏆</div><div class="ep-title">No Won Items Yet</div><div class="ep-sub">Items you win at auction will appear here.</div><button class="btn-browse" onclick="window.location.href=\'auction-browse.html\'">Browse Auctions</button></div>';return;}

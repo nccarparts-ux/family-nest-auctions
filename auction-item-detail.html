@@ -868,11 +868,11 @@ async function submitBid(){
     if(amount<minBid){ throw new Error('Bid must be at least $'+minBid+'.'); }
     // Mark previous winning bids as not winning
     await sb.from('bids').update({is_winning:false}).eq('item_id',itemId).eq('is_winning',true);
-    // Insert new bid
+    // Insert new bid (column is user_id, not bidder_id; no is_proxy column in schema)
     var{error:bErr}=await sb.from('bids').insert({
-      item_id:itemId, bidder_id:user.id,
+      item_id:itemId, user_id:user.id,
       amount:amount, max_amount:maxAmount,
-      is_winning:true, is_proxy:!!maxAmount
+      is_winning:true
     });
     if(bErr) throw new Error(bErr.message);
     // Update item current bid and bid count
@@ -1199,8 +1199,8 @@ async function loadItemData(){
           var heartBtn = document.querySelector('[title="Add to watchlist"]');
           if(heartBtn) heartBtn.textContent = '❤️';
         }
-        // User's bid status on this item
-        var myBidRes = await sb3.from('bids').select('amount,is_winning').eq('bidder_id',user.id).eq('item_id',id).order('created_at',{ascending:false}).limit(1);
+        // User's bid status on this item (column is user_id, not bidder_id)
+        var myBidRes = await sb3.from('bids').select('amount,is_winning').eq('user_id',user.id).eq('item_id',id).order('amount',{ascending:false}).limit(1);
         var myBid = myBidRes.data && myBidRes.data[0];
         var bidCtEl = el('bp-bid-ct');
         if(bidCtEl){
@@ -1232,7 +1232,7 @@ async function loadItemData(){
       // Re-check whether THIS user is actually the winner (don't blindly say "outbid")
       FNA.Auth.getUser().then(function(u){
         if(!u) return;
-        getSB().from('bids').select('is_winning').eq('bidder_id',u.id).eq('item_id',id).eq('is_winning',true).maybeSingle().then(function(res){
+        getSB().from('bids').select('is_winning').eq('user_id',u.id).eq('item_id',id).eq('is_winning',true).maybeSingle().then(function(res){
           var ctEl = el('bp-bid-ct');
           if(!ctEl) return;
           if(res && res.data){

@@ -86,14 +86,13 @@ const Items = {
       .from('items')
       .select(`
         *,
-        item_photos (storage_url, is_primary, display_order, caption),
-        sellers (id, business_name, avg_rating, total_reviews, total_sales, city, state),
-        estate_sales (id, name, location_city, location_state)
+        item_photos (storage_url, is_primary, sort_order),
+        sellers (id, business_name, avg_rating, total_reviews, total_sales, city, state)
       `)
       .eq('id', id)
       .single()
     if (error) { console.error('getById error:', error); return null }
-    // Increment view count
+    // Increment view count (best-effort)
     sb().rpc('increment_view_count', { p_item_id: id }).catch(() => {})
     return data
   },
@@ -101,9 +100,9 @@ const Items = {
   async getBidHistory(itemId) {
     const { data, error } = await sb()
       .from('bids')
-      .select('amount, created_at, is_proxy')
+      .select('amount, created_at, is_winning')
       .eq('item_id', itemId)
-      .order('created_at', { ascending: false })
+      .order('amount', { ascending: false })
       .limit(20)
     if (error) return []
     return data || []
@@ -149,10 +148,10 @@ const Bidding = {
       .from('bids')
       .select(`
         id, amount, is_winning, created_at,
-        items (id, title, current_bid, ends_at, status, current_bidder_id,
+        items (id, title, current_bid, ends_at, status,
           item_photos (storage_url, is_primary))
       `)
-      .eq('bidder_id', user.id)
+      .eq('user_id', user.id)
       .eq('is_winning', true)
       .order('created_at', { ascending: false })
     return data || []
@@ -533,9 +532,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       await loadBrowseItems({ search: q || '' })
     }
 
-    if (path.includes('auction-item-detail')) {
-      await loadItemDetail()
-    }
+    // auction-item-detail.html has its own loadItemData() with correct selectors
+    // so we skip loadItemDetail() here to avoid duplicate/conflicting calls
 
     // Auto-open login/register modal from URL params
     const params = new URLSearchParams(window.location.search)
