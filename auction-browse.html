@@ -805,4 +805,35 @@ function closeDrawer(){
 
 
 // ── INIT ──
-document.addEventListener('DO
+document.addEventListener('DOMContentLoaded', function(){
+  buildFilterPanels();
+  // Pre-fill search from URL param
+  var q = new URLSearchParams(window.location.search).get('q');
+  if(q){ var si=el('search-input'); if(si) si.value=q; handleSearch(q); }
+  else { renderResults(); }
+
+  // Update header auth state
+  (async function(){
+    try{
+      var user = await FNA.Auth.getUser();
+      var ctaDiv = document.querySelector('.nav-ctas');
+      if(user && ctaDiv){
+        var first = (user.user_metadata?.full_name||user.email||'Account').split(' ')[0];
+        var init = first[0].toUpperCase();
+        ctaDiv.innerHTML =
+          '<a href="account-dashboard.html" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:100px;padding:6px 16px 6px 8px;text-decoration:none">' +
+          '<div style="width:30px;height:30px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">'+init+'</div>' +
+          '<span style="font-size:13px;font-weight:600;color:#fff">'+first.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span></a>' +
+          '<button class="btn-honey" onclick="window.location.href=\'account-dashboard.html\'">My Account</button>';
+      }
+    }catch(e){}
+  })();
+
+  // Escape closes mobile drawer
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape') closeDrawer();
+  });
+});
+</script>
+</body>
+</html>
