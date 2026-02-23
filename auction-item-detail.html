@@ -741,6 +741,13 @@ const bidNames = ['K***a','P***l','D***n','W***e','C***s','B***y'];
 function el(id){ return document.getElementById(id); }
 function setText(id, val){ const e=el(id); if(e) e.textContent=val; }
 function setClass(id, cls, on){ const e=el(id); if(e) e.classList.toggle(cls,on); }
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function getSB(){
+  return window.supabase.createClient(
+    'https://hwsjgclteuezauveujit.supabase.co',
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+  );
+}
 
 // ── TOAST (declared early so inline onclick handlers can call it before DOMContentLoaded) ──
 function toast(msg, title){
@@ -840,7 +847,7 @@ async function openConfirm(){
 function closeConfirm(){
   const ov=el('confirm-overlay'); if(ov) ov.classList.remove('on');
 }
-function submitBid(){
+async function submitBid(){
   var itemId=new URLSearchParams(window.location.search).get('id');
   var amount=window._pendingBid;
   var maxAmount=window._pendingMax||null;
@@ -848,41 +855,72 @@ function submitBid(){
   if(!amount||amount<1){ toast('Enter a valid bid amount','⚠️ Error'); closeConfirm(); return; }
   var btn=document.querySelector('[onclick*="submitBid"]');
   if(btn){ btn.textContent='⏳ Placing…'; btn.disabled=true; }
-  FNA.Bidding.placeBid(itemId,amount,maxAmount)
-    .then(function(){
-      closeConfirm();
-      toast('Bid of $'+amount+' placed!','🎉 Bid Confirmed');
-      var bidEl=document.getElementById('bp-bid-amt');
-      if(bidEl) bidEl.textContent='$'+amount;
-      var ci=document.getElementById('custom-bid-amount');
-      if(ci) ci.value='';
-      window._pendingBid=null; window._pendingMax=null;
-      if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
-    })
-    .catch(function(err){
-      closeConfirm();
-      if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
-      if(err.message&&err.message.toLowerCase().includes('sign')){
-        toast('Please sign in to bid','🔒 Sign In Required');
-        setTimeout(function(){ window.location.href='family-nest-auctions.html?login=1'; },1500);
-      } else {
-        toast(err.message||'Bid failed — please try again','⚠️ Error');
-      }
+  try{
+    var user=await FNA.Auth.getUser();
+    if(!user){ closeConfirm(); toast('Please sign in to bid','🔒 Sign In Required'); setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500); return; }
+    var sb=getSB();
+    // Validate bid is above current
+    var{data:item,error:iErr}=await sb.from('items').select('current_bid,ends_at,status').eq('id',itemId).single();
+    if(iErr||!item){ throw new Error('Could not load item details.'); }
+    if(item.status!=='live'){ throw new Error('This auction has ended.'); }
+    if(new Date(item.ends_at)<new Date()){ throw new Error('This auction has ended.'); }
+    var minBid=(item.current_bid||0)+1;
+    if(amount<minBid){ throw new Error('Bid must be at least $'+minBid+'.'); }
+    // Mark previous winning bids as not winning
+    await sb.from('bids').update({is_winning:false}).eq('item_id',itemId).eq('is_winning',true);
+    // Insert new bid
+    var{error:bErr}=await sb.from('bids').insert({
+      item_id:itemId, bidder_id:user.id,
+      amount:amount, max_amount:maxAmount,
+      is_winning:true, is_proxy:!!maxAmount
     });
+    if(bErr) throw new Error(bErr.message);
+    // Update item current bid, count, and leading bidder
+    await sb.from('items').update({
+      current_bid:amount, current_bidder_id:user.id,
+      bid_count:(item.bid_count||0)+1
+    }).eq('id',itemId);
+    closeConfirm();
+    toast('Bid of $'+amount+' placed — you are leading!','🎉 Bid Confirmed');
+    // Update displayed bid on page
+    var bidEl=el('bp-bid'); if(bidEl) bidEl.textContent='$'+amount;
+    var bidEl2=el('top-bid'); if(bidEl2) bidEl2.textContent='$'+amount;
+    setText('bp-bid-ct', (item.bid_count||0)+1+' bids · You are leading ✅');
+    var ci=el('custom-bid-amount'); if(ci) ci.value='';
+    document.querySelectorAll('.qb-btn').forEach(b=>b.classList.remove('selected'));
+    window._pendingBid=null; window._pendingMax=null;
+    if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
+  }catch(err){
+    closeConfirm();
+    if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
+    toast(err.message||'Bid failed — please try again','⚠️ Error');
+  }
 }
 
 
 // ── WATCHLIST ──
-function toggleWatchlist(){
-  watching=!watching;
-  setText('watch-btn', watching?'❤️ Watchlist':'🤍 Watchlist');
-  toast(watching?'Added to your watchlist!':'Removed from watchlist.', watching?'❤️ Watching':'Removed');
+async function toggleWatchlist(){
+  var itemId=new URLSearchParams(window.location.search).get('id');
+  try{
+    var user=await FNA.Auth.getUser();
+    if(!user){ toast('Please sign in to save items','🔒 Sign In Required'); return; }
+    var sb=getSB();
+    if(watching){
+      await sb.from('watchlist').delete().eq('user_id',user.id).eq('item_id',itemId);
+      watching=false;
+    } else {
+      await sb.from('watchlist').upsert({user_id:user.id,item_id:itemId},{onConflict:'user_id,item_id'});
+      watching=true;
+    }
+    setText('watch-btn', watching?'❤️ Watchlist':'🤍 Watchlist');
+    toast(watching?'Added to your watchlist!':'Removed from watchlist.', watching?'❤️ Watching':'✕ Removed');
+  }catch(e){
+    toast(e.message||'Could not update watchlist','⚠️ Error');
+  }
 }
-function toggleWatch(btn){
-  watching=!watching;
+async function toggleWatch(btn){
+  await toggleWatchlist();
   if(btn) btn.textContent=watching?'❤️':'🤍';
-  setText('watch-btn', watching?'❤️ Watchlist':'🤍 Watchlist');
-  toast(watching?'Added to your watchlist!':'Removed from watchlist.', watching?'❤️ Watching':'Removed');
 }
 
 // ── NOTIFICATIONS ──
@@ -1037,5 +1075,33 @@ document.addEventListener('DOMContentLoaded', function(){
   // Keyboard shortcuts
   document.addEventListener('keydown',e=>{
     const lb=el('lightbox');
+    if(lb&&lb.classList.contains('on')){
+      if(e.key==='ArrowRight') nextPhoto(1);
+      else if(e.key==='ArrowLeft') nextPhoto(-1);
+      else if(e.key==='Escape') closeLightbox();
+    } else if(e.key==='Escape') closeConfirm();
+  });
+
+  // Update header based on auth state
+  (async function(){
+    try{
+      var user = await FNA.Auth.getUser();
+      var ctaDiv = document.querySelector('.nav-ctas');
+      if(user && ctaDiv){
+        var first = (user.user_metadata?.full_name||user.email||'Account').split(' ')[0];
+        ctaDiv.innerHTML =
+          '<a href="account-dashboard.html" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:100px;padding:6px 16px 6px 8px;text-decoration:none;cursor:pointer;transition:all .2s">' +
+          '<div style="width:30px;height:30px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">' +
+          first[0].toUpperCase()+'</div>' +
+          '<span style="font-size:13px;font-weight:600;color:#fff">'+escHtml(first)+'</span></a>' +
+          '<button class="btn-honey" onclick="window.location.href=\'auction-browse.html\'">Browse Auctions</button>';
+      }
+    }catch(e){}
+  })();
+
+});
+</script>
+</body>
+</html>
     if(lb&&lb.classList.contains('on')){
       if(e.key
