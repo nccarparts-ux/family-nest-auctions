@@ -936,26 +936,98 @@ async function loadDashboardUser(){
 async function loadOverviewData(){
   try{
     var user=await FNA.Auth.getUser();if(!user)return;
-    var[activeBids,outbid,wonItems]=await Promise.all([
-      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id).eq('is_winning',true),
-      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id).eq('is_winning',false),
-      getSB().from('bids').select('id',{count:'exact',head:true}).eq('bidder_id',user.id)
-    ]);
+
+    // Fetch all user bids with item details — one query for everything
+    var{data:allBids}=await getSB().from('bids')
+      .select('amount,is_winning,created_at,items(id,title,current_bid,ends_at,status)')
+      .eq('bidder_id',user.id)
+      .order('created_at',{ascending:false})
+      .limit(50);
+
+    // Deduplicate by item — keep only the most recent bid per item
+    var seen={}, latestPerItem=[];
+    (allBids||[]).forEach(function(b){
+      var iid=b.items?.id; if(!iid||seen[iid])return; seen[iid]=true; latestPerItem.push(b);
+    });
+
+    // Compute true leading / outbid counts on LIVE items only
+    var leadingCount=0, outbidCount=0;
+    latestPerItem.forEach(function(b){
+      if(b.items?.status==='live'){ if(b.is_winning) leadingCount++; else outbidCount++; }
+    });
+
+    // ── Stat cards ──
     var cards=document.querySelectorAll('#panel-overview .sc-num');
-    if(cards[0])cards[0].textContent=activeBids.count||0;
-    if(cards[1])cards[1].textContent=outbid.count||0;
-    if(cards[2])cards[2].textContent=wonItems.count||0;
-    // Recent activity
-    var{data:recentBids}=await getSB().from('bids').select('amount,created_at,items(id,title,current_bid)').eq('bidder_id',user.id).order('created_at',{ascending:false}).limit(5);
-    var actList=document.querySelector('#panel-overview .activity-list');
-    if(actList&&recentBids&&recentBids.length){
-      actList.innerHTML=recentBids.map(function(b){
-        var item=b.items||{};
-        var timeAgo=getTimeAgo(b.created_at);
-        return '<div class="act-row"><div class="act-icon-wrap bid">⚡</div><div class="act-content"><div class="act-title">Bid on '+escHtml2(item.title||'item')+'</div><div class="act-detail">Your bid: $'+parseFloat(b.amount).toLocaleString()+'</div></div><div class="act-time">'+timeAgo+'</div><div class="act-amount green">$'+parseFloat(b.amount).toLocaleString()+'</div></div>';
-      }).join('');
+    if(cards[0])cards[0].textContent=leadingCount;
+    if(cards[1])cards[1].textContent=outbidCount;
+    if(cards[2])cards[2].textContent=latestPerItem.length;
+
+    // ── Alert banner — only show when genuinely outbid ──
+    var banner=document.querySelector('#panel-overview .alert-banner');
+    if(banner){
+      if(outbidCount>0){
+        banner.style.display='';
+        var btxt=banner.querySelector('.ab-text');
+        if(btxt) btxt.innerHTML='<strong>You\'ve been outbid on '+outbidCount+' item'+(outbidCount!==1?'s':'')+'!</strong> Re-bid now to reclaim your lead.';
+      } else {
+        banner.style.display='none';
+      }
     }
-  }catch(e){}
+
+    // ── Recent Activity list ──
+    var actList=document.querySelector('#panel-overview .activity-list');
+    if(actList){
+      if(allBids&&allBids.length){
+        actList.innerHTML=allBids.slice(0,5).map(function(b){
+          var item=b.items||{};
+          var timeAgo=getTimeAgo(b.created_at);
+          var leading=b.is_winning;
+          return '<div class="act-row">'+
+            '<div class="act-icon-wrap '+(leading?'bid':'outbid')+'">'+(leading?'⚡':'😬')+'</div>'+
+            '<div class="act-content">'+
+              '<div class="act-title">'+escHtml2(item.title||'Item')+'</div>'+
+              '<div class="act-detail">Your bid: $'+parseFloat(b.amount).toLocaleString()+' · '+(leading?'✅ Leading':'😬 Outbid')+'</div>'+
+            '</div>'+
+            '<div class="act-time">'+timeAgo+'</div>'+
+            '<div class="act-amount '+(leading?'green':'red')+'">$'+parseFloat(b.amount).toLocaleString()+'</div>'+
+          '</div>';
+        }).join('');
+      } else {
+        actList.innerHTML='<div class="act-row"><div class="act-content" style="text-align:center;padding:20px;color:var(--text-light)">No activity yet. <a href="auction-browse.html" style="color:var(--green-mid);font-weight:600">Browse live auctions →</a></div></div>';
+      }
+    }
+
+    // ── "Ending Soon — Your Bids" — replace hardcoded rows with real data + proper ?id= links ──
+    var activeBidsList=document.getElementById('active-bids-list');
+    if(activeBidsList){
+      var liveBids=latestPerItem.filter(function(b){return b.items?.status==='live';}).slice(0,3);
+      if(liveBids.length){
+        activeBidsList.innerHTML=liveBids.map(function(b){
+          var item=b.items||{};
+          var isLeading=b.is_winning===true;
+          var countdown=FNA.UI.formatCountdown(item.ends_at);
+          var statusHtml=isLeading
+            ?'<span class="bid-status leading">✅ Leading</span>'
+            :'<span class="bid-status outbid">😬 Outbid — $'+parseFloat(item.current_bid||0).toLocaleString()+' leads</span>';
+          return '<div class="bid-row">'+
+            '<div class="bid-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div>'+
+            '<div class="bid-content">'+
+              '<div class="bid-name">'+escHtml2(item.title||'')+'</div>'+
+              '<div class="bid-meta-row">'+statusHtml+
+              '<span class="bid-meta-item">Your bid: <strong>$'+parseFloat(b.amount).toLocaleString()+'</strong></span></div>'+
+            '</div>'+
+            '<div class="bid-right">'+
+              '<div><div class="bid-current-lbl">Ends In</div>'+
+              '<div class="bid-time'+(countdown.urgent?' urgent':'')+'" data-ends-at="'+item.ends_at+'">'+countdown.text+'</div></div>'+
+              '<button class="btn-rebid" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'">Re-Bid Now</button>'+
+            '</div>'+
+          '</div>';
+        }).join('');
+      } else {
+        activeBidsList.innerHTML='<div style="text-align:center;padding:28px;color:var(--text-light);font-size:14px">No active bids yet. <button style="background:var(--green-deep);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;margin-left:8px;font-family:\'Jost\',sans-serif" onclick="window.location.href=\'auction-browse.html\'">Browse Auctions</button></div>';
+      }
+    }
+  }catch(e){console.warn('loadOverviewData error:',e);}
 }
 
 async function loadActiveBids(){

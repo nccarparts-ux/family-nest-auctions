@@ -1027,12 +1027,47 @@ async function showAllBids(btn){
   }
 }
 
+// ── RELATED ITEMS LOADER ─────────────────────────────────────
+async function loadRelatedItems(excludeId){
+  try{
+    var items = await FNA.Items.getLive({limit:8});
+    if(excludeId) items = items.filter(function(i){ return i.id !== excludeId; });
+    items = items.slice(0,4);
+    var grid = document.querySelector('.related-grid');
+    var titleEl = document.querySelector('.related-title');
+    if(titleEl) titleEl.textContent = 'More Live Auctions';
+    if(!grid || !items.length) return;
+    var emojis = ['🪑','🏺','🪔','🖼️','💍','🎨','🪞','🧺','🕰️','⌚'];
+    grid.innerHTML = items.map(function(item, i){
+      var bid = parseFloat(item.current_bid || item.starting_bid || 0);
+      var countdown = FNA.UI.formatCountdown(item.ends_at);
+      var seller = item.sellers || {};
+      var emoji = emojis[i % emojis.length];
+      return '<a class="rel-card" href="auction-item-detail.html?id='+item.id+'">'+
+        '<div class="rel-img" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">'+emoji+'</div>'+
+        '<div class="rel-body">'+
+          '<div class="rel-estate">'+(seller.business_name||'Estate')+(seller.city?' · '+seller.city:'')+'</div>'+
+          '<div class="rel-name">'+escHtml(item.title)+'</div>'+
+          '<div class="rel-footer">'+
+            '<div class="rel-bid">$'+bid.toLocaleString()+'</div>'+
+            '<div class="rel-time'+(countdown.urgent?' u':'')+'">'+countdown.text+'</div>'+
+          '</div>'+
+        '</div>'+
+      '</a>';
+    }).join('');
+  }catch(e){}
+}
+
 // ── REAL ITEM LOADER ──────────────────────────────────────────
 var realItemLoaded = false;
 
 async function loadItemData(){
   var id = new URLSearchParams(window.location.search).get('id');
-  if(!id) return; // keep static demo when no ?id= param
+  if(!id){
+    // Demo mode — still load real items in the "related" section at the bottom
+    loadRelatedItems(null);
+    return;
+  }
   try{
     var item = await FNA.Items.getById(id);
     if(!item) return;
@@ -1152,6 +1187,9 @@ async function loadItemData(){
         }
       }
     }catch(e2){}
+
+    // ── Real related items (replaces hardcoded Henderson Estate links) ──
+    loadRelatedItems(id);
 
     // ── Live Supabase subscription — real-time bid updates ──
     FNA.Items.subscribeToItem(id, function(updated){
