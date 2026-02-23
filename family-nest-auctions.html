@@ -723,30 +723,7 @@ document.addEventListener('DOMContentLoaded', function(){
     o.addEventListener('click', function(e){ if(e.target===o) o.classList.remove('on'); });
   });
 
-  // Countdown timer
-  var heroTimer=$id('hero-timer');
-  if(heroTimer){
-    var s=2*3600+14*60+38;
-    setInterval(function(){
-      if(s>0) s--;
-      var h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60;
-      heroTimer.textContent=[h,m,sec].map(function(v){ return String(v).padStart(2,'0'); }).join(':');
-      if(h===0&&m<30) heroTimer.classList.add('soon');
-    }, 1000);
-  }
-
-  // Hero bid updater
-  var bid=187;
-  setInterval(function(){
-    if(Math.random()>.55){
-      bid+=Math.floor(Math.random()*12)+5;
-      var el=$id('hero-bid'); if(!el) return;
-      el.style.transform='scale(1.18)';
-      el.style.color='var(--green-sage)';
-      el.textContent='$'+bid;
-      setTimeout(function(){ el.style.transform=''; el.style.color='var(--honey)'; }, 350);
-    }
-  }, 3200);
+  // Hero bid and timer are set by loadHeroItems() from real Supabase data
 
   // Activity feed
   setTimeout(function(){
@@ -900,8 +877,10 @@ async function loadReviews(){
 // ── HERO DYNAMIC ITEMS ─────────────────────────────────────────
 async function loadHeroItems(){
   try{
-    var items=await FNA.Items.getLive({sort:'bid_count',limit:5});
-    if(!items||items.length===0)return;
+    // Use direct fresh client (bypass singleton) for reliability
+    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
+    var {data:items,error}=await _sb.from('items').select('id,title,category,condition,current_bid,starting_bid,bid_count,ends_at,sellers(business_name,city,state)').eq('status','live').order('bid_count',{ascending:false}).limit(5);
+    if(error||!items||items.length===0)return;
     var featured=items[0];
     var titleEl=document.getElementById('hero-title');
     var bidEl=document.getElementById('hero-bid');

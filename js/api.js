@@ -310,9 +310,10 @@ const UI = {
     const total = (parseFloat(bid) + parseFloat(premium) + (item.est_shipping_min ? (item.est_shipping_min + item.est_shipping_max) / 2 : 0)).toFixed(0)
     const seller = item.sellers
 
+    const condClass = item.condition === 'excellent' ? 'c-ex' : item.condition === 'good' ? 'c-gd' : 'c-fr'
     return `
-      <div class="ac-card" onclick="window.location.href='auction-item-detail.html?id=${item.id}'">
-        <div class="ac-img" style="${photo ? `background:url('${photo}') center/cover no-repeat` : ''}">
+      <div class="ac" onclick="window.location.href='auction-item-detail.html?id=${item.id}'" style="cursor:pointer">
+        <div class="ac-img" style="${photo ? `background:url('${photo}') center/cover no-repeat;font-size:0` : ''}">
           ${!photo ? '<span style="font-size:64px">🪑</span>' : ''}
           <div class="ac-badge ${item.bid_count > 20 ? 'hot' : 'live'}">${item.bid_count > 20 ? '🔥 HOT' : '🔴 LIVE'}</div>
           <button class="ac-fav" onclick="event.stopPropagation();FNA.Watchlist.toggle('${item.id}').then(w=>this.textContent=w?'❤️':'🤍')">🤍</button>
@@ -320,7 +321,7 @@ const UI = {
         <div class="ac-body">
           <div class="ac-estate">${seller?.business_name || ''} · ${seller?.city || ''}, ${seller?.state || ''}</div>
           <div class="ac-name">${item.title}</div>
-          <div class="ac-cond ${item.condition}">✅ ${item.condition.charAt(0).toUpperCase() + item.condition.slice(1)} Condition</div>
+          <div class="cond ${condClass}">✅ ${item.condition.charAt(0).toUpperCase() + item.condition.slice(1)} Condition</div>
           <div class="ac-pricing">
             <div>
               <div class="ac-bid-lbl">Current Bid</div>
@@ -332,12 +333,12 @@ const UI = {
               <div class="ac-time" data-ends-at="${item.ends_at}">--</div>
             </div>
           </div>
-          <div class="trans-panel">
-            <div class="tp-hd">💡 Full Cost Estimate</div>
-            <div class="tp-row"><span>Current bid</span><span>${UI.formatPrice(bid)}</span></div>
-            <div class="tp-row"><span>Buyer's premium (${item.buyers_premium_pct || 15}%)</span><span>$${premium}</span></div>
-            <div class="tp-row"><span>Est. shipping</span><span>${shipping}</span></div>
-            <div class="tp-total"><span>Estimated total</span><span>~${UI.formatPrice(total)}</span></div>
+          <div class="cost-panel">
+            <div class="cp-hd">💡 Full Cost Estimate</div>
+            <div class="cp-row"><span>Current bid</span><span>${UI.formatPrice(bid)}</span></div>
+            <div class="cp-row"><span>Buyer's premium (${item.buyers_premium_pct || 15}%)</span><span>$${premium}</span></div>
+            <div class="cp-row"><span>Est. shipping</span><span>${shipping}</span></div>
+            <div class="cp-tot"><span>Estimated total</span><span>~${UI.formatPrice(total)}</span></div>
           </div>
           <div class="ac-seller">
             ${seller?.avg_rating ? `⭐ ${seller.avg_rating} · ` : ''}${seller?.business_name || ''}
@@ -527,13 +528,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       await loadHomepageAuctions()
     }
 
-    if (path.includes('auction-browse')) {
-      const q = new URLSearchParams(window.location.search).get('q')
-      await loadBrowseItems({ search: q || '' })
-    }
-
-    // auction-item-detail.html has its own loadItemData() with correct selectors
-    // so we skip loadItemDetail() here to avoid duplicate/conflicting calls
+    // auction-browse.html handles its own data loading via loadRealItems() — skip here
+    // auction-item-detail.html has its own loadItemData() with correct selectors — skip here
 
     // Auto-open login/register modal from URL params
     const params = new URLSearchParams(window.location.search)
