@@ -875,9 +875,9 @@ async function submitBid(){
       is_winning:true, is_proxy:!!maxAmount
     });
     if(bErr) throw new Error(bErr.message);
-    // Update item current bid, count, and leading bidder
+    // Update item current bid and bid count
     await sb.from('items').update({
-      current_bid:amount, current_bidder_id:user.id,
+      current_bid:amount,
       bid_count:(item.bid_count||0)+1
     }).eq('id',itemId);
     closeConfirm();
@@ -1042,6 +1042,12 @@ async function loadItemData(){
     liveBid  = parseFloat(item.current_bid || item.starting_bid || 0);
     bidCount = item.bid_count || 0;
 
+    // Fallback: get TRUE highest bid from bids table in case items.current_bid is stale
+    try{
+      var{data:topBid}=await getSB().from('bids').select('amount').eq('item_id',id).order('amount',{ascending:false}).limit(1).maybeSingle();
+      if(topBid && parseFloat(topBid.amount) > liveBid) liveBid = parseFloat(topBid.amount);
+    }catch(e0){}
+
     // Real countdown from ends_at
     if(item.ends_at){
       totalSecs = Math.max(0, Math.floor((new Date(item.ends_at) - Date.now()) / 1000));
@@ -1076,15 +1082,6 @@ async function loadItemData(){
     setText('cost-bid',   '$'+liveBid.toFixed(2));
     setText('cost-prem',  '$'+prem.toFixed(2));
     setText('cost-total', '~$'+Math.round(liveBid+prem+shipEst));
-    var premRow = document.querySelector('.bc-row span:first-child + span:not(.total span)');
-    var premLbl = document.querySelector('#panel-bids .bc-row');
-    // update the premium label text if present
-    document.querySelectorAll('.bc-row').forEach(function(row){
-      if(row.querySelector('span') && row.querySelector('span').textContent.includes("premium")){
-        var spans = row.querySelectorAll('span');
-        if(spans[0]) spans[0].textContent = "Buyer's premium ("+premPct+"%)";
-      }
-    });
 
     // ── Quick bid buttons — realistic increments above current bid ──
     var steps = liveBid < 100 ? [10,25,50,100] : liveBid < 500 ? [25,50,100,200] : liveBid < 2000 ? [50,100,250,500] : [100,250,500,1000];
@@ -1171,8 +1168,20 @@ async function loadItemData(){
       setText('cost-prem',  '$'+premAmt.toFixed(2));
       setText('cost-total', '~$'+Math.round(liveBid+premAmt+(item.est_shipping_min||65)));
       setText('bid-hist-count','('+bidCount+' bids)');
-      setText('bp-bid-ct', bidCount+' bids · 😬 You may have been outbid — check and re-bid!');
-      toast('New bid: $'+liveBid.toLocaleString(),'⚡ Live Bid Update');
+      // Re-check whether THIS user is actually the winner (don't blindly say "outbid")
+      FNA.Auth.getUser().then(function(u){
+        if(!u) return;
+        getSB().from('bids').select('is_winning').eq('bidder_id',u.id).eq('item_id',id).eq('is_winning',true).maybeSingle().then(function(res){
+          var ctEl = el('bp-bid-ct');
+          if(!ctEl) return;
+          if(res && res.data){
+            ctEl.textContent = bidCount+' bids · ✅ You are still leading!';
+          } else {
+            ctEl.textContent = bidCount+' bids · 😬 You have been outbid — re-bid below!';
+            toast('⚡ You\'ve been outbid! Current bid: $'+liveBid.toLocaleString(),'⚡ Outbid Alert');
+          }
+        }).catch(function(){});
+      }).catch(function(){});
     });
 
   }catch(err){
