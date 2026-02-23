@@ -1092,5 +1092,20 @@ function removeWatchItem(btn){
   }, 250);
 }
 
-// INIT — only attach passive listeners here
-document.addEventListener('DOM
+// INIT
+document.addEventListener('DOMContentLoaded', async function(){
+  try{
+    var user = await FNA.Auth.getUser();
+    if(!user){
+      window.location.href = 'family-nest-auctions.html?login=1';
+      return;
+    }
+    await loadDashboardUser();
+    await loadOverviewData();
+  }catch(e){
+    console.warn('Dashboard init error:', e);
+  }
+});
+</script>
+</body>
+</html>
