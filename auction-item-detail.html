@@ -700,7 +700,7 @@
     <h2>Confirm Your Bid</h2>
     <p class="sub">Please review your complete cost before confirming.</p>
     <div class="modal-summary">
-      <div class="ms-row"><span>Item</span><span>Victorian Mahogany Armchair</span></div>
+      <div class="ms-row"><span>Item</span><span id="confirm-item-name">Victorian Mahogany Armchair</span></div>
       <div class="ms-row"><span>Your bid</span><span id="confirm-bid">$200</span></div>
       <div class="ms-row"><span>Buyer's premium (15%)</span><span id="confirm-prem">$30.00</span></div>
       <div class="ms-row"><span>Est. shipping</span><span>~$65.00</span></div>
@@ -1064,9 +1064,20 @@ var realItemLoaded = false;
 async function loadItemData(){
   var id = new URLSearchParams(window.location.search).get('id');
   if(!id){
-    // Demo mode — still load real items in the "related" section at the bottom
-    loadRelatedItems(null);
-    return;
+    // No ?id= param — auto-load the first live item so the page never shows hardcoded demo data
+    try{
+      var liveItems = await FNA.Items.getLive({limit:1});
+      if(liveItems && liveItems.length){
+        id = liveItems[0].id;
+        history.replaceState({}, '', window.location.pathname + '?id=' + id);
+      } else {
+        loadRelatedItems(null);
+        return;
+      }
+    }catch(e0){
+      loadRelatedItems(null);
+      return;
+    }
   }
   try{
     var item = await FNA.Items.getById(id);
@@ -1095,14 +1106,26 @@ async function loadItemData(){
     document.title = item.title + ' — Family Nest Auctions';
 
     // ── Estate label ──
+    var _estLoc = '';
     if(item.estate_sales){
-      var loc = (item.estate_sales.location_city||'')+(item.estate_sales.location_state?', '+item.estate_sales.location_state:'');
-      var fullLoc = (item.estate_sales.name||'')+' · '+loc;
+      _estLoc = (item.estate_sales.location_city||'')+(item.estate_sales.location_state?', '+item.estate_sales.location_state:'');
+      var fullLoc = (item.estate_sales.name||'')+' · '+_estLoc;
       var esTag = document.querySelector('.item-estate-tag');
       if(esTag) esTag.textContent = '📍 '+fullLoc;
       var bpEst = document.querySelector('.bp-estate');
       if(bpEst) bpEst.textContent = '📍 '+fullLoc;
     }
+
+    // ── Breadcrumb ──
+    var bcEstLink = document.querySelector('.breadcrumb > a[href="#"]');
+    if(bcEstLink && item.estate_sales){
+      bcEstLink.textContent = (item.estate_sales.name||'Estate')+(_estLoc?' — '+_estLoc:'');
+    }
+    var bcAllSpans = Array.from(document.querySelectorAll('.breadcrumb > span:not(.sep)'));
+    if(bcAllSpans.length) bcAllSpans[bcAllSpans.length-1].textContent = item.title;
+
+    // ── Confirm modal item name ──
+    setText('confirm-item-name', item.title);
 
     // ── Bid amount + count ──
     var bidEl = el('bp-bid');
