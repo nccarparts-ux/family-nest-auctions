@@ -415,10 +415,10 @@
 <div class="dash-tabs">
   <div class="tabs-inner">
     <button class="tab-btn on" id="tab-overview"    onclick="switchTab('overview')">📊 Overview</button>
-    <button class="tab-btn"    id="tab-bids"        onclick="switchTab('bids')">⚡ Active Bids <span class="tab-badge">7</span></button>
-    <button class="tab-btn"    id="tab-watchlist"   onclick="switchTab('watchlist')">❤️ Watchlist <span class="tab-badge honey">14</span></button>
+    <button class="tab-btn"    id="tab-bids"        onclick="switchTab('bids')">⚡ Active Bids <span class="tab-badge" id="badge-bids" style="display:none">0</span></button>
+    <button class="tab-btn"    id="tab-watchlist"   onclick="switchTab('watchlist')">❤️ Watchlist <span class="tab-badge honey" id="badge-watchlist" style="display:none">0</span></button>
     <button class="tab-btn"    id="tab-won"         onclick="switchTab('won')">🏆 Won Items</button>
-    <button class="tab-btn"    id="tab-notifications" onclick="switchTab('notifications')">🔔 Notifications <span class="tab-badge">4</span></button>
+    <button class="tab-btn"    id="tab-notifications" onclick="switchTab('notifications')">🔔 Notifications <span class="tab-badge" id="badge-notifications" style="display:none">0</span></button>
     <button class="tab-btn"    id="tab-profile"     onclick="switchTab('profile')">⚙️ Profile &amp; Settings</button>
   </div>
 </div>
@@ -788,15 +788,15 @@
 
       <div class="form-section">
         <div class="fs-title">Personal Information</div>
-        <div class="ff"><label>Full Name</label><input type="text" value="Margaret Johnson"></div>
+        <div class="ff"><label>Full Name</label><input type="text" placeholder="Your full name"></div>
         <div class="ff-row">
-          <div class="ff"><label>Email</label><input type="email" value="margaret.j@email.com"></div>
-          <div class="ff"><label>Phone</label><input type="tel" value="(813) 555-0192"></div>
+          <div class="ff"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+          <div class="ff"><label>Phone</label><input type="tel" placeholder="(555) 000-0000"></div>
         </div>
-        <div class="ff"><label>Shipping Address</label><input type="text" value="1847 Bayshore Blvd"></div>
+        <div class="ff"><label>Shipping Address</label><input type="text" placeholder="Street address"></div>
         <div class="ff-row">
-          <div class="ff"><label>City</label><input type="text" value="Tampa"></div>
-          <div class="ff"><label>State / ZIP</label><input type="text" value="FL 33606"></div>
+          <div class="ff"><label>City</label><input type="text" placeholder="City"></div>
+          <div class="ff"><label>State / ZIP</label><input type="text" placeholder="FL 00000"></div>
         </div>
         <button class="btn-save" onclick="toast('Profile updated successfully!','✅ Saved')">Save Changes</button>
       </div>
@@ -918,6 +918,18 @@ async function loadDashboardUser(){
     if(statNums[0])statNums[0].innerHTML=(bids.count||0)+'<em> Active</em>';
     if(statNums[1])statNums[1].innerHTML=(won.count||0)+'<em> Items</em>';
     if(statNums[3])statNums[3].innerHTML=(watchlist.count||0)+'<em> Saved</em>';
+    // Update tab badges with real counts (only show if > 0)
+    function setBadge(id, count){
+      var b=document.getElementById(id);
+      if(!b)return;
+      if(count>0){b.textContent=count;b.style.display='';}
+      else{b.style.display='none';}
+    }
+    setBadge('badge-bids', bids.count||0);
+    setBadge('badge-watchlist', watchlist.count||0);
+    // Load notification count separately
+    var{count:notifCount}=await getSB().from('notifications').select('id',{count:'exact',head:true}).eq('user_id',user.id).eq('is_read',false);
+    setBadge('badge-notifications', notifCount||0);
   }catch(e){}
 }
 
