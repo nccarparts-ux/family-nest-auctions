@@ -1215,14 +1215,19 @@ async function loadItemData(){
           var heartBtn = document.querySelector('[title="Add to watchlist"]');
           if(heartBtn) heartBtn.textContent = '❤️';
         }
-        // User's bid status on this item (column is user_id, not bidder_id)
-        var myBidRes = await sb3.from('bids').select('amount,is_winning').eq('user_id',user.id).eq('item_id',id).order('amount',{ascending:false}).limit(1);
+        // User's bid status — compare against actual top bid (is_winning unreliable: no UPDATE RLS on bids)
+        var topBidRes = await sb3.from('bids').select('amount,user_id').eq('item_id',id).order('amount',{ascending:false}).limit(1);
+        var topBid = topBidRes.data && topBidRes.data[0];
+        var myBidRes = await sb3.from('bids').select('amount').eq('user_id',user.id).eq('item_id',id).order('amount',{ascending:false}).limit(1);
         var myBid = myBidRes.data && myBidRes.data[0];
         var bidCtEl = el('bp-bid-ct');
         if(bidCtEl){
-          if(myBid && myBid.is_winning) bidCtEl.textContent = bidCount+' bids · ✅ You are leading!';
-          else if(myBid) bidCtEl.textContent = bidCount+' bids · 😬 You have been outbid — re-bid below!';
-          else bidCtEl.textContent = bidCount+' bids · Place a bid below to join';
+          if(topBid && topBid.user_id === user.id)
+            bidCtEl.innerHTML = bidCount+' bids &nbsp;·&nbsp; <strong style="color:var(--green-deep)">✅ You are the high bidder!</strong>';
+          else if(myBid)
+            bidCtEl.innerHTML = bidCount+' bids &nbsp;·&nbsp; <strong style="color:var(--red)">😬 You\'ve been outbid — re-bid below!</strong>';
+          else
+            bidCtEl.textContent = bidCount+' bids · Place a bid below to join';
         }
       }
     }catch(e2){}
@@ -1247,17 +1252,18 @@ async function loadItemData(){
         setText('cost-prem',  '$'+premAmt.toFixed(2));
         setText('cost-total', '~$'+Math.round(liveBid+premAmt+(item.est_shipping_min||65)));
         setText('bid-hist-count','('+bidCount+' bids)');
-        // Re-check whether THIS user is actually the winner
+        // Re-check whether THIS user is the actual top bidder (top-bid comparison, not is_winning)
         _sb.auth.getUser().then(function(res){
           var u = res.data && res.data.user;
           if(!u) return;
-          _sb.from('bids').select('is_winning').eq('user_id',u.id).eq('item_id',id).eq('is_winning',true).maybeSingle().then(function(bres){
+          _sb.from('bids').select('user_id').eq('item_id',id).order('amount',{ascending:false}).limit(1).then(function(bres){
             var ctEl = el('bp-bid-ct');
             if(!ctEl) return;
-            if(bres && bres.data){
-              ctEl.textContent = bidCount+' bids · ✅ You are still leading!';
+            var topBid = bres && bres.data && bres.data[0];
+            if(topBid && topBid.user_id === u.id){
+              ctEl.innerHTML = bidCount+' bids &nbsp;·&nbsp; <strong style="color:var(--green-deep)">✅ You are still the high bidder!</strong>';
             } else {
-              ctEl.textContent = bidCount+' bids · 😬 You have been outbid — re-bid below!';
+              ctEl.innerHTML = bidCount+' bids &nbsp;·&nbsp; <strong style="color:var(--red)">😬 You\'ve been outbid — re-bid below!</strong>';
               toast('⚡ You\'ve been outbid! Current bid: $'+liveBid.toLocaleString(),'⚡ Outbid Alert');
             }
           }).catch(function(){});

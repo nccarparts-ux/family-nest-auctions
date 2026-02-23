@@ -432,27 +432,59 @@ function toast(msg,title){
   t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3400);
 }
 
+// ── SUPABASE ──
+function getSB(){
+  return window.supabase.createClient(
+    'https://hwsjgclteuezauveujit.supabase.co',
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+  );
+}
+
 // ── DATA ──
-const ALL_ITEMS = [
-  {id:1,  name:'Victorian Carved Mahogany Armchair',cat:'Furniture', estate:'Henderson Estate · Atlanta, GA', bid:187, prem:28, ship:65, bids:18, ends:6300,  cond:'excellent', icon:'🪑', bg:'#f0ebe3', seller:'Henderson Estate Sales', stars:4.9, new:false},
-  {id:2,  name:'Antique Tiffany-Style Table Lamp',  cat:'Lighting',  estate:'Henderson Estate · Atlanta, GA', bid:340, prem:51, ship:45, bids:24, ends:14400, cond:'excellent', icon:'🪔', bg:'#f8f0e0', seller:'Henderson Estate Sales', stars:4.9, new:false},
-  {id:3,  name:'Hand-Knotted Persian Wool Rug, 8×10', cat:'Rugs',   estate:'Henderson Estate · Atlanta, GA', bid:215, prem:32, ship:120,bids:9,  ends:86400, cond:'good',      icon:'🏺', bg:'#f0e8f4', seller:'Henderson Estate Sales', stars:4.9, new:true},
-  {id:4,  name:'Victorian Mahogany Writing Desk',   cat:'Furniture', estate:'Henderson Estate · Atlanta, GA', bid:520, prem:78, ship:180,bids:31, ends:7200,  cond:'excellent', icon:'🖊️', bg:'#EEF7EE', seller:'Henderson Estate Sales', stars:4.9, new:false},
-  {id:5,  name:'Gilded Victorian Wall Mirror, 36"', cat:'Art',       estate:'Henderson Estate · Atlanta, GA', bid:890, prem:134,ship:95, bids:42, ends:259200,cond:'good',      icon:'🪞', bg:'#f8f4e8', seller:'Henderson Estate Sales', stars:4.9, new:true},
-  {id:6,  name:'Art Deco Diamond Brooch, 1920s',    cat:'Jewelry',   estate:'Morrison Collection · Savannah',  bid:1250,prem:188,ship:18, bids:55, ends:3600,  cond:'excellent', icon:'💎', bg:'#f0e8f8', seller:'Morrison Collection',     stars:5.0, new:false},
-  {id:7,  name:'Sterling Silver Tea Service Set',   cat:'Silver',    estate:'Morrison Collection · Savannah',  bid:445, prem:67, ship:42, bids:22, ends:18000, cond:'good',      icon:'🫖', bg:'#e8f4f4', seller:'Morrison Collection',     stars:5.0, new:false},
-  {id:8,  name:'Signed Impressionist Oil Painting', cat:'Art',       estate:'Whitfield Gallery · Charleston',  bid:2800,prem:420,ship:110,bids:68, ends:10800, cond:'excellent', icon:'🖼️', bg:'#faf0e8', seller:'Whitfield Gallery',       stars:4.8, new:false},
-  {id:9,  name:'Vintage Rolex Oyster Perpetual',    cat:'Jewelry',   estate:'Whitfield Gallery · Charleston',  bid:4200,prem:630,ship:22, bids:89, ends:5400,  cond:'good',      icon:'⌚', bg:'#f4f0e0', seller:'Whitfield Gallery',       stars:4.8, new:true},
-  {id:10, name:'Chippendale Highboy Chest of Drawers',cat:'Furniture',estate:'Baxter Estate · Nashville',      bid:680, prem:102,ship:240,bids:16, ends:43200, cond:'fair',      icon:'🗄️', bg:'#f0ece0', seller:'Baxter Estate',           stars:4.7, new:false},
-  {id:11, name:'Set of 12 Wedgwood Dinner Plates',  cat:'Silver',    estate:'Baxter Estate · Nashville',      bid:120, prem:18, ship:55, bids:7,  ends:28800, cond:'excellent', icon:'🍽️', bg:'#e8ecf4', seller:'Baxter Estate',           stars:4.7, new:true},
-  {id:12, name:'Edwardian Silk Velvet Settee',       cat:'Furniture', estate:'Carmichael Lot · Richmond, VA',  bid:290, prem:44, ship:160,bids:12, ends:72000, cond:'fair',      icon:'🛋️', bg:'#f4e8ec', seller:'Carmichael Estate',       stars:4.6, new:false},
-  {id:13, name:'19th C. Botanical Print Collection', cat:'Art',       estate:'Carmichael Lot · Richmond, VA',  bid:85,  prem:13, ship:28, bids:5,  ends:50400, cond:'good',      icon:'🌿', bg:'#e8f4e8', seller:'Carmichael Estate',       stars:4.6, new:false},
-  {id:14, name:'Bavarian Cuckoo Clock, Black Forest', cat:'Collectibles',estate:'Larson Collection · Denver', bid:155, prem:23, ship:48, bids:14, ends:21600, cond:'excellent', icon:'🕰️', bg:'#f0ece8', seller:'Larson Collection',       stars:4.9, new:true},
-  {id:15, name:'First Edition Hemingway – The Sun Also Rises',cat:'Books',estate:'Larson Collection · Denver', bid:880, prem:132,ship:20, bids:38, ends:32400, cond:'good',      icon:'📚', bg:'#f8f4e0', seller:'Larson Collection',       stars:4.9, new:false},
-  {id:16, name:'Chinese Export Porcelain Vase, 18th C.',cat:'Collectibles',estate:'Parker Estate · Boston',   bid:1100,prem:165,ship:60, bids:27, ends:9000,  cond:'excellent', icon:'🏺', bg:'#f0e8f0', seller:'Parker Estate',           stars:4.8, new:false},
-  {id:17, name:'Cast Iron Garden Bench, Victorian',  cat:'Garden',    estate:'Parker Estate · Boston',        bid:175, prem:26, ship:210,bids:8,  ends:115200,cond:'fair',      icon:'🌿', bg:'#e8f0e0', seller:'Parker Estate',           stars:4.8, new:true},
-  {id:18, name:'Navajo Hand-Woven Blanket, c.1920',  cat:'Rugs',      estate:'Thornton Estate · Albuquerque', bid:620, prem:93, ship:55, bids:33, ends:16200, cond:'good',      icon:'🧶', bg:'#f8ece0', seller:'Thornton Estate',         stars:5.0, new:false},
-];
+const ALL_ITEMS = [];
+
+async function loadRealItems(){
+  try{
+    var _sb = getSB();
+    var {data,error} = await _sb
+      .from('items')
+      .select('id,title,category,condition,current_bid,starting_bid,bid_count,ends_at,created_at,item_photos(storage_url,is_primary,display_order),sellers(business_name,city,state,avg_rating)')
+      .eq('status','live')
+      .order('ends_at',{ascending:true});
+    if(error){ console.error('loadRealItems error:',error); return; }
+    if(!data||!data.length){ console.warn('No live items found'); return; }
+    var ICON = {'Furniture':'🪑','Lighting':'🪔','Rugs':'🏺','Art':'🖼️','Jewelry':'💎','Silver':'🫖','Collectibles':'🕰️','Books':'📚','Garden':'🌿'};
+    var BG   = {'Furniture':'#f0ebe3','Lighting':'#f8f0e0','Rugs':'#f0e8f4','Art':'#faf0e8','Jewelry':'#f0e8f8','Silver':'#e8f4f4','Collectibles':'#f0ece8','Books':'#f8f4e0','Garden':'#e8f0e0'};
+    var now = Date.now();
+    ALL_ITEMS.length = 0;
+    data.forEach(function(item){
+      var s = item.sellers || {};
+      var endsAt = item.ends_at ? new Date(item.ends_at) : null;
+      var ends = endsAt ? Math.max(0,(endsAt-now)/1000) : 999999;
+      var bid = parseFloat(item.current_bid||item.starting_bid||0);
+      var photos = (item.item_photos||[]).sort(function(a,b){return (a.display_order||0)-(b.display_order||0);});
+      var primary = photos.find(function(p){return p.is_primary;})||photos[0];
+      ALL_ITEMS.push({
+        id: item.id,
+        name: item.title,
+        cat: item.category||'Other',
+        estate: (s.business_name||'Estate Sale')+(s.city?' · '+s.city+(s.state?', '+s.state:''):''),
+        bid: bid,
+        prem: Math.round(bid*0.15),
+        ship: null,
+        bids: item.bid_count||0,
+        ends: ends,
+        cond: item.condition||'good',
+        icon: ICON[item.category]||'📦',
+        bg: BG[item.category]||'#f0f0f0',
+        seller: s.business_name||'Estate Sale',
+        stars: parseFloat(s.avg_rating||5.0),
+        new: !!(item.created_at&&(now-new Date(item.created_at))<7*24*3600*1000),
+        photo_url: primary?primary.storage_url:null
+      });
+    });
+  }catch(e){console.error('loadRealItems error:',e);}
+}
 
 // ── STATE ──
 const state = {
@@ -602,13 +634,17 @@ function fmtTime(secs){
 
 function cardHTML(item, isListView){
   const t = fmtTime(item.ends);
-  const total = item.bid + item.prem + item.ship;
+  const total = item.bid + item.prem + (item.ship||0);
   const isFav = favorites.has(item.id);
+  const shipDisplay = item.ship!=null ? '~$'+item.ship : 'Varies';
+  const totalDisplay = item.ship!=null ? '~$'+total : '~$'+(item.bid+item.prem)+'+ship';
   return `
-  <a class="a-card${isListView?' list-view':''}" href="auction-item-detail.html">
+  <a class="a-card${isListView?' list-view':''}" href="auction-item-detail.html?id=${item.id}">
     <div class="card-img" style="background:linear-gradient(135deg,${item.bg},${item.bg}cc)">
-      <span style="font-size:${isListView?'48px':'64px'}">${item.icon}</span>
-      <button class="card-fav" onclick="event.stopPropagation();event.preventDefault();toggleFav(${item.id},this)">${isFav?'❤️':'🤍'}</button>
+      ${item.photo_url
+        ? `<img src="${item.photo_url}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit" onerror="this.remove()">`
+        : `<span style="font-size:${isListView?'48px':'64px'}">${item.icon}</span>`}
+      <button class="card-fav" onclick="event.stopPropagation();event.preventDefault();toggleFav('${item.id}',this)">${isFav?'❤️':'🤍'}</button>
       <span class="card-cond ${item.cond}">${item.cond[0].toUpperCase()+item.cond.slice(1)}</span>
       ${item.new?'<span style="position:absolute;bottom:10px;left:10px;background:var(--honey);color:var(--green-deep);font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px">NEW</span>':''}
     </div>
@@ -616,14 +652,14 @@ function cardHTML(item, isListView){
       <div class="card-estate">${item.estate}</div>
       <div class="card-name">${item.name}</div>
       <div class="card-transparency">
-        <div class="ct-row"><span>Current bid</span><span>$${item.bid}</span></div>
-        <div class="ct-row"><span>Buyer's premium (15%)</span><span>$${item.prem}</span></div>
-        <div class="ct-row"><span>Est. shipping</span><span>~$${item.ship}</span></div>
-        <div class="ct-total"><span>Est. total</span><span>~$${total}</span></div>
+        <div class="ct-row"><span>Current bid</span><span>$${item.bid.toLocaleString()}</span></div>
+        <div class="ct-row"><span>Buyer's premium (15%)</span><span>$${item.prem.toLocaleString()}</span></div>
+        <div class="ct-row"><span>Est. shipping</span><span>${shipDisplay}</span></div>
+        <div class="ct-total"><span>Est. total</span><span>${totalDisplay}</span></div>
       </div>
       <div class="card-footer">
         <div>
-          <div class="card-bid">$${item.bid}</div>
+          <div class="card-bid">$${item.bid.toLocaleString()}</div>
           <div class="card-bids-ct">${item.bids} bids</div>
         </div>
         <div class="card-time${t.urgent?' urgent':''}">${t.text}</div>
@@ -807,10 +843,12 @@ function closeDrawer(){
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function(){
   buildFilterPanels();
-  // Pre-fill search from URL param
-  var q = new URLSearchParams(window.location.search).get('q');
-  if(q){ var si=el('search-input'); if(si) si.value=q; handleSearch(q); }
-  else { renderResults(); }
+  // Fetch real Supabase data, then render
+  loadRealItems().then(function(){
+    var q = new URLSearchParams(window.location.search).get('q');
+    if(q){ var si=el('search-input'); if(si) si.value=q; handleSearch(q); }
+    else { renderResults(); }
+  });
 
   // Update header auth state
   (async function(){
