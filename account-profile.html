@@ -217,7 +217,35 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
         <div id="notif-rows">
           <div class="toggle-row">
             <div><div class="toggle-label">Outbid alerts</div><div class="toggle-sub">Get notified when someone outbids you</div></div>
-            <label class="toggle-switch"><input type="checkbox" id="notif-outbid" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+            <label class="toggle-switch"><input type="checkbox" id="notif-outbid"></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Winning bid alerts</div><div class="toggle-sub">When you win an auction</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-winning"></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Auction ending soon</div><div class="toggle-sub">For items on your watchlist</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-ending"></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">New messages</div><div class="toggle-sub">From sellers or support</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-messages"></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Shipping updates</div><div class="toggle-sub">When your won items ship</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-shipping"></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Promotional emails</div><div class="toggle-sub">New estate sales, featured items</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-promo"></label>
+          </div>
+        </div>
+        <div id="notif-error" class="error-msg"></div>
+        <div id="notif-success" class="success-msg"></div>
+        <div class="btn-row">
+          <button class="btn-primary" id="notif-btn" onclick="saveNotificationPrefs(this)">Save Preferences</button>
+        </div>
+      </div>tif-outbid" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
           </div>
           <div class="toggle-row">
             <div><div class="toggle-label">Auction ending soon</div><div class="toggle-sub">1-hour reminder on watched items</div></div>
