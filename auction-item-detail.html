@@ -156,6 +156,13 @@
 
   .bp-body{padding:22px 24px}
 
+  /* bid status */
+  .bp-status{margin-bottom:16px}
+  .status-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:6px 14px;border-radius:100px}
+  .status-badge.live{background:#E6F4EC;color:#2A6040}
+  .status-badge.closed{background:#F0EBE3;color:#666}
+  .status-badge.upcoming{background:#F5EDD8;color:#7a5a20}
+
   /* live bid display */
   .bp-current{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px}
   .bp-bid-lbl{font-size:11px;color:var(--text-light);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
@@ -199,7 +206,21 @@
 
   /* quick bid buttons */
   .quick-bids{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
-  .qb-btn{flex:1;min-width:70px;padding:8px;background:var(--cream);border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-weight:700;color:var(--charcoal);cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
+  .qb-btn{flex:1;min-width:70px;padding:8px 12px;background:var(--cream-mid);border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;color:var(--charcoal);cursor:pointer;transition:all .2s;font-family:'Jost',sans-serif}
+  .qb-btn:hover{background:var(--green-light);color:var(--white)}
+  .qb-btn.active{background:var(--green-mid);color:var(--white)}
+
+  /* bid button */
+  .bp-actions{margin-top:24px}
+  .btn-bid{width:100%;padding:16px;background:var(--green-deep);border:none;border-radius:var(--r-md);color:var(--white);font-size:16px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
+  .btn-bid:hover{background:var(--green-mid);transform:translateY(-2px);box-shadow:0 6px 20px rgba(58,122,92,.3)}
+  .btn-bid:disabled{background:var(--text-light);cursor:not-allowed;transform:none;box-shadow:none}
+
+  /* watch button */
+  .btn-watch{width:100%;padding:12px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-md);color:var(--text-mid);font-size:14px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .btn-watch:hover{background:var(--cream);border-color:var(--green-sage);color:var(--green-deep)}
+  .btn-watch.watching{background:var(--honey-pale);border-color:var(--honey);color:#7a5a20}
+</style>;background:var(--cream);border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-weight:700;color:var(--charcoal);cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
   .qb-btn:hover{background:var(--green-pale);border-color:var(--green-sage)}
   .qb-btn.primary{background:var(--green-deep);border-color:var(--green-deep);color:white}
   .qb-btn.primary:hover{background:var(--green-mid)}eam);border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--charcoal);cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;text-align:center}
