@@ -2,6 +2,7 @@ import os
 import subprocess
 import time
 import re
+import json
 from datetime import datetime
 from deepseek import DeepSeekAPI
 from dotenv import load_dotenv
@@ -17,6 +18,63 @@ class DeepSeekAgent:
         self.project_root = os.getcwd()
         self.max_continuations = 6
         self.branch_name = f"ai-update-{int(time.time())}"
+        
+        # NEW: Memory system
+        self.memory_file = os.path.join(self.project_root, ".ai_memory.json")
+        self.conversation_history = []
+        self.modified_files_history = []
+        self.load_memory()
+
+    # =============================
+    # MEMORY SYSTEM (NEW)
+    # =============================
+    def load_memory(self):
+        """Load previous session memory"""
+        if os.path.exists(self.memory_file):
+            try:
+                with open(self.memory_file, 'r') as f:
+                    memory = json.load(f)
+                    self.modified_files_history = memory.get('modified_files', [])
+                    self.conversation_history = memory.get('conversation', [])
+                print(f"📚 Loaded memory: Previously modified {len(self.modified_files_history)} files")
+            except:
+                print("⚠️ Could not load memory file")
+
+    def save_memory(self):
+        """Save session memory"""
+        memory = {
+            'modified_files': self.modified_files_history,
+            'conversation': self.conversation_history[-10:],  # Keep last 10 exchanges
+            'last_session': datetime.now().isoformat()
+        }
+        with open(self.memory_file, 'w') as f:
+            json.dump(memory, f, indent=2)
+
+    def add_to_memory(self, role, content):
+        """Add a conversation to memory"""
+        self.conversation_history.append({
+            'role': role,
+            'content': content,
+            'timestamp': datetime.now().isoformat()
+        })
+        # Keep memory manageable
+        if len(self.conversation_history) > 20:
+            self.conversation_history = self.conversation_history[-20:]
+        self.save_memory()
+
+    def get_memory_context(self):
+        """Generate context string from memory"""
+        if not self.conversation_history:
+            return "No previous session history."
+        
+        context = "\n📋 PREVIOUS SESSION HISTORY:\n"
+        for entry in self.conversation_history[-5:]:  # Last 5 exchanges
+            context += f"[{entry['role']}]: {entry['content'][:100]}...\n"
+        
+        if self.modified_files_history:
+            context += f"\n📁 Previously modified files: {', '.join(self.modified_files_history[-10:])}\n"
+        
+        return context
 
     # =============================
     # FILE LIST
@@ -29,7 +87,7 @@ class DeepSeekAgent:
                 continue
 
             for file in files:
-                if file.endswith((".html", ".js", ".css", ".json")):
+                if file.endswith((".html", ".js", ".css", ".json", ".py")):
                     relative_path = os.path.relpath(
                         os.path.join(root, file),
                         self.project_root
@@ -61,7 +119,7 @@ class DeepSeekAgent:
         return context
 
     # =============================
-    # SAFE COMPLETION (FIXED)
+    # SAFE COMPLETION
     # =============================
     def get_completion(self, messages):
         """Get completion from DeepSeek with automatic continuation"""
@@ -113,7 +171,7 @@ class DeepSeekAgent:
                         })
                         continuation_count += 1
                         bar()
-                        time.sleep(1)  # Small delay to avoid rate limits
+                        time.sleep(1)
                     else:
                         print(f"\n✅ Response complete ({continuation_count + 1} parts)")
                         bar()
@@ -125,6 +183,8 @@ class DeepSeekAgent:
                     traceback.print_exc()
                     break
 
+        # Add to memory
+        self.add_to_memory("assistant", full_content[:500])
         return full_content
 
     # =============================
@@ -202,6 +262,10 @@ class DeepSeekAgent:
             print(f"📝 Rewritten: {file_path}")
             changed_files.append(file_path)
 
+        # Update memory with modified files
+        self.modified_files_history.extend(changed_files)
+        self.save_memory()
+
         return changed_files
 
     # =============================
@@ -226,8 +290,19 @@ class DeepSeekAgent:
             )
             print(f"🚀 Pushed branch: {self.branch_name}")
             print(result.stdout)
+            return True
         except subprocess.CalledProcessError as e:
             print(f"❌ Push failed: {e.stderr}")
+            
+            # Check if it's a secret scanning issue
+            if "secret" in e.stderr.lower():
+                print("\n🔐 GitHub detected a secret in your code!")
+                print("This is a security feature to protect your credentials.")
+                print("\nTo fix this:")
+                print("1. Remove the secret from the file")
+                print("2. Use environment variables instead")
+                print("3. Or visit the URL in the error to allow the secret")
+            return False
 
     def create_pull_request(self):
         try:
@@ -245,7 +320,7 @@ class DeepSeekAgent:
             print("ℹ️ GitHub CLI not installed. Install 'gh' for auto PR creation.")
 
     # =============================
-    # MAIN
+    # MAIN (NOW WITH LOOP)
     # =============================
     def run(self):
 
@@ -259,16 +334,46 @@ class DeepSeekAgent:
         print("✅ Apply changes automatically")
         print("✅ Create git branch & commit")
         print("✅ Push to GitHub")
+        print("✅ REMEMBER previous sessions")
         print("="*60)
+        
+        # Show memory from previous session
+        memory_context = self.get_memory_context()
+        if "No previous session" not in memory_context:
+            print(memory_context)
+            print("="*60)
 
-        user_input = input("\nWhat would you like to change?\n> ")
+        while True:  # MAIN LOOP - stays in bot
+            try:
+                user_input = input("\n📋 What would you like to change? (or 'exit' to quit, 'status' to see changes, 'push' to retry push)\n> ")
 
-        print("\n🔍 Scanning project files...")
-        file_list = self.list_project_files()
-        print(f"📁 Found {len(file_list)} relevant files")
+                if user_input.lower() == 'exit':
+                    self.save_memory()
+                    print("👋 Goodbye! Memory saved for next session.")
+                    break
 
-        selector_prompt = """
+                if user_input.lower() == 'status':
+                    print(f"\n📁 Modified files this session: {', '.join(self.modified_files_history[-10:])}")
+                    continue
+
+                if user_input.lower() == 'push':
+                    print("🚀 Retrying push...")
+                    self.push_branch()
+                    continue
+
+                # Add user input to memory
+                self.add_to_memory("user", user_input)
+
+                print("\n🔍 Scanning project files...")
+                file_list = self.list_project_files()
+                print(f"📁 Found {len(file_list)} relevant files")
+
+                selector_prompt = f"""
 You are an expert code reviewer. Based on the user's request, identify which files need to be modified.
+
+{self.get_memory_context()}
+
+Current request: {user_input}
 
 Return ONLY a comma-separated list of filenames (relative paths) that must be edited.
 No explanations, no markdown, just the filenames.
@@ -276,42 +381,44 @@ No explanations, no markdown, just the filenames.
 Example response: index.html,js/api.js,styles.css
 """
 
-        print("\n🤖 Asking DeepSeek which files to modify...")
-        selected = self.get_completion([
-            {"role": "system", "content": selector_prompt},
-            {"role": "user", "content": f"Project files:\n{chr(10).join(file_list[:50])}"},
-            {"role": "user", "content": user_input}
-        ])
+                print("\n🤖 Asking DeepSeek which files to modify...")
+                selected = self.get_completion([
+                    {"role": "system", "content": selector_prompt},
+                    {"role": "user", "content": f"Project files:\n{chr(10).join(file_list[:50])}"},
+                    {"role": "user", "content": user_input}
+                ])
 
-        # Clean up the response
-        selected = selected.replace("```", "").replace("csv", "").strip()
-        print(f"\n📋 Files selected: {selected}")
+                # Clean up the response
+                selected = selected.replace("```", "").replace("csv", "").strip()
+                print(f"\n📋 Files selected: {selected}")
 
-        selected_files = [f.strip() for f in selected.split(",") if f.strip()]
+                selected_files = [f.strip() for f in selected.split(",") if f.strip()]
 
-        if not selected_files:
-            print("❌ No relevant files identified.")
-            return
+                if not selected_files:
+                    print("❌ No relevant files identified.")
+                    continue
 
-        # Verify files exist
-        valid_files = []
-        for f in selected_files:
-            if os.path.exists(os.path.join(self.project_root, f)):
-                valid_files.append(f)
-            else:
-                print(f"⚠️ File not found: {f}")
+                # Verify files exist
+                valid_files = []
+                for f in selected_files:
+                    if os.path.exists(os.path.join(self.project_root, f)):
+                        valid_files.append(f)
+                    else:
+                        print(f"⚠️ File not found: {f}")
 
-        if not valid_files:
-            print("❌ None of the identified files exist.")
-            return
+                if not valid_files:
+                    print("❌ None of the identified files exist.")
+                    continue
 
-        print(f"\n📚 Loading {len(valid_files)} files for context...")
-        context = self.load_selected_files(valid_files)
+                print(f"\n📚 Loading {len(valid_files)} files for context...")
+                context = self.load_selected_files(valid_files)
 
-        modification_prompt = f"""
+                modification_prompt = f"""
 You are an expert web developer. Modify the provided files to fulfill this request:
 
 USER REQUEST: {user_input}
+
+PREVIOUS CHANGES: {', '.join(self.modified_files_history[-5:]) if self.modified_files_history else 'None'}
 
 IMPORTANT RULES:
 1. Use PATCH blocks for small changes (search/replace)
@@ -342,51 +449,67 @@ complete new file content
 Return ONLY the patch/write blocks. No explanations.
 """
 
-        print("\n🤖 Generating code changes...")
-        response = self.get_completion([
-            {"role": "system", "content": modification_prompt},
-            {"role": "user", "content": context},
-            {"role": "user", "content": "Generate the necessary patches to fulfill the user request."}
-        ])
+                print("\n🤖 Generating code changes...")
+                response = self.get_completion([
+                    {"role": "system", "content": modification_prompt},
+                    {"role": "user", "content": context},
+                    {"role": "user", "content": "Generate the necessary patches to fulfill the user request."}
+                ])
 
-        # Create git branch
-        print(f"\n🌿 Creating git branch: {self.branch_name}")
-        self.create_branch()
+                # Create git branch
+                print(f"\n🌿 Creating git branch: {self.branch_name}")
+                self.create_branch()
 
-        # Apply changes
-        print("\n📝 Applying changes to files...")
-        changed_files = self.apply_patches(response)
+                # Apply changes
+                print("\n📝 Applying changes to files...")
+                changed_files = self.apply_patches(response)
 
-        if not changed_files:
-            print("\n❌ No changes were applied.")
-            print("This could mean:")
-            print("  - The bot couldn't find the exact search text")
-            print("  - The files are already correct")
-            print("  - The response format was invalid")
-            return
+                if not changed_files:
+                    print("\n❌ No changes were applied.")
+                    print("This could mean:")
+                    print("  - The bot couldn't find the exact search text")
+                    print("  - The files are already correct")
+                    print("  - The response format was invalid")
+                    continue
 
-        print(f"\n✅ Successfully modified {len(changed_files)} files:")
-        for f in changed_files:
-            print(f"  • {f}")
+                print(f"\n✅ Successfully modified {len(changed_files)} files:")
+                for f in changed_files:
+                    print(f"  • {f}")
 
-        # Git operations
-        print("\n📌 Staging changes...")
-        subprocess.run(["git", "add", "."], check=True, capture_output=True)
+                # Git operations
+                print("\n📌 Staging changes...")
+                subprocess.run(["git", "add", "."], check=True, capture_output=True)
 
-        commit_message = f"AI Update: {user_input[:50]}..."
-        print(f"💾 Committing: {commit_message}")
-        subprocess.run(["git", "commit", "-m", commit_message], check=True, capture_output=True)
+                commit_message = f"AI Update: {user_input[:50]}..."
+                print(f"💾 Committing: {commit_message}")
+                subprocess.run(["git", "commit", "-m", commit_message], check=True, capture_output=True)
 
-        print("🚀 Pushing to GitHub...")
-        self.push_branch()
+                print("🚀 Attempting to push to GitHub...")
+                push_success = self.push_branch()
 
-        # Try to create PR
-        self.create_pull_request()
+                if not push_success:
+                    print("\n⚠️ Push failed due to security rules.")
+                    print("You can:")
+                    print("  - Type 'push' to retry after fixing the issue")
+                    print("  - Fix the secret in the file and try again")
+                    print("  - Continue with other tasks and push later")
 
-        print("\n" + "="*60)
-        print("✅ All done! Check your GitHub repository for the new branch.")
-        print("="*60)
+                # Try to create PR (optional)
+                self.create_pull_request()
 
+                print("\n" + "="*60)
+                print("✅ Task completed! You can continue with another task.")
+                print("="*60)
+
+            except KeyboardInterrupt:
+                print("\n\n👋 Interrupted. Saving memory...")
+                self.save_memory()
+                break
+            except Exception as e:
+                print(f"\n❌ Unexpected error: {e}")
+                import traceback
+                traceback.print_exc()
+                print("\nContinuing...")
 
 if __name__ == "__main__":
     agent = DeepSeekAgent()

@@ -86,6 +86,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
 .stat-delta.up{color:#2a6040}
 .stat-delta.down{color:var(--red)}
 
+/* Dashboard data will be populated by JavaScript */
+#statRevenue .stat-val::before { content: '$0'; }
+#statLive .stat-val::before { content: '0'; }
+#statBids .stat-val::before { content: '0'; }
+#statViews .stat-val::before { content: '0'; }
+
 /* ── SECTION CARD ── */
 .section-card{background:var(--white);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-xs);margin-bottom:22px}
 .sc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:10px;flex-wrap:wrap}
