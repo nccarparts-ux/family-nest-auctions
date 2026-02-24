@@ -65,7 +65,13 @@ const Items = {
         current_bid, starting_bid, bid_count, view_count,
         ends_at, starts_at, status, item_number,
         buyers_premium_pct, est_shipping_min, est_shipping_max,
-        seller_id,
+        seller_id, period, condition_notes, reserve_price,
+        dimensions_w, dimensions_h, dimensions_d, weight_lbs,
+        origin_city, origin_state, origin_country,
+        provenance, authenticity_notes, restoration_history,
+        materials, era, style, color, markings,
+        packaging_notes, shipping_notes, local_pickup_ok,
+        created_at, updated_at,
         item_photos (storage_url, is_primary),
         sellers (id, business_name, avg_rating, city, state)
       `)
