@@ -4,10 +4,31 @@
 .env.development 
 .env.production 
 ECHO is on.
+
 # Backups 
 *.backup 
 *.backup2 
 ECHO is on.
+
 # Python 
 __pycache__/ 
 *.pyc 
+# Python files
+*.py
+*.pyc
+__pycache__/
+
+# AI/Agent files
+*.txt
+*.md
+context.txt
+complete_response.txt
+.ai_memory.json
+
+# Backups
+*.backup
+*.backup2
+
+# IDE files
+.vscode/
+.idea/
