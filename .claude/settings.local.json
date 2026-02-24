@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:family-nest-auctions.vercel.app)",
+      "Bash(curl:*)",
+      "Bash(git -C /c/Users/chris/Desktop/family-nest-auctions log --oneline -5)"
+    ]
+  }
+}

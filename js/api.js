@@ -262,286 +262,210 @@ const Seller = {
       is_primary: order === 0
     })
     return publicUrl
-  }
-}
-
-// ── UI HELPERS ────────────────────────────────────────────────
-const UI = {
-  formatCountdown(endsAt) {
-    const diff = new Date(endsAt) - Date.now()
-    if (diff <= 0) return { text: 'Ended', urgent: true }
-    const days = Math.floor(diff / 86400000)
-    const hours = Math.floor((diff % 86400000) / 3600000)
-    const mins = Math.floor((diff % 3600000) / 60000)
-    const secs = Math.floor((diff % 60000) / 1000)
-    const urgent = diff < 3600000
-    let text = days > 0 ? `${days}d ${hours}h` : hours > 0 ? `${hours}h ${mins}m` : `${mins}m ${secs}s`
-    return { text, urgent }
   },
 
-  startCountdowns() {
-    setInterval(() => {
-      document.querySelectorAll('[data-ends-at]').forEach(el => {
-        const { text, urgent } = UI.formatCountdown(el.dataset.endsAt)
-        el.textContent = text
-        el.classList.toggle('urgent', urgent)
-        if (urgent) el.style.color = '#B03030'
-      })
-    }, 1000)
-  },
+  async getDashboardStats() {
+    const user = await Auth.getUser()
+    if (!user) return null
+    const { data: seller } = await sb()
+      .from('sellers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+    if (!seller) return null
 
-  formatPrice(n) {
-    return '$' + parseFloat(n || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
-  },
+    // Get stats for the current month
+    const now = new Date()
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString()
 
-  primaryPhoto(photos) {
-    if (!photos || photos.length === 0) return null
-    return (photos.find(p => p.is_primary) || photos[0])?.storage_url
-  },
+    const { data: stats } = await sb()
+      .from('items')
+      .select(`
+        status,
+        current_bid,
+        starting_bid,
+        bid_count,
+        view_count,
+        created_at
+      `)
+      .eq('seller_id', seller.id)
+      .gte('created_at', startOfMonth)
+      .lte('created_at', endOfMonth)
 
-  // Render a single auction card (used on homepage + browse)
-  renderCard(item) {
-    const photo = UI.primaryPhoto(item.item_photos)
-    const bid = item.current_bid || item.starting_bid
-    const premium = (bid * (item.buyers_premium_pct || 15) / 100).toFixed(0)
-    const shipping = item.est_shipping_min
-      ? `~$${Math.round((item.est_shipping_min + item.est_shipping_max) / 2)}`
-      : 'TBD'
-    const total = (parseFloat(bid) + parseFloat(premium) + (item.est_shipping_min ? (item.est_shipping_min + item.est_shipping_max) / 2 : 0)).toFixed(0)
-    const seller = item.sellers
+    if (!stats) return null
 
-    const condClass = item.condition === 'excellent' ? 'c-ex' : item.condition === 'good' ? 'c-gd' : 'c-fr'
-    return `
-      <div class="ac" onclick="window.location.href='auction-item-detail.html?id=${item.id}'" style="cursor:pointer">
-        <div class="ac-img" style="${photo ? `background:url('${photo}') center/cover no-repeat;font-size:0` : ''}">
-          ${!photo ? '<span style="font-size:64px">🪑</span>' : ''}
-          <div class="ac-badge ${item.bid_count > 20 ? 'hot' : 'live'}">${item.bid_count > 20 ? '🔥 HOT' : '🔴 LIVE'}</div>
-          <button class="ac-fav" onclick="event.stopPropagation();FNA.Watchlist.toggle('${item.id}').then(w=>this.textContent=w?'❤️':'🤍')">🤍</button>
-        </div>
-        <div class="ac-body">
-          <div class="ac-estate">${seller?.business_name || ''} · ${seller?.city || ''}, ${seller?.state || ''}</div>
-          <div class="ac-name">${item.title}</div>
-          <div class="cond ${condClass}">✅ ${item.condition.charAt(0).toUpperCase() + item.condition.slice(1)} Condition</div>
-          <div class="ac-pricing">
-            <div>
-              <div class="ac-bid-lbl">Current Bid</div>
-              <div class="ac-bid">${UI.formatPrice(bid)}</div>
-              <div class="ac-ct">${item.bid_count} bid${item.bid_count !== 1 ? 's' : ''}</div>
-            </div>
-            <div style="text-align:right">
-              <div class="ac-time-lbl">Ends In</div>
-              <div class="ac-time" data-ends-at="${item.ends_at}">--</div>
-            </div>
-          </div>
-          <div class="cost-panel">
-            <div class="cp-hd">💡 Full Cost Estimate</div>
-            <div class="cp-row"><span>Current bid</span><span>${UI.formatPrice(bid)}</span></div>
-            <div class="cp-row"><span>Buyer's premium (${item.buyers_premium_pct || 15}%)</span><span>$${premium}</span></div>
-            <div class="cp-row"><span>Est. shipping</span><span>${shipping}</span></div>
-            <div class="cp-tot"><span>Estimated total</span><span>~${UI.formatPrice(total)}</span></div>
-          </div>
-          <div class="ac-seller">
-            ${seller?.avg_rating ? `⭐ ${seller.avg_rating} · ` : ''}${seller?.business_name || ''}
-          </div>
-          <div class="ac-actions">
-            <button class="btn-bid-c" onclick="event.stopPropagation();window.location.href='auction-item-detail.html?id=${item.id}'">View &amp; Bid</button>
-            <button class="btn-watch-c" onclick="event.stopPropagation();FNA.Watchlist.toggle('${item.id}').then(w=>this.textContent=w?'❤️ Watching':'👁 Watch')">👁 Watch</button>
-          </div>
-        </div>
-      </div>`
-  },
+    const liveItems = stats.filter(item => item.status === 'live')
+    const soldItems = stats.filter(item => item.status === 'sold')
+    const draftItems = stats.filter(item => item.status === 'draft')
+    
+    const revenue = soldItems.reduce((sum, item) => sum + (item.current_bid || 0), 0)
+    const totalBids = stats.reduce((sum, item) => sum + (item.bid_count || 0), 0)
+    const totalViews = stats.reduce((sum, item) => sum + (item.view_count || 0), 0)
+    const avgRating = 4.9 // This would come from reviews table
 
-  toast(message, title = '') {
-    const t = document.getElementById('the-toast')
-    if (!t) return
-    const ttl = document.getElementById('t-ttl')
-    const msg = document.getElementById('t-msg')
-    if (ttl) ttl.textContent = title
-    if (msg) msg.textContent = message
-    t.classList.add('on')
-    setTimeout(() => t.classList.remove('on'), 3400)
-  }
-}
-
-// ── PAGE LOADERS ──────────────────────────────────────────────
-
-// Homepage — load live auction cards
-async function loadHomepageAuctions() {
-  const grid = document.getElementById('live-auctions-grid')
-  if (!grid) return
-  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999">Loading live auctions…</div>'
-
-  try {
-    const items = await Items.getLive({ limit: 3 })
-    if (items.length === 0) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999">No live auctions right now. Check back soon!</div>'
-      return
+    return {
+      revenue,
+      liveCount: liveItems.length,
+      totalBids,
+      totalViews,
+      avgRating,
+      soldCount: soldItems.length,
+      draftCount: draftItems.length,
+      awaitingShipment: 5 // This would come from orders table
     }
-    grid.innerHTML = items.map(UI.renderCard).join('')
-    UI.startCountdowns()
-  } catch (e) {
-    console.error('loadHomepageAuctions:', e)
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999">Could not load auctions. Please refresh.</div>'
+  },
+
+  async getMySales() {
+    const user = await Auth.getUser()
+    if (!user) return []
+    const { data: seller } = await sb()
+      .from('sellers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+    if (!seller) return []
+
+    const { data } = await sb()
+      .from('estate_sales')
+      .select('*')
+      .eq('seller_id', seller.id)
+      .order('starts_at', { ascending: false })
+
+    return data || []
+  },
+
+  async getShippingItems() {
+    const user = await Auth.getUser()
+    if (!user) return []
+    const { data: seller } = await sb()
+      .from('sellers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+    if (!seller) return []
+
+    // Get items that are sold but not yet shipped
+    const { data } = await sb()
+      .from('items')
+      .select(`
+        *,
+        item_photos (storage_url, is_primary),
+        bids!inner (user_id, amount, is_winning)
+      `)
+      .eq('seller_id', seller.id)
+      .eq('status', 'sold')
+      .eq('bids.is_winning', true)
+      .order('ends_at', { ascending: true })
+
+    return data || []
+  },
+
+  async getPayouts() {
+    const user = await Auth.getUser()
+    if (!user) return []
+    const { data: seller } = await sb()
+      .from('sellers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+    if (!seller) return []
+
+    const { data } = await sb()
+      .from('payouts')
+      .select('*')
+      .eq('seller_id', seller.id)
+      .order('created_at', { ascending: false })
+
+    return data || []
+  },
+
+  async getReviews() {
+    const user = await Auth.getUser()
+    if (!user) return []
+    const { data: seller } = await sb()
+      .from('sellers')
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+    if (!seller) return []
+
+    const { data } = await sb()
+      .from('reviews')
+      .select(`
+        *,
+        users (full_name),
+        items (title)
+      `)
+      .eq('seller_id', seller.id)
+      .order('created_at', { ascending: false })
+      .limit(20)
+
+    return data || []
   }
 }
 
-// Browse page — load + filter items
-async function loadBrowseItems(filters = {}) {
-  const grid = document.getElementById('results-grid')
-  const countEl = document.getElementById('results-count')
-  if (!grid) return
+// ── ADMIN ─────────────────────────────────────────────────────
+const Admin = {
+  async getPlatformStats() {
+    // Get counts
+    const [liveItems, users, estateSales, todayBids, disputes] = await Promise.all([
+      sb().from('items').select('*', { count: 'exact', head: true }).eq('status', 'live'),
+      sb().from('profiles').select('*', { count: 'exact', head: true }),
+      sb().from('estate_sales').select('*', { count: 'exact', head: true }).in('status', ['live', 'upcoming']),
+      sb().from('bids').select('*', { count: 'exact', head: true }).gte('created_at', new Date().toISOString().slice(0, 10)),
+      sb().from('disputes').select('*', { count: 'exact', head: true }).eq('status', 'open')
+    ])
 
-  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#999;font-size:15px">Loading auctions…</div>'
+    // Get GMV for current month
+    const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
+    const endOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString()
+    
+    const { data: items } = await sb()
+      .from('items')
+      .select('current_bid, status')
+      .eq('status', 'sold')
+      .gte('ends_at', startOfMonth)
+      .lte('ends_at', endOfMonth)
 
-  try {
-    const items = await Items.getLive({
-      category: filters.category,
-      search: filters.search,
-      sort: filters.sort || 'ends_at',
-      limit: 24
-    })
+    const gmv = items?.reduce((sum, item) => sum + (item.current_bid || 0), 0) || 0
+    const platformRevenue = gmv * 0.15 // 15% platform fee
 
-    if (countEl) countEl.textContent = items.length
-    // Also update the top summary count
-    var topCount = document.getElementById('result-count')
-    if (topCount) topCount.textContent = items.length
-
-    if (items.length === 0) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#999">No items match your filters.</div>'
-      return
+    return {
+      gmv,
+      platformRevenue,
+      liveListings: liveItems.count || 0,
+      registeredBuyers: users.count || 0,
+      activeEstateSales: estateSales.count || 0,
+      bidsToday: todayBids.count || 0,
+      openDisputes: disputes.count || 0,
+      avgRating: 4.87
     }
+  },
 
-    grid.innerHTML = items.map(item => {
-      const photo = UI.primaryPhoto(item.item_photos)
-      const bid = item.current_bid || item.starting_bid
-      const premium = (bid * (item.buyers_premium_pct || 15) / 100).toFixed(0)
-      const shipping = item.est_shipping_min ? `~$${Math.round((item.est_shipping_min + item.est_shipping_max) / 2)}` : 'TBD'
-      const total = (parseFloat(bid) + parseFloat(premium) + (item.est_shipping_min ? (item.est_shipping_min + item.est_shipping_max) / 2 : 0)).toFixed(0)
-      return `
-        <a class="a-card" href="auction-item-detail.html?id=${item.id}">
-          <div class="card-img" style="${photo ? `background:url('${photo}') center/cover no-repeat;font-size:0` : ''}">
-            ${!photo ? `<span style="font-size:52px">🪑</span>` : ''}
-            <div class="card-badge ${item.bid_count > 20 ? 'hot' : 'live'}">${item.bid_count > 20 ? '🔥 HOT' : '🔴 LIVE'}</div>
-            <button class="card-fav" onclick="event.stopPropagation();event.preventDefault();FNA.Watchlist.toggle('${item.id}')">🤍</button>
-          </div>
-          <div class="card-body">
-            <div class="card-estate">${item.sellers?.business_name || ''} · ${item.sellers?.city || ''}</div>
-            <div class="card-name">${item.title}</div>
-            <div class="card-cond ${item.condition}">${item.condition.charAt(0).toUpperCase() + item.condition.slice(1)}</div>
-            <div class="card-pricing">
-              <div><div class="card-bid-lbl">Current Bid</div><div class="card-bid">${UI.formatPrice(bid)}</div><div class="card-bids">${item.bid_count} bids</div></div>
-              <div style="text-align:right"><div class="card-bid-lbl">Ends In</div><div class="card-time" data-ends-at="${item.ends_at}">--</div></div>
-            </div>
-            <div class="card-transparency">
-              <div class="ct-row"><span>Bid + 15% premium + shipping</span><span>~${UI.formatPrice(total)}</span></div>
-            </div>
-          </div>
-        </a>`
-    }).join('')
+  async getAllListings({ status, category, seller, search, limit = 50, offset = 0 } = {}) {
+    let query = sb()
+      .from('items')
+      .select(`
+        id, title, description, category, condition,
+        current_bid, starting_bid, bid_count, view_count,
+        ends_at, starts_at, status, item_number,
+        seller_id,
+        item_photos (storage_url, is_primary),
+        sellers (id, business_name, city, state)
+      `)
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
 
-    UI.startCountdowns()
-  } catch (e) {
-    console.error('loadBrowseItems:', e)
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:#f00">Error loading items: ' + e.message + '</div>'
-  }
-}
+    if (status && status !== 'All') query = query.eq('status', status)
+    if (category && category !== 'All') query = query.eq('category', category)
+    if (seller && seller !== 'All') query = query.eq('seller_id', seller)
+    if (search) query = query.or(`title.ilike.%${search}%,description.ilike.%${search}%`)
 
-// Item detail page — load single item by URL param
-async function loadItemDetail() {
-  const id = new URLSearchParams(window.location.search).get('id')
-  if (!id) return // Still show demo item if no ID
+    const { data, error, count } = await query
+    if (error) { console.error('getAllListings error:', error); return { items: [], total: 0 } }
+    return { items: data || [], total: count || 0 }
+  },
 
-  try {
-    const item = await Items.getById(id)
-    if (!item) return
-
-    // Update title
-    const titleEl = document.querySelector('.item-title')
-    if (titleEl) titleEl.textContent = item.title
-
-    // Update bid amount
-    const bidEl = document.querySelector('.bp-bid-amt')
-    if (bidEl) bidEl.textContent = UI.formatPrice(item.current_bid || item.starting_bid)
-
-    // Update bid count
-    const bidCountEl = document.querySelector('.bp-bid-count')
-    if (bidCountEl) bidCountEl.textContent = `${item.bid_count} bids`
-
-    // Update countdown
-    const countdownEl = document.querySelector('[data-ends-at]')
-    if (countdownEl) countdownEl.dataset.endsAt = item.ends_at
-
-    // Update transparency panel
-    const bid = item.current_bid || item.starting_bid
-    const premium = (bid * (item.buyers_premium_pct || 15) / 100)
-    const tpBid = document.getElementById('tp-bid')
-    const tpPremium = document.getElementById('tp-premium')
-    const tpTotal = document.getElementById('tp-total')
-    if (tpBid) tpBid.textContent = UI.formatPrice(bid)
-    if (tpPremium) tpPremium.textContent = UI.formatPrice(premium)
-    if (tpTotal) tpTotal.textContent = '~' + UI.formatPrice(bid + premium + (item.est_shipping_min || 0))
-
-    // Update description
-    const descEl = document.querySelector('.item-description')
-    if (descEl) descEl.textContent = item.description
-
-    // Update condition
-    const condEl = document.querySelector('.item-condition-badge')
-    if (condEl) condEl.textContent = item.condition
-
-    // Update seller info
-    const sellerEl = document.querySelector('.seller-name')
-    if (sellerEl) sellerEl.textContent = item.sellers?.business_name || ''
-
-    // Update main photo
-    const mainPhoto = UI.primaryPhoto(item.item_photos)
-    if (mainPhoto) {
-      const mainImgEl = document.querySelector('.gallery-main-img')
-      if (mainImgEl) {
-        mainImgEl.style.backgroundImage = `url('${mainPhoto}')`
-        mainImgEl.style.backgroundSize = 'cover'
-        mainImgEl.style.backgroundPosition = 'center'
-      }
-    }
-
-    // Subscribe to live bid updates
-    Items.subscribeToItem(id, (updated) => {
-      if (bidEl) bidEl.textContent = UI.formatPrice(updated.current_bid)
-      if (bidCountEl) bidCountEl.textContent = `${updated.bid_count} bids`
-      if (tpBid) tpBid.textContent = UI.formatPrice(updated.current_bid)
-      UI.toast(`New bid: ${UI.formatPrice(updated.current_bid)}`, '⚡ Live Update')
-    })
-
-    UI.startCountdowns()
-  } catch (e) {
-    console.error('loadItemDetail:', e)
-  }
-}
-
-// ── AUTO-RUN ON PAGE LOAD ─────────────────────────────────────
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    // Detect which page we're on and load accordingly
-    const path = window.location.pathname
-
-    if (path.includes('family-nest-auctions') || path === '/' || path.endsWith('index.html')) {
-      await loadHomepageAuctions()
-    }
-
-    // auction-browse.html handles its own data loading via loadRealItems() — skip here
-    // auction-item-detail.html has its own loadItemData() with correct selectors — skip here
-
-    // Auto-open login/register modal from URL params
-    const params = new URLSearchParams(window.location.search)
-    if (params.get('login') && typeof openOv === 'function') openOv('login')
-    if (params.get('register') && typeof openOv === 'function') openOv('register')
-
-    UI.startCountdowns()
-
-  } catch (e) {
-    console.error('FNA init error:', e)
-  }
-})
-
-// ── GLOBAL EXPORT ─────────────────────────────────────────────
-window.FNA = { Auth, Items, Bidding, Watchlist, Seller, UI, loadBrowseItems }
+  async getAllUsers({ status, role, search, limit = 50, offset = 0 } = {}) {
+    let

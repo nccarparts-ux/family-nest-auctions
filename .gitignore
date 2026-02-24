@@ -1,19 +1,13 @@
-# Utility / seeding scripts that contain secret keys — never commit these
-_supabase_setup.js
-_inspect_schema.js
-_fix_admin.js
-_fix_admin.py
-
-# Environment / secrets
-.env
-.env.local
-.env*.local
-*.secret.js
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Editor
-.vscode/
-.idea/
+# Environment files 
+.env 
+.env.local 
+.env.development 
+.env.production 
+ECHO is on.
+# Backups 
+*.backup 
+*.backup2 
+ECHO is on.
+# Python 
+__pycache__/ 
+*.pyc 
