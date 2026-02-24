@@ -1,18 +1,18 @@
 /**
  * Family Nest Auctions — Supabase REST API Setup Script
  * Runs with: node _supabase_setup.js
- * Uses service role key only — no direct DB connection
+ * Uses anon key only (safe for frontend) — no direct DB connection
  *
  * NOTE: Run setup_missing_tables.sql in Supabase SQL Editor BEFORE running this
  * script, so the reviews.reviewer_name / title / item_name columns exist.
  */
 
 const SUPABASE_URL = 'https://hwsjgclteuezauveujit.supabase.co';
-const SERVICE_ROLE  = 'sb_secret_4YMFtuhy6n3nTwEsnxD2Fg_dh0_qahH';
+const SUPABASE_ANON_KEY = 'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS';
 
 const headers = {
-  'Authorization': `Bearer ${SERVICE_ROLE}`,
-  'apikey': SERVICE_ROLE,
+  'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+  'apikey': SUPABASE_ANON_KEY,
   'Content-Type': 'application/json',
   'Prefer': 'return=representation'
 };
@@ -55,7 +55,7 @@ async function main() {
   // 2. Verify storage buckets
   console.log('── Step 2: Verifying storage buckets ──');
   const bucketsRes = await fetch(`${SUPABASE_URL}/storage/v1/bucket`, {
-    headers: { 'Authorization': `Bearer ${SERVICE_ROLE}` }
+    headers: { 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
   });
   const buckets = await bucketsRes.json();
   const bucketNames = Array.isArray(buckets) ? buckets.map(b => b.name) : [];
