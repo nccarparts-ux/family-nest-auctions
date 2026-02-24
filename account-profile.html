@@ -126,6 +126,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
         <button class="snav-item" onclick="showSection('password',this)">🔒 Password</button>
         <button class="snav-item" onclick="showSection('notifications',this)">🔔 Notifications</button>
         <button class="snav-item" onclick="showSection('payment',this)">💳 Payment Methods</button>
+        <button class="snav-item" onclick="showSection('seller',this)">🏪 Seller Profile</button>
       </div>
     </div>
 
@@ -218,6 +219,102 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
           <div class="toggle-row">
             <div><div class="toggle-label">Outbid alerts</div><div class="toggle-sub">Get notified when someone outbids you</div></div>
             <label class="toggle-switch"><input type="checkbox" id="notif-outbid"></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Auction ending soon</div><div class="toggle-sub">Reminders for auctions you're watching or bidding on</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-ending"></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">New messages</div><div class="toggle-sub">When you receive a message from a seller or buyer</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-messages"></label>
+          </div>
+          <div class="toggle-row">
+            <div><div class="toggle-label">Promotions & updates</div><div class="toggle-sub">Occasional news about new features and special events</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="notif-promos"></label>
+          </div>
+        </div>
+        <div id="notif-error" class="error-msg"></div>
+        <div id="notif-success" class="success-msg"></div>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="saveNotificationPrefs(this)">Save Preferences</button>
+        </div>
+      </div>
+
+      <!-- PAYMENT METHODS -->
+      <div class="section-card tab-section" id="section-payment">
+        <div class="sec-title">💳 Payment Methods</div>
+        <div id="payment-methods">
+          <div class="pm-card">
+            <div class="pm-left">
+              <div class="pm-icon">💳</div>
+              <div>
+                <div class="pm-name">Visa ending in 4321</div>
+                <div class="pm-sub">Expires 08/2026 · Primary</div>
+              </div>
+            </div>
+            <button class="tbl-action danger" onclick="removePaymentMethod('card_123')">Remove</button>
+          </div>
+          <div class="pm-card">
+            <div class="pm-left">
+              <div class="pm-icon">🏦</div>
+              <div>
+                <div class="pm-name">Bank account ending in 7890</div>
+                <div class="pm-sub">For payouts · Verified</div>
+              </div>
+            </div>
+            <button class="tbl-action danger" onclick="removePaymentMethod('bank_456')">Remove</button>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <button class="btn-secondary" onclick="addPaymentMethod()">+ Add Payment Method</button>
+        </div>
+        <div id="payment-error" class="error-msg"></div>
+        <div id="payment-success" class="success-msg"></div>
+      </div>
+
+      <!-- SELLER PROFILE -->
+      <div class="section-card tab-section" id="section-seller">
+        <div class="sec-title">🏪 Seller Profile</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Seller Display Name</label>
+            <input class="form-input" id="seller-display" placeholder="How you appear as a seller">
+            <span class="form-hint">This name will be shown on your listings and seller profile.</span>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Seller Bio</label>
+            <textarea class="form-input" id="seller-bio" rows="4" placeholder="Tell buyers about your expertise, background, or what you specialize in…" style="resize:vertical;min-height:100px"></textarea>
+            <span class="form-hint">Optional. Helps build trust with potential buyers.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Phone (optional)</label>
+            <input class="form-input" id="seller-phone" placeholder="(555) 000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Address (optional)</label>
+            <input class="form-input" id="seller-address" placeholder="Street, City, State">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Seller Policies</label>
+            <textarea class="form-input" id="seller-policies" rows="3" placeholder="Your policies on shipping, returns, local pickup, etc." style="resize:vertical;min-height:80px"></textarea>
+            <span class="form-hint">These will appear on your seller profile page.</span>
+          </div>
+        </div>
+        <div id="seller-error" class="error-msg"></div>
+        <div id="seller-success" class="success-msg"></div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="loadSellerProfile()">Discard Changes</button>
+          <button class="btn-primary" id="seller-save-btn" onclick="saveSellerProfile(this)">Save Seller Profile</button>
+        </div>
+        <div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--cream-mid)">
+          <div class="sec-title" style="font-size:18px;margin-bottom:12px">Seller Dashboard</div>
+          <p style="font-size:13.5px;color:var(--text-mid);margin-bottom:16px">Manage your listings, view sales, and handle buyer inquiries.</p>
+          <a href="seller-dashboard.html" class="btn-primary" style="text-decoration:none;display:inline-block">Go to Seller Dashboard →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>tif-outbid"></label>
           </div>
           <div class="toggle-row">
             <div><div class="toggle-label">Winning bid alerts</div><div class="toggle-sub">When you win an auction</div></div>
