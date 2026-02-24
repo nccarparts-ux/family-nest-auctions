@@ -77,6 +77,9 @@
   .tab-panel{display:none}
   .tab-panel.on{display:block}
 
+  /* Loading state */
+  .loading-state{text-align:center;padding:32px;color:var(--text-light);font-size:14px}
+
   /* ── OVERVIEW PANEL ── */
   .overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:32px}
   .stat-card{background:var(--white);border-radius:var(--r-lg);padding:22px;box-shadow:var(--sh-xs);border-left:4px solid transparent;transition:all .22s}
@@ -91,6 +94,12 @@
   .sc-trend{font-size:12px;font-weight:600;margin-top:6px}
   .sc-trend.up{color:var(--green-mid)}
   .sc-trend.down{color:var(--red)}
+
+  /* Dashboard data will be populated by JavaScript */
+  #statTotalBids .sc-num::before { content: '0'; }
+  #statWatching .sc-num::before { content: '0'; }
+  #statWon .sc-num::before { content: '0'; }
+  #statSpent .sc-num::before { content: '$0'; }
 
   /* ALERTS BANNER */
   .alert-banner{background:var(--honey-pale);border:1.5px solid var(--honey);border-radius:var(--r-md);padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .2s}
