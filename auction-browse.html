@@ -39,7 +39,16 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 36px
 .btn-honey:hover{background:var(--honey-light);transform:translateY(-1px)}
 
 /* ── MOBILE NAV ── */
-
+.mobile-menu-btn{display:none;background:none;border:none;color:white;font-size:20px;cursor:pointer}
+@media(max-width:1024px){
+  .mobile-menu-btn{display:block}
+  .nav-links,.nav-ctas{display:none}
+  .mobile-menu{position:fixed;top:70px;left:0;right:0;background:var(--green-deep);padding:20px 36px;display:none;flex-direction:column;gap:15px;box-shadow:0 10px 20px rgba(0,0,0,.2);z-index:900}
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{color:rgba(255,255,255,.9);text-decoration:none;font-size:15px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+  .mobile-menu a:hover{color:var(--honey)}
+  .mobile-menu .btn-ghost,.mobile-menu .btn-honey{margin-top:10px;text-align:center}
+}
 
 /* ── SEARCH HERO ── */
 .search-hero{background:var(--green-deep);margin-top:108px;padding:32px 36px}
