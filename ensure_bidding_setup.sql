@@ -100,27 +100,47 @@ BEGIN
 END $$;
 
 -- 6. VERIFY AUTH.USERS REFERENCE (user_id column foreign key)
--- Check if user_id column references auth.users properly
+-- Drop and recreate to ensure consistent naming and behavior
 DO $$
+DECLARE
+  constraint_rec record;
 BEGIN
-  -- Check foreign key constraint exists
-  IF NOT EXISTS (
-    SELECT 1 FROM information_schema.table_constraints tc
+  -- First drop our specifically named constraint if it exists
+  BEGIN
+    ALTER TABLE bids DROP CONSTRAINT IF EXISTS bids_user_id_fkey;
+    RAISE NOTICE 'Dropped bids_user_id_fkey constraint if it existed';
+  EXCEPTION WHEN others THEN
+    RAISE NOTICE 'Could not drop bids_user_id_fkey: %', SQLERRM;
+  END;
+
+  -- Drop any other foreign key constraints on bids.user_id referencing auth.users
+  FOR constraint_rec IN
+    SELECT tc.constraint_name
+    FROM information_schema.table_constraints tc
     JOIN information_schema.constraint_column_usage ccu
       ON tc.constraint_name = ccu.constraint_name
     WHERE tc.table_schema = 'public' AND tc.table_name = 'bids'
       AND tc.constraint_type = 'FOREIGN KEY'
       AND ccu.column_name = 'user_id'
       AND ccu.table_schema = 'auth' AND ccu.table_name = 'users'
-  ) THEN
-    -- Add foreign key constraint if missing
+  LOOP
+    BEGIN
+      EXECUTE 'ALTER TABLE bids DROP CONSTRAINT ' || quote_ident(constraint_rec.constraint_name);
+      RAISE NOTICE 'Dropped foreign key constraint % on bids.user_id', constraint_rec.constraint_name;
+    EXCEPTION WHEN others THEN
+      RAISE NOTICE 'Could not drop constraint %: %', constraint_rec.constraint_name, SQLERRM;
+    END;
+  END LOOP;
+
+  -- Add our properly named constraint
+  BEGIN
     ALTER TABLE bids
       ADD CONSTRAINT bids_user_id_fkey
       FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL;
     RAISE NOTICE 'Added foreign key constraint from bids.user_id to auth.users.id';
-  ELSE
-    RAISE NOTICE 'Foreign key constraint already exists for bids.user_id';
-  END IF;
+  EXCEPTION WHEN duplicate_object THEN
+    RAISE NOTICE 'Foreign key constraint bids_user_id_fkey already exists (should not happen)';
+  END;
 END $$;
 
 -- 7. REFRESH SCHEMA CACHE
