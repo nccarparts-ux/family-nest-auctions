@@ -914,13 +914,31 @@ async function submitBid(){
     if(amount<minBid){ throw new Error('Bid must be at least $'+minBid+'.'); }
     // Mark previous winning bids as not winning
     await sb.from('bids').update({is_winning:false}).eq('item_id',itemId).eq('is_winning',true);
-    // Insert new bid (column is user_id, not bidder_id; no is_proxy column in schema)
+    // Insert new bid - include both user_id and bidder_id to handle schema variations
     var{error:bErr}=await sb.from('bids').insert({
-      item_id:itemId, user_id:user.id,
-      amount:amount, max_amount:maxAmount,
+      item_id:itemId,
+      user_id:user.id,
+      bidder_id:user.id,  // Include if column exists to satisfy NOT NULL constraint
+      amount:amount,
+      max_amount:maxAmount,
       is_winning:true
     });
-    if(bErr) throw new Error(bErr.message);
+    if(bErr) {
+      // If error is about bidder_id column, try without it
+      if (bErr.message && bErr.message.includes('bidder_id')) {
+        console.log('Retrying insert without bidder_id...');
+        var{error:bErr2}=await sb.from('bids').insert({
+          item_id:itemId,
+          user_id:user.id,
+          amount:amount,
+          max_amount:maxAmount,
+          is_winning:true
+        });
+        if(bErr2) throw new Error(bErr2.message);
+      } else {
+        throw new Error(bErr.message);
+      }
+    }
     // Update item current bid and bid count
     await sb.from('items').update({
       current_bid:amount,

@@ -99,6 +99,135 @@ BEGIN
   END IF;
 END $$;
 
+-- 5a. FIX BIDDER_ID COLUMN ISSUE
+-- Handle the case where bidder_id column exists with NOT NULL constraint
+DO $$
+DECLARE
+    user_id_exists boolean;
+    bidder_id_exists boolean;
+    constraint_name text;
+    fk_exists boolean;
+BEGIN
+    -- Check if columns exist
+    SELECT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = 'public' AND table_name = 'bids' AND column_name = 'user_id'
+    ) INTO user_id_exists;
+
+    SELECT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_schema = 'public' AND table_name = 'bids' AND column_name = 'bidder_id'
+    ) INTO bidder_id_exists;
+
+    RAISE NOTICE 'Checking columns: user_id exists=%, bidder_id exists=%', user_id_exists, bidder_id_exists;
+
+    -- Scenario 1: Both columns exist - drop bidder_id if redundant
+    IF user_id_exists AND bidder_id_exists THEN
+        RAISE NOTICE 'Both columns exist. Checking if bidder_id is redundant...';
+
+        -- Check if bidder_id has data
+        IF EXISTS (SELECT 1 FROM bids WHERE bidder_id IS NOT NULL LIMIT 1) THEN
+            RAISE NOTICE 'bidder_id has data, making nullable instead of dropping...';
+            -- Make bidder_id nullable
+            BEGIN
+                ALTER TABLE bids ALTER COLUMN bidder_id DROP NOT NULL;
+                RAISE NOTICE 'Made bidder_id nullable';
+            EXCEPTION WHEN others THEN
+                RAISE NOTICE 'Could not alter bidder_id: %', SQLERRM;
+            END;
+        ELSE
+            RAISE NOTICE 'bidder_id has no data, dropping column...';
+            -- Drop any constraints on bidder_id first
+            SELECT constraint_name INTO constraint_name
+            FROM information_schema.table_constraints
+            WHERE table_schema = 'public' AND table_name = 'bids'
+                AND constraint_type IN ('FOREIGN KEY', 'UNIQUE', 'PRIMARY KEY')
+                AND constraint_name IN (
+                    SELECT constraint_name
+                    FROM information_schema.constraint_column_usage
+                    WHERE table_schema = 'public' AND table_name = 'bids' AND column_name = 'bidder_id'
+                )
+            LIMIT 1;
+
+            IF constraint_name IS NOT NULL THEN
+                EXECUTE 'ALTER TABLE bids DROP CONSTRAINT ' || quote_ident(constraint_name);
+                RAISE NOTICE 'Dropped constraint % from bidder_id', constraint_name;
+            END IF;
+
+            -- Drop the column
+            BEGIN
+                ALTER TABLE bids DROP COLUMN bidder_id;
+                RAISE NOTICE 'Dropped redundant bidder_id column';
+            EXCEPTION WHEN others THEN
+                RAISE NOTICE 'Could not drop bidder_id: %', SQLERRM;
+                -- Fallback: make it nullable
+                BEGIN
+                    ALTER TABLE bids ALTER COLUMN bidder_id DROP NOT NULL;
+                    RAISE NOTICE 'Made bidder_id nullable as fallback';
+                EXCEPTION WHEN others THEN
+                    RAISE NOTICE 'Could not make bidder_id nullable: %', SQLERRM;
+                END;
+            END;
+        END IF;
+
+    -- Scenario 2: Only bidder_id exists, rename to user_id
+    ELSIF bidder_id_exists AND NOT user_id_exists THEN
+        RAISE NOTICE 'Only bidder_id exists, renaming to user_id...';
+
+        -- Check if foreign key exists to auth.users
+        SELECT EXISTS (
+            SELECT 1 FROM information_schema.table_constraints tc
+            JOIN information_schema.constraint_column_usage ccu
+                ON tc.constraint_name = ccu.constraint_name
+            WHERE tc.table_schema = 'public' AND tc.table_name = 'bids'
+                AND tc.constraint_type = 'FOREIGN KEY'
+                AND ccu.column_name = 'bidder_id'
+                AND ccu.table_schema = 'auth' AND ccu.table_name = 'users'
+        ) INTO fk_exists;
+
+        IF fk_exists THEN
+            -- Foreign key exists to auth.users, just rename
+            ALTER TABLE bids RENAME COLUMN bidder_id TO user_id;
+            RAISE NOTICE 'Renamed bidder_id to user_id (preserved foreign key)';
+        ELSE
+            -- No proper foreign key, rename and add correct one
+            ALTER TABLE bids RENAME COLUMN bidder_id TO user_id;
+            RAISE NOTICE 'Renamed bidder_id to user_id';
+
+            -- Add foreign key to auth.users
+            BEGIN
+                ALTER TABLE bids
+                    ADD CONSTRAINT bids_user_id_fkey
+                    FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL;
+                RAISE NOTICE 'Added foreign key to auth.users';
+            EXCEPTION WHEN duplicate_object THEN
+                RAISE NOTICE 'Foreign key already exists';
+            END;
+        END IF;
+
+    -- Scenario 3: Only user_id exists (ideal)
+    ELSIF user_id_exists AND NOT bidder_id_exists THEN
+        RAISE NOTICE 'Only user_id exists (ideal state)';
+
+    -- Scenario 4: Neither exists (should have been created in section 1)
+    ELSE
+        RAISE NOTICE 'Creating user_id column...';
+        ALTER TABLE bids ADD COLUMN user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL;
+    END IF;
+
+    -- Ensure user_id is nullable (matches ON DELETE SET NULL)
+    IF user_id_exists OR (bidder_id_exists AND NOT user_id_exists) THEN
+        IF EXISTS (
+            SELECT 1 FROM information_schema.columns
+            WHERE table_schema = 'public' AND table_name = 'bids'
+                AND column_name = 'user_id' AND is_nullable = 'NO'
+        ) THEN
+            ALTER TABLE bids ALTER COLUMN user_id DROP NOT NULL;
+            RAISE NOTICE 'Made user_id nullable';
+        END IF;
+    END IF;
+END $$;
+
 -- 6. VERIFY AUTH.USERS REFERENCE (user_id column foreign key)
 -- Drop and recreate to ensure consistent naming and behavior
 DO $$
