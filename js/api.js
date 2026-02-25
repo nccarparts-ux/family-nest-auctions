@@ -10,6 +10,10 @@ const SITE_URL = window.location.origin
 // ── INIT ─────────────────────────────────────────────────────
 let _sb = null
 function sb() {
+  if (!window.supabase) {
+    console.error('Supabase SDK not loaded. Check network or script tag.')
+    return null
+  }
   if (!_sb) {
     _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: { persistSession: true, autoRefreshToken: true }
