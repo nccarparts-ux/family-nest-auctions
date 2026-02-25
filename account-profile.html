@@ -408,7 +408,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
 var SUPABASE_URL='https://hwsjgclteuezauveujit.supabase.co';
 var SUPABASE_KEY='sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS';
 var _sb=null;
-function getSB(){if(!_sb)_sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);return _sb;}
+function getSB(){if(!_sb)_sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY, { auth: { persistSession: true, autoRefreshToken: true } });return _sb;}
 
 function el(id){return document.getElementById(id);}
 function setText(id,v){var e=el(id);if(e)e.textContent=v;}

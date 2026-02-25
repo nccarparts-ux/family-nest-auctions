@@ -448,9 +448,14 @@ function toast(msg,title){
 
 // ── SUPABASE ──
 function getSB(){
+  if (!window.supabase) {
+    console.error('Supabase SDK not loaded');
+    return null;
+  }
   return window.supabase.createClient(
     'https://hwsjgclteuezauveujit.supabase.co',
-    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+    { auth: { persistSession: true, autoRefreshToken: true } }
   );
 }
 

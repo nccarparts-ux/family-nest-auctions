@@ -946,7 +946,7 @@ function switchTab(name){
 // ── SUPABASE DATA LOADERS ─────────────────────────────────────
 var _sb2=null;
 function getSB(){
-  if(!_sb2)_sb2=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
+  if(!_sb2)_sb2=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS', { auth: { persistSession: true, autoRefreshToken: true } });
   return _sb2;
 }
 
