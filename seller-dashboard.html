@@ -336,7 +336,7 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
     </div>
   </a>
   <div class="hd-center">
-    <span class="hd-badge">🟢 Henderson Estate — 3 Live Sales</span>
+    <span class="hd-badge">🟢 Seller Dashboard</span>
   </div>
   <div class="hd-right">
     <button class="hd-notif" onclick="toast('3 new shipping reminders','🔔 Notifications')">🔔<span class="badge">3</span></button>
@@ -404,8 +404,8 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
       <div class="page-header">
         <div class="ph-top">
           <div>
-            <div class="ph-title">Good morning, Henderson Estate 👋</div>
-            <div class="ph-sub">Thursday, February 19, 2026 · 3 sales active · 5 items need attention</div>
+            <div class="ph-title">Good morning, Loading... 👋</div>
+            <div class="ph-sub">Loading...</div>
           </div>
           <button class="btn-primary" onclick="switchTab('upload',null)">➕ Add New Item</button>
         </div>
@@ -752,12 +752,9 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
         </div>
         <div style="padding:0 22px">
           <!-- repeat listing rows -->
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div><div class="listing-content"><div class="listing-name">Victorian Carved Mahogany Armchair, c.1890</div><div class="listing-meta">Henderson Estate · 18 bids · 1,240 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$187</div><div class="listing-bids">18 bids</div><div class="listing-time urgent">1h 42m</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Victorian Armchair')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f8f0e0,#f0e4c0)">🪔</div><div class="listing-content"><div class="listing-name">Antique Tiffany-Style Table Lamp</div><div class="listing-meta">Henderson Estate · 24 bids · 890 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span></div></div><div class="listing-right"><div class="listing-bid">$340</div><div class="listing-bids">24 bids</div><div class="listing-time">4h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Tiffany Lamp')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8f4,#e0d0e8)">🏺</div><div class="listing-content"><div class="listing-name">Hand-Knotted Persian Wool Rug, 8×10</div><div class="listing-meta">Henderson Estate · 9 bids · 560 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#d1ecf1;color:#0c5460">✔ Good</span></div></div><div class="listing-right"><div class="listing-bid">$215</div><div class="listing-bids">9 bids</div><div class="listing-time">1d left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Persian Rug')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#EEF7EE,#d0e4d0)">🖊️</div><div class="listing-content"><div class="listing-name">Victorian Mahogany Writing Desk</div><div class="listing-meta">Henderson Estate · 31 bids · 1,880 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$520</div><div class="listing-bids">31 bids</div><div class="listing-time urgent">2h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Writing Desk')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:var(--cream-mid)">📝</div><div class="listing-content"><div class="listing-name">1920s Mahogany Side Table — DRAFT</div><div class="listing-meta">Henderson Estate · Not published · Created yesterday</div><div class="listing-tags"><span class="tag draft">📝 Draft</span></div></div><div class="listing-right"><div class="listing-bid">—</div><div class="listing-bids">Not live</div><div class="listing-time">—</div><div class="listing-actions"><button class="act-btn edit" onclick="toast('Opening draft…','Edit Draft')">Edit</button><button class="act-btn danger" onclick="toast('Draft deleted','Deleted')">Delete</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:var(--cream-mid)">🏆</div><div class="listing-content"><div class="listing-name">Art Deco Diamond Brooch — SOLD</div><div class="listing-meta">Morrison Collection · 55 bids · Final price: $1,340</div><div class="listing-tags"><span class="tag sold">✅ Sold</span></div></div><div class="listing-right"><div class="listing-bid">$1,340</div><div class="listing-bids">55 bids</div><div class="listing-time">Ended Feb 17</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening archive…','View Archive')">View</button></div></div></div>
+          <div style="text-align:center;padding:40px;color:var(--text-light);font-size:14px;">
+            Loading listings...
+          </div>
         </div>
       </div>
     </div>
@@ -935,11 +932,11 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
       <div class="section-card">
         <div class="sc-head"><div class="sc-title">🏢 Business Profile</div></div>
         <div class="upload-form">
-          <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" value="Henderson Estate Sales"></div>
-          <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" value="Sarah Henderson"></div>
-          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value="(678) 658-3083"></div>
-          <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="henderson@familynestauctions.com"></div>
-          <div class="form-group full"><label class="form-label">Business Address</label><input class="form-input" value="1234 Peachtree St NE, Atlanta, GA 30309"></div>
+          <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" value=""></div>
+          <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" value=""></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value=""></div>
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" value=""></div>
+          <div class="form-group full"><label class="form-label">Business Address</label><input class="form-input" value=""></div>
           <div class="form-group full"><label class="form-label">Bio / About</label><textarea class="form-textarea">Family-owned estate liquidation service serving Atlanta and surrounding areas since 2014. We specialize in fine antiques, jewelry, and quality home furnishings from distinguished estate collections.</textarea></div>
         </div>
         <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end">
