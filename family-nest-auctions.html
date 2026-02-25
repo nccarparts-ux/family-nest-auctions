@@ -879,15 +879,38 @@ async function loadHeroItems(){
   try{
     // Use direct fresh client (bypass singleton) for reliability
     var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
-    var {data:items,error}=await _sb.from('items').select('id,title,category,condition,current_bid,starting_bid,bid_count,ends_at,sellers(business_name,city,state)').eq('status','live').order('bid_count',{ascending:false}).limit(5);
+    var {data:items,error}=await _sb.from('items').select('id,title,category,condition,current_bid,starting_bid,buyers_premium_pct,est_shipping_min,est_shipping_max,bid_count,ends_at,sellers(business_name,city,state)').eq('status','live').order('bid_count',{ascending:false}).limit(5);
     if(error||!items||items.length===0)return;
+
+    // Get true highest bids from bids table to ensure accuracy
+    var itemIds = items.map(item => item.id);
+    var {data:topBids,error:bidsError} = await _sb
+      .from('bids')
+      .select('item_id,amount')
+      .in('item_id', itemIds)
+      .order('amount', {ascending:false});
+
+    // Create map of item_id -> highest bid amount
+    var highestBidMap = {};
+    if(topBids && !bidsError){
+      topBids.forEach(bid => {
+        if(!highestBidMap[bid.item_id] || bid.amount > highestBidMap[bid.item_id]){
+          highestBidMap[bid.item_id] = parseFloat(bid.amount);
+        }
+      });
+    }
+
     var featured=items[0];
+    // Determine true highest bid for featured item
+    var trueHighestBid = highestBidMap[featured.id];
+    var featuredBid = trueHighestBid || parseFloat(featured.current_bid || featured.starting_bid || 0);
+
     var titleEl=document.getElementById('hero-title');
     var bidEl=document.getElementById('hero-bid');
     var estateEl=document.getElementById('hero-estate');
     var btnEl=document.getElementById('hero-bid-btn');
     if(titleEl)titleEl.textContent=featured.title;
-    if(bidEl)bidEl.textContent=FNA.UI.formatPrice(featured.current_bid||featured.starting_bid);
+    if(bidEl)bidEl.textContent=FNA.UI.formatPrice(featuredBid);
     if(estateEl)estateEl.textContent='📍 '+(featured.sellers?.city||'')+', '+(featured.sellers?.state||'')+' — '+(featured.sellers?.business_name||'');
     if(btnEl){btnEl.onclick=function(){window.location.href='auction-item-detail.html?id='+featured.id;};}
     // Start countdown for featured item
@@ -908,7 +931,10 @@ async function loadHeroItems(){
       var cats={'Furniture':'🪑','Art':'🖼️','Jewelry':'💍','Watches':'⌚','Lighting':'🪔','Rugs':'🏺','Collectibles':'🏺','Silver':'🥄','Electronics':'📺'};
       miniGrid.innerHTML=items.slice(1,5).map(function(item){
         var icon=cats[item.category]||'🪑';
-        var bid=FNA.UI.formatPrice(item.current_bid||item.starting_bid);
+        // Determine true highest bid for each mini item
+        var itemTrueHighestBid = highestBidMap[item.id];
+        var itemBid = itemTrueHighestBid || parseFloat(item.current_bid || item.starting_bid || 0);
+        var bid=FNA.UI.formatPrice(itemBid);
         var countdown=FNA.UI.formatCountdown(item.ends_at);
         return '<div class="mini-tile" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'"><div class="mini-icon">'+icon+'</div><div class="mini-name">'+escHtml(item.title.substring(0,28))+'</div><div class="mini-price">'+bid+'</div><div class="mini-bids">'+item.bid_count+' bids · '+countdown.text+'</div></div>';
       }).join('');
