@@ -1,8 +1,38 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-  <meta http-equiv="refresh" content="0; url=family-nest-auctions.html">
-  <title>Family Nest Auctions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+<meta content="0; url=family-nest-auctions.html" http-equiv="refresh"/>
+<title>Family Nest Auctions</title>
+
+<style>
+    /* Responsive Design */
+    .mobile-only { display: none; }
+    .desktop-only { display: block; }
+    
+    @media (max-width: 768px) {
+        .mobile-only { display: block; }
+        .desktop-only { display: none; }
+        body { font-size: 14px; }
+        .container { padding: 10px; }
+    }
+    
+    @media (max-width: 480px) {
+        body { font-size: 12px; }
+        h1 { font-size: 24px; }
+    }
+</style>
+
 </head>
-<body><script>window.location.replace('family-nest-auctions.html')</script></body>
+<body>
+<main class="container">
+<h1>Welcome to Family Nest Auctions</h1>
+<p>Browse our selection of unique estate items and antiques.</p>
+<div class="featured-items">
+<!-- Items will be loaded dynamically -->
+</div>
+</main>
+</body>
 </html>
