@@ -896,16 +896,15 @@ async function submitBid(){
     var user=await FNA.Auth.getUser();
     if(!user){ closeConfirm(); toast('Please sign in to bid','🔒 Sign In Required'); setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500); return; }
     console.log('Placing bid for user:', user.id);
-    // Get session to verify authentication
-    const session = await FNA.Auth.getSession();
+    var sb=getSB();
+    // Check session is loaded
+    const { data: { session } } = await sb.auth.getSession();
     console.log('Session exists:', !!session);
     if (!session) {
       toast('Please sign in again','🔒 Session Expired');
       setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500);
       return;
     }
-    var sb = FNA.getClient();
-    // Client automatically loads session from storage with persistSession: true
     // Validate bid is above current
     var{data:item,error:iErr}=await sb.from('items').select('current_bid,ends_at,status,bid_count').eq('id',itemId).single();
     if(iErr||!item){ throw new Error('Could not load item details.'); }
@@ -916,7 +915,6 @@ async function submitBid(){
     // Mark previous winning bids as not winning
     await sb.from('bids').update({is_winning:false}).eq('item_id',itemId).eq('is_winning',true);
     // Insert new bid (column is user_id, not bidder_id; no is_proxy column in schema)
-    console.log('Inserting bid data:', { item_id: itemId, user_id: user.id, amount, max_amount: maxAmount, is_winning: true });
     var{error:bErr}=await sb.from('bids').insert({
       item_id:itemId, user_id:user.id,
       amount:amount, max_amount:maxAmount,
@@ -954,16 +952,14 @@ async function toggleWatchlist(){
   try{
     var user=await FNA.Auth.getUser();
     if(!user){ toast('Please sign in to save items','🔒 Sign In Required'); return; }
-    // Get session to verify authentication
-    const session = await FNA.Auth.getSession();
-    console.log('Session exists:', !!session);
+    var sb=getSB();
+    // Check session is loaded
+    const { data: { session } } = await sb.auth.getSession();
     if (!session) {
       toast('Please sign in again','🔒 Session Expired');
       setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500);
       return;
     }
-    var sb = FNA.getClient();
-    // Client automatically loads session from storage with persistSession: true
     if(watching){
       await sb.from('watchlist').delete().eq('user_id',user.id).eq('item_id',itemId);
       watching=false;
@@ -974,6 +970,7 @@ async function toggleWatchlist(){
     setText('watch-btn', watching?'❤️ Watchlist':'🤍 Watchlist');
     toast(watching?'Added to your watchlist!':'Removed from watchlist.', watching?'❤️ Watching':'✕ Removed');
   }catch(e){
+    console.error('Watchlist error:', e);
     toast(e.message||'Could not update watchlist','⚠️ Error');
   }
 }
@@ -1139,8 +1136,8 @@ async function loadItemData(){
     }
   }
   try{
-    // Use authenticated client from FNA
-    var _sb = FNA.getClient();
+    // Use getSB() directly — fresh client, no api.js singleton dependency
+    var _sb = getSB();
     var{data:item, error:itemErr} = await _sb
       .from('items')
       .select('*,item_photos(storage_url,is_primary,display_order,caption),sellers(id,business_name,avg_rating,total_reviews,total_sales,city,state)')
