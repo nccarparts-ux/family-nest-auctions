@@ -895,8 +895,10 @@ async function submitBid(){
   try{
     var user=await FNA.Auth.getUser();
     if(!user){ closeConfirm(); toast('Please sign in to bid','🔒 Sign In Required'); setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500); return; }
+    console.log('Placing bid for user:', user.id);
     // Get session to verify authentication
     const session = await FNA.Auth.getSession();
+    console.log('Session exists:', !!session);
     if (!session) {
       toast('Please sign in again','🔒 Session Expired');
       setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500);
@@ -914,6 +916,7 @@ async function submitBid(){
     // Mark previous winning bids as not winning
     await sb.from('bids').update({is_winning:false}).eq('item_id',itemId).eq('is_winning',true);
     // Insert new bid (column is user_id, not bidder_id; no is_proxy column in schema)
+    console.log('Inserting bid data:', { item_id: itemId, user_id: user.id, amount, max_amount: maxAmount, is_winning: true });
     var{error:bErr}=await sb.from('bids').insert({
       item_id:itemId, user_id:user.id,
       amount:amount, max_amount:maxAmount,
@@ -937,6 +940,7 @@ async function submitBid(){
     window._pendingBid=null; window._pendingMax=null;
     if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
   }catch(err){
+    console.error('Bid error:', err);
     closeConfirm();
     if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
     toast(err.message||'Bid failed — please try again','⚠️ Error');
@@ -952,6 +956,7 @@ async function toggleWatchlist(){
     if(!user){ toast('Please sign in to save items','🔒 Sign In Required'); return; }
     // Get session to verify authentication
     const session = await FNA.Auth.getSession();
+    console.log('Session exists:', !!session);
     if (!session) {
       toast('Please sign in again','🔒 Session Expired');
       setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500);
