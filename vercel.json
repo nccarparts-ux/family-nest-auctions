@@ -26,8 +26,5 @@
         }
       ]
     }
-  ],
-  "optimizations": {
-    "minify": false
-  }
+  ]
 }
