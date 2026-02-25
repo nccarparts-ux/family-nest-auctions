@@ -1,0 +1,32 @@
+{
+  "test_history": [
+    {
+      "timestamp": "2026-02-24T20:56:00.053472",
+      "summary": {
+        "total": 118,
+        "passed": 118,
+        "failed": 0,
+        "pass_rate": "100.0%",
+        "timestamp": "2026-02-24T20:56:00.045286"
+      },
+      "failures": 0,
+      "warnings": 0
+    },
+    {
+      "timestamp": "2026-02-24T21:05:52.480909",
+      "total_tests": 89,
+      "passed": 75,
+      "failed": 14,
+      "pass_rate": "84.3%"
+    },
+    {
+      "timestamp": "2026-02-24T21:15:17.534706",
+      "total_tests": 89,
+      "passed": 82,
+      "failed": 7,
+      "failures": 7
+    }
+  ],
+  "failure_patterns": {},
+  "learned_fixes": []
+}
