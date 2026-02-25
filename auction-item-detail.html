@@ -895,16 +895,15 @@ async function submitBid(){
   try{
     var user=await FNA.Auth.getUser();
     if(!user){ closeConfirm(); toast('Please sign in to bid','🔒 Sign In Required'); setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500); return; }
-    // Get session from authenticated client
+    // Get session to verify authentication
     const session = await FNA.Auth.getSession();
     if (!session) {
       toast('Please sign in again','🔒 Session Expired');
       setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500);
       return;
     }
-    var sb=getSB();
-    // Set session explicitly to ensure auth.uid() works
-    await sb.auth.setSession(session);
+    var sb = FNA.getClient();
+    // Client automatically loads session from storage with persistSession: true
     // Validate bid is above current
     var{data:item,error:iErr}=await sb.from('items').select('current_bid,ends_at,status,bid_count').eq('id',itemId).single();
     if(iErr||!item){ throw new Error('Could not load item details.'); }
@@ -951,16 +950,15 @@ async function toggleWatchlist(){
   try{
     var user=await FNA.Auth.getUser();
     if(!user){ toast('Please sign in to save items','🔒 Sign In Required'); return; }
-    // Get session from authenticated client
+    // Get session to verify authentication
     const session = await FNA.Auth.getSession();
     if (!session) {
       toast('Please sign in again','🔒 Session Expired');
       setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500);
       return;
     }
-    var sb=getSB();
-    // Set session explicitly to ensure auth.uid() works
-    await sb.auth.setSession(session);
+    var sb = FNA.getClient();
+    // Client automatically loads session from storage with persistSession: true
     if(watching){
       await sb.from('watchlist').delete().eq('user_id',user.id).eq('item_id',itemId);
       watching=false;
@@ -1136,8 +1134,8 @@ async function loadItemData(){
     }
   }
   try{
-    // Use getSB() directly — fresh client, no api.js singleton dependency
-    var _sb = getSB();
+    // Use authenticated client from FNA
+    var _sb = FNA.getClient();
     var{data:item, error:itemErr} = await _sb
       .from('items')
       .select('*,item_photos(storage_url,is_primary,display_order,caption),sellers(id,business_name,avg_rating,total_reviews,total_sales,city,state)')

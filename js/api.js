@@ -667,5 +667,6 @@ window.FNA = {
   Storage,
   UI,
   Seller,
-  Admin
+  Admin,
+  getClient: () => sb()
 }
