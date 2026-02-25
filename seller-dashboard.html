@@ -1707,9 +1707,38 @@ async function submitFranchise(btn){
       return;
     }
 
+    // Check if user has an approved seller account
+    try {
+      const sb = getSellerSB();
+      const { data: seller, error } = await sb.from('sellers')
+        .select('id, is_verified, status')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!seller || !seller.is_verified || seller.status !== 'active') {
+        // Show pending approval message
+        document.body.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--cream);padding:20px">
+            <div style="max-width:500px;text-align:center;padding:40px;background:white;border-radius:var(--r-lg);box-shadow:var(--sh-md)">
+              <div style="font-size:48px;margin-bottom:20px">⏳</div>
+              <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:12px;color:var(--charcoal)">Seller Account Pending Approval</h2>
+              <p style="color:var(--text-mid);margin-bottom:24px;line-height:1.5">Your seller application is under review. We'll notify you once approved (usually within 48 hours).</p>
+              <a href="family-nest-auctions.html" style="display:inline-block;padding:12px 24px;background:var(--green-deep);color:white;border-radius:var(--r-sm);text-decoration:none;font-weight:700;font-family:'Jost',sans-serif">Return to Homepage</a>
+            </div>
+          </div>
+        `;
+        return;
+      }
+    } catch (error) {
+      console.error('Seller check error:', error);
+      // Continue anyway to avoid blocking legitimate sellers due to technical error
+    }
+
     // Load dashboard data
     await loadSellerDashboard();
-    
+
     // Start countdowns
     FNA.UI.startCountdowns();
   });

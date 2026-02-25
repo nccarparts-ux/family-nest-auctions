@@ -1,0 +1,40 @@
+-- ============================================================
+-- Family Nest Auctions — Admin System Setup
+-- Run this in Supabase SQL Editor to enable admin features
+-- ============================================================
+
+-- 1. ADD ADMIN COLUMN TO PROFILES TABLE
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT false;
+
+-- 2. ADD RLS POLICY FOR ADMINS TO ACCESS ALL DATA
+DROP POLICY IF EXISTS "admin_full_access" ON profiles;
+CREATE POLICY "admin_full_access" ON profiles
+  FOR ALL USING (auth.uid() = id OR (SELECT is_admin FROM profiles WHERE id = auth.uid()))
+  WITH CHECK (auth.uid() = id OR (SELECT is_admin FROM profiles WHERE id = auth.uid()));
+
+-- 3. UPDATE ADMIN APPROVE SELLER FUNCTIONALITY
+-- Create a function that updates both sellers and profiles when approving a seller
+CREATE OR REPLACE FUNCTION approve_seller_and_update_profile(seller_uuid UUID)
+RETURNS void AS $$
+BEGIN
+  -- Update seller to verified and active
+  UPDATE sellers
+  SET is_verified = true, status = 'active'
+  WHERE id = seller_uuid;
+
+  -- Update corresponding user's profile to is_seller = true
+  UPDATE profiles
+  SET is_seller = true
+  WHERE id = (SELECT user_id FROM sellers WHERE id = seller_uuid);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 4. SET FIRST USER AS ADMIN (if needed)
+-- Uncomment and update with your user ID to make yourself admin
+-- UPDATE profiles SET is_admin = true WHERE id = 'your-user-id-here';
+
+-- 5. VERIFY SETUP
+SELECT
+  'Admin system setup complete.' AS status,
+  'Run: UPDATE profiles SET is_admin = true WHERE id = (your-user-id)' AS next_step,
+  'Then access admin-panel.html' AS note;

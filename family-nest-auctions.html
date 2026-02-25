@@ -813,7 +813,7 @@ async function doSellerApply(){
   var phone=document.getElementById('seller-phone')?.value?.trim();
   var city=document.getElementById('seller-city')?.value?.trim();
   var state=document.getElementById('seller-state')?.value?.trim();
-  var years=document.getElementById('seller-years')?.value;
+  var years=parseInt(document.getElementById('seller-years')?.value)||0;
   var bio=document.getElementById('seller-bio')?.value?.trim();
   var errEl=document.getElementById('seller-error');
   var sucEl=document.getElementById('seller-success');
@@ -824,11 +824,23 @@ async function doSellerApply(){
   try{
     var user=await FNA.Auth.getUser();
     if(!user){closeOv('seller');openOv('login');return;}
-    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
-    await _sb.from('sellers').insert({user_id:user.id,business_name:business,phone,city,state,business_bio:bio,is_verified:false,is_active:false});
+    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',{ auth: { persistSession: true, autoRefreshToken: true } });
+    await _sb.from('sellers').insert({
+      user_id:user.id,
+      business_name:business,
+      contact_name:contact,
+      phone,
+      city,
+      state,
+      years_in_business:years,
+      bio,
+      is_verified:false,
+      status:'pending'
+    });
     if(sucEl){sucEl.textContent='Application submitted! We\'ll review and contact you within 48 hours.';sucEl.style.display='block';}
     if(btn){btn.textContent='Application Submitted ✓';btn.disabled=true;}
   }catch(e){
+    console.error('Seller apply error:', e);
     if(errEl){errEl.textContent=e.message||'Could not submit. Please try again.';errEl.style.display='block';}
     if(btn){btn.textContent='Submit Application';btn.disabled=false;}
   }

@@ -757,7 +757,37 @@ function buildChart(containerId, vals, color, labelId, labelFn){
   if(lb) lb.innerHTML=vals.map((_,i)=>`<div style="flex:1;font-size:9px;color:var(--text-light);text-align:center">${['F6','F7','F8','F9','F10','F11','F12','F13','F14','F15','F16','F17','F18','F19'][i]||'—'}</div>`).join('');
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async ()=>{
+  // Check admin authentication
+  try {
+    // Initialize Supabase client with auth
+    const sb = window.supabase.createClient(
+      'https://hwsjgclteuezauveujit.supabase.co',
+      'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+      { auth: { persistSession: true, autoRefreshToken: true } }
+    );
+
+    // Check if user is signed in
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) {
+      window.location.href = 'family-nest-auctions.html?login=1';
+      return;
+    }
+
+    // Check if user is admin
+    const { data: profile } = await sb.from('profiles').select('is_admin').eq('id', user.id).single();
+    if (!profile || !profile.is_admin) {
+      alert('Admin access required. Redirecting to homepage.');
+      window.location.href = 'family-nest-auctions.html';
+      return;
+    }
+  } catch (error) {
+    console.error('Auth error:', error);
+    window.location.href = 'family-nest-auctions.html?login=1';
+    return;
+  }
+
+  // User is authenticated admin, continue loading
   buildLiveGrid();
   buildChart('gmv-chart',[4800,3900,5200,4100,6300,5800,4400,5100,6800,4200,7200,5600,6100,4820],'var(--green-sage)','gmv-labels',v=>'$'+v.toLocaleString());
   buildChart('user-chart',[42,38,55,48,71,66,44,59,72,41,88,64,77,58],'var(--honey)','user-labels',v=>v+' users');
@@ -837,9 +867,27 @@ async function loadAdminSellers(){
 
 async function adminApproveSeller(id,btn){
   if(!id)return;if(btn){btn.textContent='Approving…';btn.disabled=true;}
-  var {error}=await getAdminSB().from('sellers').update({is_verified:true,status:'active'}).eq('id',id);
-  if(error){toast('Error: '+error.message,'⚠️');if(btn){btn.textContent='Approve';btn.disabled=false;}return;}
-  toast('Seller approved','✅ Approved');loadAdminSellers();
+  try {
+    // First get the seller to find user_id
+    var {data:seller,error:sellerError}=await getAdminSB().from('sellers').select('user_id').eq('id',id).single();
+    if(sellerError) throw sellerError;
+
+    // Update seller to verified and active
+    var {error}=await getAdminSB().from('sellers').update({is_verified:true,status:'active'}).eq('id',id);
+    if(error) throw error;
+
+    // Update user's profile to is_seller = true
+    if(seller.user_id){
+      var {error:profileError}=await getAdminSB().from('profiles').update({is_seller:true}).eq('id',seller.user_id);
+      if(profileError) console.warn('Could not update profile:', profileError);
+      // Not critical if profile update fails
+    }
+
+    toast('Seller approved','✅ Approved');loadAdminSellers();
+  } catch(e) {
+    toast('Error: '+(e.message||'Unknown'),'⚠️');
+    if(btn){btn.textContent='Approve';btn.disabled=false;}
+  }
 }
 async function adminSuspendSeller(id,btn){
   if(!id)return;if(btn){btn.textContent='Suspending…';btn.disabled=true;}
