@@ -33,6 +33,9 @@ complete_response.txt
 .vscode/
 .idea/
 
+# Local tooling and configuration
+.claude/
+
 # Temporary deployment and test files
 *.bat
 *.log
