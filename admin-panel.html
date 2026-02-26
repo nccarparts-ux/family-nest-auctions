@@ -659,6 +659,16 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script type="text/javascript">
+// Debug: log when script loads
+console.log('Admin panel script loading...');
+
+// Global click handler for debugging
+document.addEventListener('click', function(e) {
+  if (e.target.closest && e.target.closest('.nav-item[type="button"]')) {
+    console.log('Global click detected on nav button:', e.target.closest('.nav-item[type="button"]'));
+  }
+}, true); // Use capture phase to catch all clicks
+
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
   if(!h||!m)return;
@@ -687,22 +697,30 @@ function switchTab(name,btn){
     console.log('Panel ID:', panelId, 'Found:', panel);
     if (panel) {
       panel.classList.add('active');
+      console.log('Panel activated:', panelId);
     } else {
       console.error('Panel not found:', panelId);
+      alert('Panel not found: ' + panelId + '. Check console for details.');
       return;
     }
     // Activate clicked nav item
     if (btn && typeof btn.classList !== 'undefined') {
       btn.classList.add('active');
+      console.log('Button activated:', btn);
     } else {
       // Find the button with matching onclick
-      const button = document.querySelector(`.nav-item[onclick*="switchTab('${name}']"`);
-      if (button) button.classList.add('active');
+      const button = document.querySelector(`.nav-item[onclick*="switchTab('${name}',"`);
+      if (button) {
+        button.classList.add('active');
+        console.log('Found and activated button by selector:', button);
+      }
     }
     // Update URL hash for bookmarking
     window.location.hash = 'tab-' + name;
+    console.log('Tab switched successfully to:', name);
   } catch (error) {
     console.error('switchTab error:', error);
+    alert('Error switching tab: ' + error.message);
   }
 }
 function openDisputeModal(title){
@@ -828,27 +846,6 @@ document.addEventListener('DOMContentLoaded',async ()=>{
   // User is authenticated admin, continue loading
   console.log('Admin panel loaded, attaching event listeners...');
 
-  // Single event delegation for sidebar navigation
-  const sidebar = document.querySelector('.sidebar');
-  if (sidebar) {
-    sidebar.addEventListener('click', function(e) {
-      const button = e.target.closest('.nav-item[type="button"]');
-      if (!button) return;
-      console.log('Sidebar button clicked:', button);
-      // Extract tab name from onclick attribute
-      const onclick = button.getAttribute('onclick');
-      if (onclick && onclick.includes("switchTab('")) {
-        const match = onclick.match(/switchTab\('([^']+)'/);
-        if (match && match[1]) {
-          const tabName = match[1];
-          console.log('Switching to tab:', tabName);
-          switchTab(tabName, button);
-        }
-      }
-      // Prevent double execution if onclick also fires
-      e.stopPropagation();
-    });
-  }
 
   buildLiveGrid();
   buildChart('gmv-chart',[4800,3900,5200,4100,6300,5800,4400,5100,6800,4200,7200,5600,6100,4820],'var(--green-sage)','gmv-labels',v=>'$'+v.toLocaleString());
