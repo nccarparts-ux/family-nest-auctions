@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Cache refresh: 2026-02-25T17:30:00Z -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>My Account — Family Nest Auctions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -382,7 +385,7 @@
 
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/api.js"></script>
+  <script src="js/api.js?v=2"></script>
 </head>
 <body>
 
@@ -511,7 +514,7 @@
       <div class="activity-list">
         <div class="act-row"><div class="act-icon-wrap outbid">😬</div><div class="act-content"><div class="act-title">Outbid on Victorian Mahogany Chair</div><div class="act-detail">New leader placed $210 · Your max was $200</div></div><div class="act-time">12 min ago</div><div class="act-amount red">-$23 gap</div></div>
         <div class="act-row"><div class="act-icon-wrap ship">📦</div><div class="act-content"><div class="act-title">Shipment en route — Art Deco Brooch</div><div class="act-detail">USPS tracking #9400111899223847382910 · Est. Friday</div></div><div class="act-time">2h ago</div><div class="act-amount honey">In Transit</div></div>
-        <div class="act-row"><div class="act-icon-wrap bid">⚡</div><div class="act-content"><div class="act-title">Bid placed — Tiffany-Style Lamp</div><div class="act-detail">Henderson Estate · You are currently leading</div></div><div class="act-time">3h ago</div><div class="act-amount green">$355</div></div>
+        <div class="act-row"><div class="act-icon-wrap bid">⚡</div><div class="act-content"><div class="act-title">Bid placed — Tiffany-Style Lamp</div><div class="act-detail">Seller · You are currently leading</div></div><div class="act-time">3h ago</div><div class="act-amount green">$355</div></div>
         <div class="act-row"><div class="act-icon-wrap win">🏆</div><div class="act-content"><div class="act-title">Won — Persian Wool Rug 8×10</div><div class="act-detail">Whitfield Estate · Payment confirmed · Awaiting ship</div></div><div class="act-time">Yesterday</div><div class="act-amount honey">$460 total</div></div>
         <div class="act-row"><div class="act-icon-wrap watch">❤️</div><div class="act-content"><div class="act-title">Saved to watchlist — Vintage Rolex</div><div class="act-detail">Caldwell Estate · Ends in 6h · Currently $4,200</div></div><div class="act-time">Yesterday</div><div class="act-amount" style="color:var(--text-light)">Watching</div></div>
       </div>
@@ -901,7 +904,8 @@
 
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script type="text/javascript">
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
   if(!h||!m)return;
@@ -909,7 +913,10 @@ function toggleMenu(){
   m.classList.toggle('open');
   document.body.style.overflow=m.classList.contains('open')?'hidden':'';
 }
-</script><script>
+
+// ═══════════════════════════════════════════════
+// ALL FUNCTIONS AT TRUE GLOBAL SCOPE
+// No window.fn = fn() inside DOMContentLoaded —
 // ═══════════════════════════════════════════════
 // ALL FUNCTIONS AT TRUE GLOBAL SCOPE
 // No window.fn = fn() inside DOMContentLoaded —
@@ -950,7 +957,7 @@ function switchTab(name){
 // ── SUPABASE DATA LOADERS ─────────────────────────────────────
 var _sb2=null;
 function getSB(){
-  if(!_sb2)_sb2=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
+  if(!_sb2)_sb2=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS', { auth: { persistSession: true, autoRefreshToken: true } });
   return _sb2;
 }
 

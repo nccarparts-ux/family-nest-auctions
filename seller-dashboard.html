@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Cache refresh: 2026-02-25T17:30:00Z -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Seller Dashboard — Family Nest Auctions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -200,9 +203,7 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
 .footer-links a{color:var(--green-light);text-decoration:none;font-size:12.5px;font-weight:500}
 .footer-links a:hover{color:var(--white);text-decoration:underline}
 .footer-copy{font-size:12px;color:var(--green-sage)}
-</style>
-</head>
-<body>chart-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--charcoal);margin-bottom:16px}
+chart-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--charcoal);margin-bottom:16px}
 .bar-chart{display:flex;align-items:flex-end;gap:6px;height:120px}
 .bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
 .bar{width:100%;border-radius:4px 4px 0 0;background:var(--green-sage);transition:height .5s ease;cursor:pointer;position:relative}
@@ -317,7 +318,7 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
 
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/api.js"></script>
+  <script src="js/api.js?v=2"></script>
 </head>
 <body>
 
@@ -336,10 +337,11 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
     </div>
   </a>
   <div class="hd-center">
-    <span class="hd-badge">🟢 Henderson Estate — 3 Live Sales</span>
+    <span class="hd-badge">🟢 Seller Dashboard</span>
   </div>
   <div class="hd-right">
     <button class="hd-notif" onclick="toast('3 new shipping reminders','🔔 Notifications')">🔔<span class="badge">3</span></button>
+    <a href="admin-panel.html" id="admin-panel-btn" class="hd-view-site" style="background:rgba(176,48,48,.1);border-color:rgba(176,48,48,.3);color:#e88; display: none">Admin Panel</a>
     <a href="auction-browse.html" class="hd-view-site">← View Site</a>
     <div class="hd-avatar" onclick="toast('Account settings coming soon','👤 Profile')">HS</div>
   </div>
@@ -404,8 +406,8 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
       <div class="page-header">
         <div class="ph-top">
           <div>
-            <div class="ph-title">Good morning, Henderson Estate 👋</div>
-            <div class="ph-sub">Thursday, February 19, 2026 · 3 sales active · 5 items need attention</div>
+            <div class="ph-title">Good morning, Loading... 👋</div>
+            <div class="ph-sub">Loading...</div>
           </div>
           <button class="btn-primary" onclick="switchTab('upload',null)">➕ Add New Item</button>
         </div>
@@ -752,12 +754,9 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
         </div>
         <div style="padding:0 22px">
           <!-- repeat listing rows -->
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div><div class="listing-content"><div class="listing-name">Victorian Carved Mahogany Armchair, c.1890</div><div class="listing-meta">Henderson Estate · 18 bids · 1,240 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$187</div><div class="listing-bids">18 bids</div><div class="listing-time urgent">1h 42m</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Victorian Armchair')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f8f0e0,#f0e4c0)">🪔</div><div class="listing-content"><div class="listing-name">Antique Tiffany-Style Table Lamp</div><div class="listing-meta">Henderson Estate · 24 bids · 890 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span></div></div><div class="listing-right"><div class="listing-bid">$340</div><div class="listing-bids">24 bids</div><div class="listing-time">4h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Tiffany Lamp')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#f0e8f4,#e0d0e8)">🏺</div><div class="listing-content"><div class="listing-name">Hand-Knotted Persian Wool Rug, 8×10</div><div class="listing-meta">Henderson Estate · 9 bids · 560 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#d1ecf1;color:#0c5460">✔ Good</span></div></div><div class="listing-right"><div class="listing-bid">$215</div><div class="listing-bids">9 bids</div><div class="listing-time">1d left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Persian Rug')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:linear-gradient(135deg,#EEF7EE,#d0e4d0)">🖊️</div><div class="listing-content"><div class="listing-name">Victorian Mahogany Writing Desk</div><div class="listing-meta">Henderson Estate · 31 bids · 1,880 views</div><div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">✅ Excellent</span></div></div><div class="listing-right"><div class="listing-bid">$520</div><div class="listing-bids">31 bids</div><div class="listing-time urgent">2h left</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening…','View')">View</button><button class="act-btn edit" onclick="openEditModal('Writing Desk')">Edit</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:var(--cream-mid)">📝</div><div class="listing-content"><div class="listing-name">1920s Mahogany Side Table — DRAFT</div><div class="listing-meta">Henderson Estate · Not published · Created yesterday</div><div class="listing-tags"><span class="tag draft">📝 Draft</span></div></div><div class="listing-right"><div class="listing-bid">—</div><div class="listing-bids">Not live</div><div class="listing-time">—</div><div class="listing-actions"><button class="act-btn edit" onclick="toast('Opening draft…','Edit Draft')">Edit</button><button class="act-btn danger" onclick="toast('Draft deleted','Deleted')">Delete</button></div></div></div>
-          <div class="listing-row"><div class="listing-thumb" style="background:var(--cream-mid)">🏆</div><div class="listing-content"><div class="listing-name">Art Deco Diamond Brooch — SOLD</div><div class="listing-meta">Morrison Collection · 55 bids · Final price: $1,340</div><div class="listing-tags"><span class="tag sold">✅ Sold</span></div></div><div class="listing-right"><div class="listing-bid">$1,340</div><div class="listing-bids">55 bids</div><div class="listing-time">Ended Feb 17</div><div class="listing-actions"><button class="act-btn view" onclick="toast('Opening archive…','View Archive')">View</button></div></div></div>
+          <div style="text-align:center;padding:40px;color:var(--text-light);font-size:14px;">
+            Loading listings...
+          </div>
         </div>
       </div>
     </div>
@@ -935,11 +934,11 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
       <div class="section-card">
         <div class="sc-head"><div class="sc-title">🏢 Business Profile</div></div>
         <div class="upload-form">
-          <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" value="Henderson Estate Sales"></div>
-          <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" value="Sarah Henderson"></div>
-          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value="(678) 658-3083"></div>
-          <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="henderson@familynestauctions.com"></div>
-          <div class="form-group full"><label class="form-label">Business Address</label><input class="form-input" value="1234 Peachtree St NE, Atlanta, GA 30309"></div>
+          <div class="form-group"><label class="form-label">Business Name</label><input class="form-input" value=""></div>
+          <div class="form-group"><label class="form-label">Contact Name</label><input class="form-input" value=""></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" value=""></div>
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" value=""></div>
+          <div class="form-group full"><label class="form-label">Business Address</label><input class="form-input" value=""></div>
           <div class="form-group full"><label class="form-label">Bio / About</label><textarea class="form-textarea">Family-owned estate liquidation service serving Atlanta and surrounding areas since 2014. We specialize in fine antiques, jewelry, and quality home furnishings from distinguished estate collections.</textarea></div>
         </div>
         <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end">
@@ -1046,7 +1045,8 @@ footer{background:var(--green-deep);color:var(--green-light);padding:24px 32px;m
 <!-- TOAST -->
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
 
-<script>
+<script type="text/javascript">
+/* fix-visible-js 2026-02-25-18-10 */
 function el(id){return document.getElementById(id)}
 function setText(id,v){const e=el(id);if(e)e.textContent=v}
 function toast(msg,title){
@@ -1097,7 +1097,8 @@ var _sbSeller=null;
 function getSellerSB(){
   if(!_sbSeller) _sbSeller=window.supabase.createClient(
     'https://hwsjgclteuezauveujit.supabase.co',
-    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+    { auth: { persistSession: true, autoRefreshToken: true } }
   );
   return _sbSeller;
 }
@@ -1708,9 +1709,51 @@ async function submitFranchise(btn){
       return;
     }
 
+    // Check if user has an approved seller account
+    try {
+      const sb = getSellerSB();
+      const { data: seller, error } = await sb.from('sellers')
+        .select('id, is_verified, status')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (!seller || !seller.is_verified || seller.status !== 'active') {
+        // Show pending approval message
+        document.body.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--cream);padding:20px">
+            <div style="max-width:500px;text-align:center;padding:40px;background:white;border-radius:var(--r-lg);box-shadow:var(--sh-md)">
+              <div style="font-size:48px;margin-bottom:20px">⏳</div>
+              <h2 style="font-family:'Cormorant Garamond',serif;font-size:28px;margin-bottom:12px;color:var(--charcoal)">Seller Account Pending Approval</h2>
+              <p style="color:var(--text-mid);margin-bottom:24px;line-height:1.5">Your seller application is under review. We'll notify you once approved (usually within 48 hours).</p>
+              <a href="family-nest-auctions.html" style="display:inline-block;padding:12px 24px;background:var(--green-deep);color:white;border-radius:var(--r-sm);text-decoration:none;font-weight:700;font-family:'Jost',sans-serif">Return to Homepage</a>
+            </div>
+          </div>
+        `;
+        return;
+      }
+    } catch (error) {
+      console.error('Seller check error:', error);
+      // Continue anyway to avoid blocking legitimate sellers due to technical error
+    }
+
+    // Check if user is admin and show admin panel button
+    try {
+      const sb = getSellerSB();
+      const { data: profile } = await sb.from('profiles').select('is_admin').eq('id', user.id).single();
+      if (profile && profile.is_admin) {
+        const adminBtn = document.getElementById('admin-panel-btn');
+        if (adminBtn) adminBtn.style.display = 'inline-block';
+      }
+    } catch (error) {
+      console.error('Admin check error:', error);
+      // Non-critical, just don't show admin button
+    }
+
     // Load dashboard data
     await loadSellerDashboard();
-    
+
     // Start countdowns
     FNA.UI.startCountdowns();
   });

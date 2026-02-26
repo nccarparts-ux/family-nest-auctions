@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Cache refresh: 2026-02-25T17:30:00Z -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Browse Live Auctions — Family Nest Auctions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -273,7 +276,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/api.js"></script>
+  <script src="js/api.js?v=2"></script>
 </head>
 <body>
 
@@ -422,7 +425,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 <!-- TOAST -->
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script type="text/javascript">
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
   if(!h||!m)return;
@@ -430,7 +434,8 @@ function toggleMenu(){
   m.classList.toggle('open');
   document.body.style.overflow=m.classList.contains('open')?'hidden':'';
 }
-</script><script>
+
+// ── SAFE HELPERS ──
 // ── SAFE HELPERS ──
 function el(id){return document.getElementById(id)}
 function setText(id,val){const e=el(id);if(e)e.textContent=val}
@@ -443,9 +448,14 @@ function toast(msg,title){
 
 // ── SUPABASE ──
 function getSB(){
+  if (!window.supabase) {
+    console.error('Supabase SDK not loaded');
+    return null;
+  }
   return window.supabase.createClient(
     'https://hwsjgclteuezauveujit.supabase.co',
-    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+    { auth: { persistSession: true, autoRefreshToken: true } }
   );
 }
 
@@ -455,22 +465,59 @@ const ALL_ITEMS = [];
 async function loadRealItems(){
   try{
     var _sb = getSB();
-    var {data,error} = await _sb
+    // Fetch items with all needed fields including buyer's premium and shipping estimates
+    var {data:items,error} = await _sb
       .from('items')
-      .select('id,title,category,condition,current_bid,starting_bid,bid_count,ends_at,created_at,item_photos(storage_url,is_primary,display_order),sellers(business_name,city,state,avg_rating)')
+      .select('id,title,category,condition,current_bid,starting_bid,bid_count,ends_at,created_at,buyers_premium_pct,est_shipping_min,est_shipping_max,item_photos(storage_url,is_primary,display_order),sellers(business_name,city,state,avg_rating)')
       .eq('status','live')
       .order('ends_at',{ascending:true});
     if(error){ console.error('loadRealItems error:',error); return; }
-    if(!data||!data.length){ console.warn('No live items found'); return; }
+    if(!items||!items.length){ console.warn('No live items found'); return; }
+
+    // Get true highest bids from bids table to ensure accuracy
+    var itemIds = items.map(item => item.id);
+    var {data:topBids,error:bidsError} = await _sb
+      .from('bids')
+      .select('item_id,amount')
+      .in('item_id', itemIds)
+      .order('amount', {ascending:false});
+
+    // Create a map of item_id -> highest bid amount
+    var highestBidMap = {};
+    if(!bidsError && topBids){
+      topBids.forEach(bid => {
+        var itemId = bid.item_id;
+        var amount = parseFloat(bid.amount);
+        if(!highestBidMap[itemId] || amount > highestBidMap[itemId]){
+          highestBidMap[itemId] = amount;
+        }
+      });
+    }
+
     var ICON = {'Furniture':'🪑','Lighting':'🪔','Rugs':'🏺','Art':'🖼️','Jewelry':'💎','Silver':'🫖','Collectibles':'🕰️','Books':'📚','Garden':'🌿'};
     var BG   = {'Furniture':'#f0ebe3','Lighting':'#f8f0e0','Rugs':'#f0e8f4','Art':'#faf0e8','Jewelry':'#f0e8f8','Silver':'#e8f4f4','Collectibles':'#f0ece8','Books':'#f8f4e0','Garden':'#e8f0e0'};
     var now = Date.now();
     ALL_ITEMS.length = 0;
-    data.forEach(function(item){
+    items.forEach(function(item){
       var s = item.sellers || {};
       var endsAt = item.ends_at ? new Date(item.ends_at) : null;
       var ends = endsAt ? Math.max(0,(endsAt-now)/1000) : 999999;
-      var bid = parseFloat(item.current_bid||item.starting_bid||0);
+
+      // Use true highest bid from bids table if available, otherwise fall back to items.current_bid or starting_bid
+      var trueHighestBid = highestBidMap[item.id];
+      var bid = trueHighestBid || parseFloat(item.current_bid || item.starting_bid || 0);
+
+      // Calculate buyer's premium using item's specific percentage (default 15%)
+      var premPct = item.buyers_premium_pct || 15;
+      var prem = Math.round(bid * premPct / 100);
+
+      // Calculate shipping estimate (average of min and max, or default 65) - matches auction-item-detail.html logic
+      var shipEst = 65; // Default shipping estimate as per auction-item-detail.html
+      if(item.est_shipping_min != null){ // Check for null/undefined, but allow 0 (free shipping)
+        var max = item.est_shipping_max != null ? item.est_shipping_max : item.est_shipping_min;
+        shipEst = Math.round((item.est_shipping_min + max) / 2);
+      }
+
       var photos = (item.item_photos||[]).sort(function(a,b){return (a.display_order||0)-(b.display_order||0);});
       var primary = photos.find(function(p){return p.is_primary;})||photos[0];
       ALL_ITEMS.push({
@@ -479,8 +526,8 @@ async function loadRealItems(){
         cat: item.category||'Other',
         estate: (s.business_name||'Estate Sale')+(s.city?' · '+s.city+(s.state?', '+s.state:''):''),
         bid: bid,
-        prem: Math.round(bid*0.15),
-        ship: null,
+        prem: prem,
+        ship: shipEst,
         bids: item.bid_count||0,
         ends: ends,
         cond: item.condition||'good',

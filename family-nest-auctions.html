@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Cache refresh: 2026-02-25T17:30:00Z -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Family Nest Auctions | Online Estate Sale Bidding</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -327,7 +330,7 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <!-- Family Nest API -->
-  <script src="js/api.js"></script>
+  <script src="js/api.js?v=2"></script>
 </head>
 <body>
 
@@ -372,7 +375,7 @@
       </div>
       <div id="nav-user-menu" style="display:none;position:absolute;top:48px;right:0;background:var(--white);border-radius:var(--r-md);box-shadow:var(--sh-lg);padding:8px;min-width:180px;z-index:999">
         <a href="account-dashboard.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">👤 My Account</a>
-        <a href="seller-dashboard.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">🏡 Seller Dashboard</a>
+        <a href="seller-dashboard.html" id="nav-seller-dashboard-link" style="display:none;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">🏡 Seller Dashboard</a>
         <a href="messages.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">✉️ Messages</a>
         <hr style="border:none;border-top:1px solid var(--cream-mid);margin:4px 0">
         <button onclick="FNA.Auth.signOut()" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--red);border:none;background:transparent;cursor:pointer;border-radius:var(--r-sm);width:100%;text-align:left;font-family:'Jost',sans-serif;transition:background .15s" onmouseover="this.style.background='#FDECEA'" onmouseout="this.style.background='transparent'">🚪 Sign Out</button>
@@ -389,7 +392,7 @@
   <a href="family-nest-auctions.html" onclick="toggleMenu()">Home</a>
   <a href="auction-browse.html" onclick="toggleMenu()">Live Auctions</a>
   <a href="family-nest-auctions.html#how" onclick="toggleMenu()">How It Works</a>
-  <a href="seller-dashboard.html" onclick="toggleMenu()">Sell With Us</a>
+  <a href="seller-dashboard.html" id="mobile-seller-dashboard-link" onclick="toggleMenu()" style="display: none">Sell With Us</a>
   <a href="account-dashboard.html" onclick="toggleMenu()">My Account</a>
   <div class="mobile-menu-ctas">
     <button onclick="toggleMenu();window.location.href='family-nest-auctions.html?register=1'" style="width:220px;padding:14px;background:var(--honey);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif">Start Bidding Free</button>
@@ -433,11 +436,11 @@
       <div class="prev-card" id="hero-featured-card">
         <div class="prev-img">🪑<div class="prev-tag">⭐ Featured Sale</div></div>
         <div class="prev-body">
-          <div class="prev-estate" id="hero-estate">📍 Atlanta, GA — Henderson Estate</div>
-          <div class="prev-title" id="hero-title">Victorian Carved Mahogany Armchair, c.1890</div>
+          <div class="prev-estate" id="hero-estate">📍 Loading...</div>
+          <div class="prev-title" id="hero-title">Loading...</div>
           <div class="prev-foot">
-            <div><div class="prev-bid-lbl">Current Bid</div><div class="prev-bid" id="hero-bid">$187</div></div>
-            <div><div class="prev-time-lbl">Ends In</div><div class="prev-time" id="hero-timer">02:14:38</div></div>
+            <div><div class="prev-bid-lbl">Current Bid</div><div class="prev-bid" id="hero-bid">$--</div></div>
+            <div><div class="prev-time-lbl">Ends In</div><div class="prev-time" id="hero-timer">00:00:00</div></div>
           </div>
           <button class="btn-bid-prev" id="hero-bid-btn" onclick="openOv('bid')">Bid — See Your Full Cost First</button>
         </div>
@@ -587,7 +590,7 @@
       </div>
     </div>
     <div class="foot-col"><h4>For Buyers</h4><ul><li><a href="auction-browse.html">Browse Live Auctions</a></li><li><a href="#">How Bidding Works</a></li><li><a href="#">Buyer Protection</a></li><li><a href="#">Shipping Info</a></li><li><a href="account-dashboard.html">My Watchlist</a></li><li><a href="account-dashboard.html">Purchase Archive</a></li></ul></div>
-    <div class="foot-col"><h4>For Sellers</h4><ul><li><a href="#">List Your Estate</a></li><li><a href="seller-dashboard.html">Seller Dashboard</a></li><li><a href="#">Pricing &amp; Fees</a></li><li><a href="#">Seller Verification</a></li><li><a href="#">Success Stories</a></li></ul></div>
+    <div class="foot-col"><h4>For Sellers</h4><ul><li><a href="#">List Your Estate</a></li><li><a href="seller-dashboard.html" id="footer-seller-dashboard-link" style="display: none">Seller Dashboard</a></li><li><a href="#">Pricing &amp; Fees</a></li><li><a href="#">Seller Verification</a></li><li><a href="#">Success Stories</a></li></ul></div>
     <div class="foot-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Locations</a></li><li><a href="#">Franchise Opportunities</a></li><li><a href="#">Blog</a></li><li><a href="#">Contact</a></li><li><a href="#">Accessibility</a></li></ul></div>
   </div>
   <div class="foot-bottom">
@@ -620,7 +623,7 @@
 
 <div class="overlay" id="ov-bid"><div class="modal">
   <button class="modal-x" onclick="closeOv('bid')">✕</button>
-  <h2>Place Your Bid</h2><p class="sub">Victorian Carved Mahogany Armchair · Henderson Estate, Atlanta GA</p>
+  <h2>Place Your Bid</h2><p class="sub">Loading...</p>
   <div class="cost-box">
     <div class="cb-hd">💡 Your Full Cost at Current Bid</div>
     <div class="cb-r"><span>Current bid</span><span>$187.00</span></div>
@@ -653,7 +656,7 @@
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
 <div class="act-feed" id="act-feed"></div>
 
-<script>
+<script type="text/javascript">
 // ── GLOBAL SCOPE — all functions hoisted immediately, safe for inline onclick ──
 
 function $id(id){ return document.getElementById(id); }
@@ -810,7 +813,7 @@ async function doSellerApply(){
   var phone=document.getElementById('seller-phone')?.value?.trim();
   var city=document.getElementById('seller-city')?.value?.trim();
   var state=document.getElementById('seller-state')?.value?.trim();
-  var years=document.getElementById('seller-years')?.value;
+  var years=parseInt(document.getElementById('seller-years')?.value)||0;
   var bio=document.getElementById('seller-bio')?.value?.trim();
   var errEl=document.getElementById('seller-error');
   var sucEl=document.getElementById('seller-success');
@@ -821,11 +824,23 @@ async function doSellerApply(){
   try{
     var user=await FNA.Auth.getUser();
     if(!user){closeOv('seller');openOv('login');return;}
-    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
-    await _sb.from('sellers').insert({user_id:user.id,business_name:business,phone,city,state,business_bio:bio,is_verified:false,is_active:false});
+    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',{ auth: { persistSession: true, autoRefreshToken: true } });
+    await _sb.from('sellers').insert({
+      user_id:user.id,
+      business_name:business,
+      contact_name:contact,
+      phone,
+      city,
+      state,
+      years_in_business:years,
+      bio,
+      is_verified:false,
+      status:'pending'
+    });
     if(sucEl){sucEl.textContent='Application submitted! We\'ll review and contact you within 48 hours.';sucEl.style.display='block';}
     if(btn){btn.textContent='Application Submitted ✓';btn.disabled=true;}
   }catch(e){
+    console.error('Seller apply error:', e);
     if(errEl){errEl.textContent=e.message||'Could not submit. Please try again.';errEl.style.display='block';}
     if(btn){btn.textContent='Submit Application';btn.disabled=false;}
   }
@@ -854,6 +869,30 @@ async function checkAuthState(){
       var avEl=document.getElementById('nav-user-av');
       if(nameEl)nameEl.textContent=firstName;
       if(avEl)avEl.textContent=firstName[0].toUpperCase();
+
+      // Check if user is an approved seller
+      try {
+        var sb = window.supabase.createClient(
+          'https://hwsjgclteuezauveujit.supabase.co',
+          'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+          { auth: { persistSession: true, autoRefreshToken: true } }
+        );
+        var { data: profile } = await sb.from('profiles').select('is_seller').eq('id', user.id).single();
+
+        if (profile && profile.is_seller) {
+          // Show seller dashboard links
+          var navLink = document.getElementById('nav-seller-dashboard-link');
+          var mobileLink = document.getElementById('mobile-seller-dashboard-link');
+          var footerLink = document.getElementById('footer-seller-dashboard-link');
+
+          if (navLink) navLink.style.display = 'flex';
+          if (mobileLink) mobileLink.style.display = 'block';
+          if (footerLink) footerLink.style.display = 'inline';
+        }
+      } catch (profileError) {
+        console.error('Profile check error:', profileError);
+        // Non-critical, just don't show seller links
+      }
     }
   }catch(e){}
 }
@@ -879,15 +918,38 @@ async function loadHeroItems(){
   try{
     // Use direct fresh client (bypass singleton) for reliability
     var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
-    var {data:items,error}=await _sb.from('items').select('id,title,category,condition,current_bid,starting_bid,bid_count,ends_at,sellers(business_name,city,state)').eq('status','live').order('bid_count',{ascending:false}).limit(5);
+    var {data:items,error}=await _sb.from('items').select('id,title,category,condition,current_bid,starting_bid,buyers_premium_pct,est_shipping_min,est_shipping_max,bid_count,ends_at,sellers(business_name,city,state)').eq('status','live').order('bid_count',{ascending:false}).limit(5);
     if(error||!items||items.length===0)return;
+
+    // Get true highest bids from bids table to ensure accuracy
+    var itemIds = items.map(item => item.id);
+    var {data:topBids,error:bidsError} = await _sb
+      .from('bids')
+      .select('item_id,amount')
+      .in('item_id', itemIds)
+      .order('amount', {ascending:false});
+
+    // Create map of item_id -> highest bid amount
+    var highestBidMap = {};
+    if(topBids && !bidsError){
+      topBids.forEach(bid => {
+        if(!highestBidMap[bid.item_id] || bid.amount > highestBidMap[bid.item_id]){
+          highestBidMap[bid.item_id] = parseFloat(bid.amount);
+        }
+      });
+    }
+
     var featured=items[0];
+    // Determine true highest bid for featured item
+    var trueHighestBid = highestBidMap[featured.id];
+    var featuredBid = trueHighestBid || parseFloat(featured.current_bid || featured.starting_bid || 0);
+
     var titleEl=document.getElementById('hero-title');
     var bidEl=document.getElementById('hero-bid');
     var estateEl=document.getElementById('hero-estate');
     var btnEl=document.getElementById('hero-bid-btn');
     if(titleEl)titleEl.textContent=featured.title;
-    if(bidEl)bidEl.textContent=FNA.UI.formatPrice(featured.current_bid||featured.starting_bid);
+    if(bidEl)bidEl.textContent=FNA.UI.formatPrice(featuredBid);
     if(estateEl)estateEl.textContent='📍 '+(featured.sellers?.city||'')+', '+(featured.sellers?.state||'')+' — '+(featured.sellers?.business_name||'');
     if(btnEl){btnEl.onclick=function(){window.location.href='auction-item-detail.html?id='+featured.id;};}
     // Start countdown for featured item
@@ -908,7 +970,10 @@ async function loadHeroItems(){
       var cats={'Furniture':'🪑','Art':'🖼️','Jewelry':'💍','Watches':'⌚','Lighting':'🪔','Rugs':'🏺','Collectibles':'🏺','Silver':'🥄','Electronics':'📺'};
       miniGrid.innerHTML=items.slice(1,5).map(function(item){
         var icon=cats[item.category]||'🪑';
-        var bid=FNA.UI.formatPrice(item.current_bid||item.starting_bid);
+        // Determine true highest bid for each mini item
+        var itemTrueHighestBid = highestBidMap[item.id];
+        var itemBid = itemTrueHighestBid || parseFloat(item.current_bid || item.starting_bid || 0);
+        var bid=FNA.UI.formatPrice(itemBid);
         var countdown=FNA.UI.formatCountdown(item.ends_at);
         return '<div class="mini-tile" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'"><div class="mini-icon">'+icon+'</div><div class="mini-name">'+escHtml(item.title.substring(0,28))+'</div><div class="mini-price">'+bid+'</div><div class="mini-bids">'+item.bid_count+' bids · '+countdown.text+'</div></div>';
       }).join('');

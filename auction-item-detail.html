@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Cache refresh: 2026-02-25T17:30:00Z -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Victorian Mahogany Armchair — Family Nest Auctions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -186,6 +189,15 @@
 
   /* proxy bid toggle */
   .proxy-toggle{margin-bottom:18px}
+  
+  /* bid form */
+  .bp-bid-form{margin-bottom:20px}
+  .bp-input-row{display:flex;align-items:stretch;margin-bottom:10px}
+  .bp-input-group{flex:1}
+  .bp-bid-btn{height:100%;border-radius:0 var(--r-sm) var(--r-sm) 0}
+  .bp-quick-bids{display:flex;gap:8px;margin-top:12px}
+  .quick-bid-btn{padding:8px 14px;background:var(--cream);border:1px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--charcoal);cursor:pointer;transition:all .2s;flex:1;text-align:center;font-family:'Jost',sans-serif}
+  .quick-bid-btn:hover{background:var(--cream-mid);border-color:var(--green-sage)}
   .proxy-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
   .proxy-label{font-size:13.5px;font-weight:700;color:var(--charcoal)}
   .proxy-label small{display:block;font-size:11.5px;font-weight:400;color:var(--text-mid);margin-top:1px}
@@ -202,17 +214,17 @@
   .proxy-info{font-size:12px;color:#7a5a20;margin-bottom:8px;line-height:1.5}
   .bp-input-group{display:flex;align-items:center;gap:0;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);overflow:hidden;background:var(--white)}
   .bp-input-prefix{padding:12px 14px;background:var(--cream);font-size:16px;font-weight:700;color:var(--text-mid);border-right:1.5px solid var(--cream-dark)}
-  .bp-input{flex:1;border:none;outline:none;padding:12px 14px;font-size:16px;font-weight:700;color:var(--charcoal);font-family:'Jost',sans-serif;min-width:0}
-  .bp-input::placeholder{color:var(--text-light)}
-  .bp-suggestions{display:flex;gap:8px;margin-top:8px}
-  .bp-sug-btn{padding:6px 12px;background:var(--cream);border:1px solid var(--cream-dark);border-radius:var(--r-sm);font-size:12px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
-  .bp-sug-btn:hover{background:var(--green-pale);border-color:var(--green-sage)}
-  .btn-place-bid{width:100%;padding:14px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:16px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;margin-top:16px}
-  .btn-place-bid:hover{background:var(--green-mid);transform:translateY(-1px)}
-  .btn-place-bid:disabled{background:var(--cream-dark);cursor:not-allowed;transform:none}
-  .btn-watch-bp{padding:12px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-weight:600;color:var(--charcoal);cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;width:100%;margin-top:8px}
-  .btn-watch-bp:hover{border-color:var(--honey);color:var(--honey)}
-  .btn-watch-bp.on{background:var(--honey-pale);border-color:var(--honey);color:#7a5a20}lid var(--cream-dark)}
+  .bp-input{flex:1;padding:12px 14px;border:none;font-size:16px;font-weight:600;color:var(--charcoal);font-family:'Jost',sans-serif;background:transparent;min-width:0}
+  .bp-input:focus{outline:none}
+  .bp-input::placeholder{color:var(--text-light);font-weight:400}
+  .bp-bid-btn{background:var(--green-deep);color:white;border:none;padding:12px 24px;font-size:14px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap}
+  .bp-bid-btn:hover{background:var(--green-mid);transform:translateY(-1px)}
+  .bp-bid-btn:disabled{background:var(--cream-dark);color:var(--text-light);cursor:not-allowed;transform:none}
+  .bp-login-prompt{background:var(--honey-pale);border-radius:var(--r-sm);padding:16px;text-align:center;margin-top:20px}
+  .bp-login-prompt p{font-size:13.5px;color:#7a5a20;margin-bottom:12px}
+  .bp-login-btn{background:var(--honey);color:var(--green-deep);border:none;padding:10px 20px;border-radius:var(--r-sm);font-size:13px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+  .bp-login-btn:hover{background:var(--honey-light);transform:translateY(-1px)}
+  .bp-footer{background:var(--cream);padding:16px 24px;border-top:1px solid var(--cream-mid);font-size:11.5px;color:var(--text-light);text-align:center;line-height:1.5}lid var(--cream-dark)}
   .bp-input-group input{flex:1;border:none;outline:none;padding:12px 14px;font-size:18px;font-weight:700;font-family:'Cormorant Garamond',serif;color:var(--charcoal);background:transparent}
 
   /* quick bid buttons */
@@ -231,10 +243,9 @@
   .btn-watch{width:100%;padding:12px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-md);color:var(--text-mid);font-size:14px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px}
   .btn-watch:hover{background:var(--cream);border-color:var(--green-sage);color:var(--green-deep)}
   .btn-watch.watching{background:var(--honey-pale);border-color:var(--honey);color:#7a5a20}
-</style>;background:var(--cream);border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-weight:700;color:var(--charcoal);cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
   .qb-btn:hover{background:var(--green-pale);border-color:var(--green-sage)}
   .qb-btn.primary{background:var(--green-deep);border-color:var(--green-deep);color:white}
-  .qb-btn.primary:hover{background:var(--green-mid)}eam);border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--charcoal);cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;text-align:center}
+  .qb-btn.primary:hover{background:var(--green-mid)}
   .qb-btn:hover{border-color:var(--green-mid);background:var(--green-pale);color:var(--green-deep)}
   .qb-btn.selected{border-color:var(--green-deep);background:var(--green-pale);color:var(--green-deep)}
 
@@ -369,7 +380,7 @@
 
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/api.js"></script>
+  <script src="js/api.js?v=2"></script>
 </head>
 <body>
 
@@ -434,7 +445,7 @@
   <span class="sep">›</span>
   <a href="auction-browse.html">Live Auctions</a>
   <span class="sep">›</span>
-  <a href="#">Henderson Estate — Atlanta, GA</a>
+  <a href="#">Loading...</a>
   <span class="sep">›</span>
   <span>Victorian Carved Mahogany Armchair</span>
 </div>
@@ -467,8 +478,8 @@
 
     <!-- ITEM INFO -->
     <div class="item-info">
-      <div class="item-estate-tag">📍 Henderson Estate · Atlanta, GA · Sale #4821</div>
-      <h1 class="item-title" id="item-title">Victorian Carved Mahogany Armchair, c.1890</h1>
+      <div class="item-estate-tag">📍 Loading...</div>
+      <h1 class="item-title" id="item-title">Loading...</h1>
       <div class="item-meta-row">
         <span class="meta-pill green">✅ Excellent Condition</span>
         <span class="meta-pill honey">🏺 Furniture &amp; Seating</span>
@@ -476,9 +487,7 @@
         <span class="meta-pill">🤖 AI-Verified Description</span>
       </div>
       <div class="item-desc">
-        <p>A magnificent example of late Victorian craftsmanship, this hand-carved mahogany armchair dates to approximately 1890. The piece features intricate floral and foliate carvings along the crest rail and arm terminals, characteristic of the period's ornate aesthetic sensibility.</p>
-        <p>The original horsehair and velvet upholstery has been expertly reupholstered in a period-appropriate deep burgundy velvet, preserving the chair's authentic silhouette while providing comfortable modern seating. All four legs retain their original brass casters in working condition.</p>
-        <p>Provenance: Acquired by the Henderson family circa 1920 from an Atlanta estate auction. Has remained in continuous family possession for over 100 years.</p>
+        <p>Loading description...</p>
       </div>
     </div>
 
@@ -534,9 +543,9 @@
     <div class="section-card">
       <div class="sc-title">🏡 About the Seller</div>
       <div class="seller-card">
-        <div class="seller-avatar">H</div>
+        <div class="seller-avatar">?</div>
         <div style="flex:1">
-          <div class="seller-name">Henderson Estate Sales · Atlanta, GA</div>
+          <div class="seller-name">Loading...</div>
           <div><span class="stars">★★★★★</span> <span style="font-size:13px;color:var(--text-mid)">4.9 rating · Member since 2021</span></div>
           <div class="seller-stats">
             <div class="ss-item"><strong>312</strong> items sold</div>
@@ -553,8 +562,8 @@
   <!-- RIGHT: BID PANEL -->
   <div class="bid-panel">
     <div class="bp-header">
-      <div class="bp-estate">📍 Henderson Estate · Atlanta, GA</div>
-      <div class="bp-title">Victorian Carved Mahogany Armchair</div>
+      <div class="bp-estate">📍 Loading...</div>
+      <div class="bp-title">Loading...</div>
     </div>
     <div class="bp-body">
 
@@ -687,24 +696,11 @@
 
 <!-- RELATED ITEMS -->
 <div class="related-sec">
-  <div class="related-title">More from Henderson Estate</div>
+  <div class="related-title">Loading...</div>
   <div class="related-grid">
-    <a class="rel-card" href="auction-item-detail.html">
-      <div class="rel-img" style="background:linear-gradient(135deg,#f8f0e0,#f0e4c0)">🪔</div>
-      <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Antique Tiffany-Style Table Lamp</div><div class="rel-footer"><div class="rel-bid">$340</div><div class="rel-time">4h left</div></div></div>
-    </a>
-    <a class="rel-card" href="auction-item-detail.html">
-      <div class="rel-img" style="background:linear-gradient(135deg,#f0e8f4,#e0d0e8)">🏺</div>
-      <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Hand-Knotted Persian Wool Rug, 8×10</div><div class="rel-footer"><div class="rel-bid">$215</div><div class="rel-time">1d left</div></div></div>
-    </a>
-    <a class="rel-card" href="auction-item-detail.html">
-      <div class="rel-img" style="background:linear-gradient(135deg,#EEF7EE,#d0e4d0)">🖊️</div>
-      <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Victorian Mahogany Writing Desk</div><div class="rel-footer"><div class="rel-bid">$520</div><div class="rel-time u">2h left</div></div></div>
-    </a>
-    <a class="rel-card" href="auction-item-detail.html">
-      <div class="rel-img" style="background:linear-gradient(135deg,#f8f4e8,#f0e8d0)">🪞</div>
-      <div class="rel-body"><div class="rel-estate">Henderson Estate · Atlanta, GA</div><div class="rel-name">Gilded Victorian Wall Mirror, 36"</div><div class="rel-footer"><div class="rel-bid">$890</div><div class="rel-time">3d left</div></div></div>
-    </a>
+    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-light);font-size:14px;">
+      Loading related items...
+    </div>
   </div>
 </div>
 
@@ -750,7 +746,8 @@
 <!-- TOAST -->
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+<script type="text/javascript">
+/* fix-visible-js 2026-02-25-18-10 */
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
   if(!h||!m)return;
@@ -758,7 +755,7 @@ function toggleMenu(){
   m.classList.toggle('open');
   document.body.style.overflow=m.classList.contains('open')?'hidden':'';
 }
-</script><script>
+
 // ── GALLERY STATE (safe to declare outside DOMContentLoaded) ──
 const imgs   = ['🪑','🔍','🪵','🧵','🏷️','📏'];
 const labels = ['Main view','Detail — carvings','Wood grain','Upholstery','Label/markings','Dimensions'];
@@ -778,9 +775,14 @@ function setText(id, val){ const e=el(id); if(e) e.textContent=val; }
 function setClass(id, cls, on){ const e=el(id); if(e) e.classList.toggle(cls,on); }
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function getSB(){
+  if (!window.supabase) {
+    console.error('Supabase SDK not loaded');
+    return null;
+  }
   return window.supabase.createClient(
     'https://hwsjgclteuezauveujit.supabase.co',
-    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+    { auth: { persistSession: true, autoRefreshToken: true } }
   );
 }
 
@@ -893,7 +895,16 @@ async function submitBid(){
   try{
     var user=await FNA.Auth.getUser();
     if(!user){ closeConfirm(); toast('Please sign in to bid','🔒 Sign In Required'); setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500); return; }
+    console.log('Placing bid for user:', user.id);
     var sb=getSB();
+    // Check session is loaded
+    const { data: { session } } = await sb.auth.getSession();
+    console.log('Session exists:', !!session);
+    if (!session) {
+      toast('Please sign in again','🔒 Session Expired');
+      setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500);
+      return;
+    }
     // Validate bid is above current
     var{data:item,error:iErr}=await sb.from('items').select('current_bid,ends_at,status,bid_count').eq('id',itemId).single();
     if(iErr||!item){ throw new Error('Could not load item details.'); }
@@ -903,16 +914,35 @@ async function submitBid(){
     if(amount<minBid){ throw new Error('Bid must be at least $'+minBid+'.'); }
     // Mark previous winning bids as not winning
     await sb.from('bids').update({is_winning:false}).eq('item_id',itemId).eq('is_winning',true);
-    // Insert new bid (column is user_id, not bidder_id; no is_proxy column in schema)
+    // Insert new bid - include both user_id and bidder_id to handle schema variations
     var{error:bErr}=await sb.from('bids').insert({
-      item_id:itemId, user_id:user.id,
-      amount:amount, max_amount:maxAmount,
+      item_id:itemId,
+      user_id:user.id,
+      bidder_id:user.id,  // Include if column exists to satisfy NOT NULL constraint
+      amount:amount,
+      max_amount:maxAmount,
       is_winning:true
     });
-    if(bErr) throw new Error(bErr.message);
+    if(bErr) {
+      // If error is about bidder_id column, try without it
+      if (bErr.message && bErr.message.includes('bidder_id')) {
+        console.log('Retrying insert without bidder_id...');
+        var{error:bErr2}=await sb.from('bids').insert({
+          item_id:itemId,
+          user_id:user.id,
+          amount:amount,
+          max_amount:maxAmount,
+          is_winning:true
+        });
+        if(bErr2) throw new Error(bErr2.message);
+      } else {
+        throw new Error(bErr.message);
+      }
+    }
     // Update item current bid and bid count
     await sb.from('items').update({
       current_bid:amount,
+      current_bidder_id:user.id,
       bid_count:(item.bid_count||0)+1
     }).eq('id',itemId);
     closeConfirm();
@@ -926,6 +956,7 @@ async function submitBid(){
     window._pendingBid=null; window._pendingMax=null;
     if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
   }catch(err){
+    console.error('Bid error:', err);
     closeConfirm();
     if(btn){ btn.textContent='✓ Confirm Bid'; btn.disabled=false; }
     toast(err.message||'Bid failed — please try again','⚠️ Error');
@@ -940,6 +971,13 @@ async function toggleWatchlist(){
     var user=await FNA.Auth.getUser();
     if(!user){ toast('Please sign in to save items','🔒 Sign In Required'); return; }
     var sb=getSB();
+    // Check session is loaded
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) {
+      toast('Please sign in again','🔒 Session Expired');
+      setTimeout(function(){window.location.href='family-nest-auctions.html?login=1';},1500);
+      return;
+    }
     if(watching){
       await sb.from('watchlist').delete().eq('user_id',user.id).eq('item_id',itemId);
       watching=false;
@@ -950,6 +988,7 @@ async function toggleWatchlist(){
     setText('watch-btn', watching?'❤️ Watchlist':'🤍 Watchlist');
     toast(watching?'Added to your watchlist!':'Removed from watchlist.', watching?'❤️ Watching':'✕ Removed');
   }catch(e){
+    console.error('Watchlist error:', e);
     toast(e.message||'Could not update watchlist','⚠️ Error');
   }
 }

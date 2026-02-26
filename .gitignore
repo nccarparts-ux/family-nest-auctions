@@ -32,3 +32,15 @@ complete_response.txt
 # IDE files
 .vscode/
 .idea/
+
+# Local tooling and configuration
+.claude/
+
+# Temporary deployment and test files
+*.bat
+*.log
+*.JPG
+*.jpg
+*.png
+temp_*.html
+deployed_*.html

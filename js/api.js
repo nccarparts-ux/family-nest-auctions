@@ -10,6 +10,10 @@ const SITE_URL = window.location.origin
 // ── INIT ─────────────────────────────────────────────────────
 let _sb = null
 function sb() {
+  if (!window.supabase) {
+    console.error('Supabase SDK not loaded. Check network or script tag.')
+    return null
+  }
   if (!_sb) {
     _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
       auth: { persistSession: true, autoRefreshToken: true }
@@ -474,4 +478,195 @@ const Admin = {
   },
 
   async getAllUsers({ status, role, search, limit = 50, offset = 0 } = {}) {
-    let
+    let query = sb()
+      .from('profiles')
+      .select('id, email, full_name, created_at, last_sign_in_at, role, status')
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
+
+    if (status && status !== 'All') query = query.eq('status', status)
+    if (role && role !== 'All') query = query.eq('role', role)
+    if (search) query = query.or(`email.ilike.%${search}%,full_name.ilike.%${search}%`)
+
+    const { data, error, count } = await query
+    if (error) { console.error('getAllUsers error:', error); return { users: [], total: 0 } }
+    return { users: data || [], total: count || 0 }
+  }
+}
+
+// ── PAYMENTS ─────────────────────────────────────────────────────
+const Payments = {
+  async createPayout(sellerId, amount, description) {
+    const { data, error } = await sb()
+      .from('payouts')
+      .insert({ seller_id: sellerId, amount, description })
+      .select()
+      .single()
+    if (error) throw error
+    return data
+  },
+  async getPayoutHistory(sellerId) {
+    const { data } = await sb()
+      .from('payouts')
+      .select('*')
+      .eq('seller_id', sellerId)
+      .order('created_at', { ascending: false })
+    return data || []
+  }
+}
+
+// ── SEARCH ─────────────────────────────────────────────────────
+const Search = {
+  async items(query, filters = {}) {
+    let q = sb()
+      .from('items')
+      .select(`
+        id, title, description, category, condition,
+        current_bid, starting_bid, bid_count,
+        ends_at, status,
+        item_photos (storage_url, is_primary),
+        sellers (business_name, city, state)
+      `)
+      .ilike('title', `%${query}%`)
+      .eq('status', 'live')
+      .order('ends_at', { ascending: true })
+      .limit(20)
+
+    if (filters.category) q = q.eq('category', filters.category)
+    if (filters.minPrice) q = q.gte('current_bid', filters.minPrice)
+    if (filters.maxPrice) q = q.lte('current_bid', filters.maxPrice)
+
+    const { data } = await q
+    return data || []
+  }
+}
+
+// ── NOTIFICATIONS ─────────────────────────────────────────────────────
+const Notifications = {
+  async subscribe(itemId, types = ['outbid', 'ending']) {
+    const user = await Auth.getUser()
+    if (!user) throw new Error('Not authenticated')
+
+    const { error } = await sb()
+      .from('watchlist')
+      .upsert({
+        user_id: user.id,
+        item_id: itemId,
+        notify_outbid: types.includes('outbid'),
+        notify_ending: types.includes('ending')
+      }, { onConflict: 'user_id,item_id' })
+
+    if (error) throw error
+  },
+  async unsubscribe(itemId) {
+    const user = await Auth.getUser()
+    if (!user) return
+
+    await sb()
+      .from('watchlist')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('item_id', itemId)
+  }
+}
+
+// ── STORAGE ─────────────────────────────────────────────────────
+const Storage = {
+  async uploadItemPhoto(file, itemId) {
+    const user = await Auth.getUser()
+    if (!user) throw new Error('Not authenticated')
+
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${itemId}/${Date.now()}.${fileExt}`
+
+    const { data, error } = await sb()
+      .storage
+      .from('item-photos')
+      .upload(fileName, file, { cacheControl: '3600', upsert: false })
+
+    if (error) throw error
+
+    // Create photo record
+    const { data: photo, error: photoError } = await sb()
+      .from('item_photos')
+      .insert({
+        item_id: itemId,
+        storage_url: data.path,
+        is_primary: false,
+        display_order: 0
+      })
+      .select()
+      .single()
+
+    if (photoError) throw photoError
+    return photo
+  },
+  async getPhotoUrl(path) {
+    const { data } = await sb()
+      .storage
+      .from('item-photos')
+      .getPublicUrl(path)
+    return data.publicUrl
+  }
+}
+
+// ── UI ─────────────────────────────────────────────────────
+const UI = {
+  formatPrice(amount) {
+    if (!amount && amount !== 0) return '—'
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount)
+  },
+  formatCountdown(endDate) {
+    const end = new Date(endDate)
+    const now = new Date()
+    const diffMs = end - now
+
+    if (diffMs <= 0) return { text: 'Ended', urgent: true }
+
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
+
+    if (days > 0) return { text: `${days}d ${hours}h`, urgent: days < 2 }
+    if (hours > 0) return { text: `${hours}h ${minutes}m`, urgent: hours < 6 }
+    return { text: `${minutes}m`, urgent: true }
+  },
+  primaryPhoto(photos) {
+    if (!photos || !photos.length) return null
+    const primary = photos.find(p => p.is_primary) || photos[0]
+    return primary.storage_url
+  },
+  startCountdowns() {
+    document.querySelectorAll('[data-countdown]').forEach(el => {
+      const endDate = el.dataset.countdown
+      const update = () => {
+        const { text, urgent } = this.formatCountdown(endDate)
+        el.textContent = text
+        if (urgent) el.classList.add('urgent')
+      }
+      update()
+      setInterval(update, 60000) // Update every minute
+    })
+  }
+}
+
+// ── EXPORT ─────────────────────────────────────────────────────
+window.FNA = {
+  Auth,
+  Items,
+  Bidding,
+  Watchlist,
+  Payments,
+  Search,
+  Notifications,
+  Storage,
+  UI,
+  Seller,
+  Admin,
+  getClient: () => sb()
+}

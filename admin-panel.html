@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Cache refresh: 2026-02-25T17:30:00Z -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Admin Panel — Family Nest Auctions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -268,7 +271,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="js/api.js"></script>
+  <script src="js/api.js?v=2"></script>
 </head>
 <body>
 
@@ -319,27 +322,27 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
   <nav class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-label">Platform</div>
-      <button class="nav-item active" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span>Dashboard</button>
-      <button class="nav-item" onclick="switchTab('monitor',this)"><span class="nav-icon">🔴</span>Live Monitor<span class="nav-badge green">18</span></button>
-      <button class="nav-item" onclick="switchTab('analytics',this)"><span class="nav-icon">📈</span>Analytics</button>
+      <button type="button" class="nav-item active" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span>Dashboard</button>
+      <button type="button" class="nav-item" onclick="switchTab('monitor',this)"><span class="nav-icon">🔴</span>Live Monitor<span class="nav-badge green">18</span></button>
+      <button type="button" class="nav-item" onclick="switchTab('analytics',this)"><span class="nav-icon">📈</span>Analytics</button>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Management</div>
-      <button class="nav-item" onclick="switchTab('listings',this)"><span class="nav-icon">📦</span>All Listings<span class="nav-badge honey">247</span></button>
-      <button class="nav-item" onclick="switchTab('users',this)"><span class="nav-icon">👥</span>Users</button>
-      <button class="nav-item" onclick="switchTab('sellers',this)"><span class="nav-icon">🏡</span>Sellers</button>
-      <button class="nav-item" onclick="switchTab('sales',this)"><span class="nav-icon">🗓️</span>Estate Sales</button>
+      <button type="button" class="nav-item" onclick="switchTab('listings',this)"><span class="nav-icon">📦</span>All Listings<span class="nav-badge honey">247</span></button>
+      <button type="button" class="nav-item" onclick="switchTab('users',this)"><span class="nav-icon">👥</span>Users</button>
+      <button type="button" class="nav-item" onclick="switchTab('sellers',this)"><span class="nav-icon">🏡</span>Sellers</button>
+      <button type="button" class="nav-item" onclick="switchTab('sales',this)"><span class="nav-icon">🗓️</span>Estate Sales</button>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Operations</div>
-      <button class="nav-item" onclick="switchTab('disputes',this)"><span class="nav-icon">⚖️</span>Disputes<span class="nav-badge red">3</span></button>
-      <button class="nav-item" onclick="switchTab('payouts',this)"><span class="nav-icon">💰</span>Payouts</button>
-      <button class="nav-item" onclick="switchTab('flags',this)"><span class="nav-icon">🚩</span>Flagged Items<span class="nav-badge red">7</span></button>
+      <button type="button" class="nav-item" onclick="switchTab('disputes',this)"><span class="nav-icon">⚖️</span>Disputes<span class="nav-badge red">3</span></button>
+      <button type="button" class="nav-item" onclick="switchTab('payouts',this)"><span class="nav-icon">💰</span>Payouts</button>
+      <button type="button" class="nav-item" onclick="switchTab('flags',this)"><span class="nav-icon">🚩</span>Flagged Items<span class="nav-badge red">7</span></button>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">System</div>
-      <button class="nav-item" onclick="switchTab('audit',this)"><span class="nav-icon">📋</span>Audit Log</button>
-      <button class="nav-item" onclick="switchTab('settings',this)"><span class="nav-icon">⚙️</span>Platform Settings</button>
+      <button type="button" class="nav-item" onclick="switchTab('audit',this)"><span class="nav-icon">📋</span>Audit Log</button>
+      <button type="button" class="nav-item" onclick="switchTab('settings',this)"><span class="nav-icon">⚙️</span>Platform Settings</button>
     </div>
   </nav>
 
@@ -357,7 +360,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 
       <div class="alert-strip red"><strong>🚨 3 active disputes</strong> require admin review — buyers and sellers are waiting for resolution.</div>
       <div class="alert-strip honey"><strong>⚠️ 7 flagged listings</strong> pending review — possible condition misrepresentation.</div>
-      <div class="alert-strip blue"><strong>💡 Henderson Estate</strong> has 5 overdue shipments — automated reminder sent 12h ago.</div>
+      <div class="alert-strip blue"><strong>💡 Seller</strong> has 5 overdue shipments — automated reminder sent 12h ago.</div>
 
       <div class="stat-grid">
         <div class="stat-card g"><div class="stat-icon">💰</div><div class="stat-val" id="stat-gmv">$84,220</div><div class="stat-label">Platform GMV This Month</div><div class="stat-delta up">↑ 22% MoM</div></div>
@@ -389,7 +392,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
         <div id="live-feed">
           <div class="audit-row"><div class="audit-time">Just now</div><div class="audit-icon">⚡</div><div class="audit-text"><span class="au-actor">K***a</span> placed bid $187 on Victorian Armchair<span class="audit-tag bid">BID</span></div></div>
           <div class="audit-row"><div class="audit-time">1 min ago</div><div class="audit-icon">👤</div><div class="audit-text"><span class="au-actor">New user</span> registered from Tampa, FL<span class="audit-tag user">USER</span></div></div>
-          <div class="audit-row"><div class="audit-time">2 min ago</div><div class="audit-icon">📦</div><div class="audit-text"><span class="au-actor">Henderson Estate</span> published new listing: Wedgwood Plates<span class="audit-tag system">LISTING</span></div></div>
+          <div class="audit-row"><div class="audit-time">2 min ago</div><div class="audit-icon">📦</div><div class="audit-text"><span class="au-actor">Seller</span> published new listing: Wedgwood Plates<span class="audit-tag system">LISTING</span></div></div>
           <div class="audit-row"><div class="audit-time">4 min ago</div><div class="audit-icon">🏆</div><div class="audit-text"><span class="au-actor">P***l</span> won — Art Deco Brooch · Final: $1,340<span class="audit-tag bid">WIN</span></div></div>
           <div class="audit-row"><div class="audit-time">6 min ago</div><div class="audit-icon">⚖️</div><div class="audit-text"><span class="au-actor">D***s T.</span> opened dispute #1042 — condition mismatch<span class="audit-tag admin">DISPUTE</span></div></div>
           <div class="audit-row"><div class="audit-time">9 min ago</div><div class="audit-icon">💰</div><div class="audit-text"><span class="au-actor">Payout processed</span> to Morrison Collection · $4,210<span class="audit-tag system">PAYOUT</span></div></div>
@@ -427,12 +430,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
           <input class="tt-input" type="text" placeholder="🔍 Search listings…">
           <select class="tt-select"><option>All Status</option><option>Live</option><option>Draft</option><option>Ended</option></select>
           <select class="tt-select"><option>All Categories</option><option>Furniture</option><option>Jewelry</option><option>Art</option></select>
-          <select class="tt-select"><option>All Sellers</option><option>Henderson Estate</option><option>Morrison Collection</option><option>Whitfield Gallery</option></select>
+          <select class="tt-select"><option>All Sellers</option><option>Seller 1</option><option>Seller 2</option><option>Seller 3</option></select>
         </div>
         <table class="data-table">
           <thead><tr><th>Item</th><th>Seller</th><th>Status</th><th>Current Bid</th><th>Bids</th><th>Views</th><th>Ends</th><th>Actions</th></tr></thead>
           <tbody>
-            <tr><td><strong>Victorian Mahogany Armchair</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-4821-0047</div></td><td>Henderson Estate</td><td><span class="pill live">🟢 Live</span></td><td><strong>$187</strong></td><td>18</td><td>1,240</td><td style="color:var(--red);font-weight:600">1h 42m</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening listing…','View')">View</button><button class="tbl-action" onclick="toast('Editing listing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Listing paused','⏸ Paused')">Pause</button></div></td></tr>
+            <tr><td><strong>Victorian Mahogany Armchair</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-4821-0047</div></td><td>Seller</td><td><span class="pill live">🟢 Live</span></td><td><strong>$187</strong></td><td>18</td><td>1,240</td><td style="color:var(--red);font-weight:600">1h 42m</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening listing…','View')">View</button><button class="tbl-action" onclick="toast('Editing listing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Listing paused','⏸ Paused')">Pause</button></div></td></tr>
             <tr><td><strong>Art Deco Diamond Brooch, 1920s</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-2103-0088</div></td><td>Morrison Collection</td><td><span class="pill live">🟢 Live</span></td><td><strong>$1,250</strong></td><td>55</td><td>4,820</td><td>3h left</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action" onclick="toast('Editing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Paused','⏸ Paused')">Pause</button></div></td></tr>
             <tr><td><strong>Signed Impressionist Oil Painting</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-3309-0021</div></td><td>Whitfield Gallery</td><td><span class="pill live">🟢 Live</span></td><td><strong>$2,800</strong></td><td>68</td><td>6,100</td><td>10h left</td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Opening…','View')">View</button><button class="tbl-action" onclick="toast('Editing…','Edit')">Edit</button><button class="tbl-action danger" onclick="toast('Paused','⏸ Paused')">Pause</button></div></td></tr>
             <tr><td><strong>Edwardian Silk Velvet Settee</strong><div style="font-size:11.5px;color:var(--text-light)">#FNA-5012-0014 · 🚩 Flagged</div></td><td>Carmichael Estate</td><td><span class="pill flagged">🚩 Flagged</span></td><td><strong>$290</strong></td><td>12</td><td>880</td><td>20h left</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openDisputeModal('Edwardian Settee')">Review</button><button class="tbl-action danger" onclick="toast('Listing removed','❌ Removed')">Remove</button></div></td></tr>
@@ -534,7 +537,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
         <table class="data-table">
           <thead><tr><th>Seller</th><th>Available</th><th>Pending</th><th>Total Owed</th><th>Bank</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody>
-            <tr><td><strong>Henderson Estate</strong></td><td>$8,440</td><td>$3,220</td><td>$11,660</td><td>Chase ···4521</td><td><span class="pill processing">⚙️ Processing</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Payout approved for Henderson','✅ Approved')">Approve</button></div></td></tr>
+            <tr><td><strong>Seller</strong></td><td>$8,440</td><td>$3,220</td><td>$11,660</td><td>Chase ···4521</td><td><span class="pill processing">⚙️ Processing</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Payout approved for Seller','✅ Approved')">Approve</button></div></td></tr>
             <tr><td><strong>Morrison Collection</strong></td><td>$6,800</td><td>$0</td><td>$6,800</td><td>BofA ···8812</td><td><span class="pill active">✅ Ready</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Payout sent to Morrison','💸 Sent')">Send</button></div></td></tr>
             <tr><td><strong>Whitfield Gallery</strong></td><td>$4,900</td><td>$1,200</td><td>$6,100</td><td>Wells Fargo ···3341</td><td><span class="pill pending">⏳ Dispute Hold</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="switchTab('disputes',null)">View Dispute</button></div></td></tr>
             <tr><td><strong>Larson Collection</strong></td><td>$3,640</td><td>$560</td><td>$4,200</td><td>Chase ···9920</td><td><span class="pill active">✅ Ready</span></td><td><div class="tbl-actions"><button class="tbl-action" onclick="toast('Payout sent to Larson','💸 Sent')">Send</button></div></td></tr>
@@ -577,7 +580,7 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
       <div class="section-card" style="padding:0">
         <div class="audit-row"><div class="audit-time">2:14:32 PM</div><div class="audit-icon">⚡</div><div class="audit-text"><span class="au-actor">K***a</span> bid $187 on #FNA-4821-0047 (Victorian Armchair) from IP 74.125.x.x<span class="audit-tag bid">BID</span></div></div>
         <div class="audit-row"><div class="audit-time">2:13:01 PM</div><div class="audit-icon">👤</div><div class="audit-text">New user registered: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1f753172706d7e737a6c5f7a727e7673317c7072">[email&#160;protected]</a> from Tampa, FL<span class="audit-tag user">USER</span></div></div>
-        <div class="audit-row"><div class="audit-time">2:11:44 PM</div><div class="audit-icon">📦</div><div class="audit-text"><span class="au-actor">Henderson Estate</span> published listing #FNA-4821-0054 — Wedgwood Plates<span class="audit-tag system">LISTING</span></div></div>
+        <div class="audit-row"><div class="audit-time">2:11:44 PM</div><div class="audit-icon">📦</div><div class="audit-text"><span class="au-actor">Seller</span> published listing #FNA-4821-0054 — Wedgwood Plates<span class="audit-tag system">LISTING</span></div></div>
         <div class="audit-row"><div class="audit-time">2:08:19 PM</div><div class="audit-icon">🏆</div><div class="audit-text"><span class="au-actor">P***l</span> won auction #FNA-2103-0088 (Art Deco Brooch) · Final: $1,340<span class="audit-tag bid">WIN</span></div></div>
         <div class="audit-row"><div class="audit-time">2:05:47 PM</div><div class="audit-icon">🔐</div><div class="audit-text">Admin Sarah H. logged in from 192.168.1.x<span class="audit-tag admin">ADMIN</span></div></div>
         <div class="audit-row"><div class="audit-time">2:02:31 PM</div><div class="audit-icon">⚖️</div><div class="audit-text"><span class="au-actor">D***s T.</span> opened dispute #1042 against Carmichael Estate<span class="audit-tag admin">DISPUTE</span></div></div>
@@ -665,7 +668,18 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 <!-- TOAST -->
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script type="text/javascript">
+// Debug: log when script loads
+console.log('Admin panel script loading...');
+
+// Global click handler for debugging
+document.addEventListener('click', function(e) {
+  if (e.target.closest && e.target.closest('.nav-item[type="button"]')) {
+    console.log('Global click detected on nav button:', e.target.closest('.nav-item[type="button"]'));
+  }
+}, true); // Use capture phase to catch all clicks
+
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
   if(!h||!m)return;
@@ -673,7 +687,7 @@ function toggleMenu(){
   m.classList.toggle('open');
   document.body.style.overflow=m.classList.contains('open')?'hidden':'';
 }
-</script><script>
+
 function el(id){return document.getElementById(id)}
 function setText(id,v){const e=el(id);if(e)e.textContent=v}
 function toast(msg,title){
@@ -682,13 +696,43 @@ function toast(msg,title){
   t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3400);
 }
 function switchTab(name,btn){
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const p=el('panel-'+name);if(p)p.classList.add('active');
-  if(btn)btn.classList.add('active');
-  else document.querySelectorAll('.nav-item').forEach(n=>{
-    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+name+"'"))n.classList.add('active');
-  });
+  try {
+    console.log('switchTab called:', name, btn);
+    // Hide all panels
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    // Deactivate all nav items
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    // Show selected panel
+    const panelId = 'panel-' + name;
+    const panel = document.getElementById(panelId);
+    console.log('Panel ID:', panelId, 'Found:', panel);
+    if (panel) {
+      panel.classList.add('active');
+      console.log('Panel activated:', panelId);
+    } else {
+      console.error('Panel not found:', panelId);
+      alert('Panel not found: ' + panelId + '. Check console for details.');
+      return;
+    }
+    // Activate clicked nav item
+    if (btn && typeof btn.classList !== 'undefined') {
+      btn.classList.add('active');
+      console.log('Button activated:', btn);
+    } else {
+      // Find the button with matching onclick
+      const button = document.querySelector(`.nav-item[onclick*="switchTab('${name}',"`);
+      if (button) {
+        button.classList.add('active');
+        console.log('Found and activated button by selector:', button);
+      }
+    }
+    // Update URL hash for bookmarking
+    window.location.hash = 'tab-' + name;
+    console.log('Tab switched successfully to:', name);
+  } catch (error) {
+    console.error('switchTab error:', error);
+    alert('Error switching tab: ' + error.message);
+  }
 }
 function openDisputeModal(title){
   setText('modal-title','⚖️ Dispute Review');
@@ -764,7 +808,56 @@ function buildChart(containerId, vals, color, labelId, labelFn){
   if(lb) lb.innerHTML=vals.map((_,i)=>`<div style="flex:1;font-size:9px;color:var(--text-light);text-align:center">${['F6','F7','F8','F9','F10','F11','F12','F13','F14','F15','F16','F17','F18','F19'][i]||'—'}</div>`).join('');
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async ()=>{
+  // Check admin authentication
+  try {
+    // Initialize Supabase client with auth
+    const sb = window.supabase.createClient(
+      'https://hwsjgclteuezauveujit.supabase.co',
+      'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+      { auth: { persistSession: true, autoRefreshToken: true } }
+    );
+
+    // Check if user is signed in
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) {
+      window.location.href = 'family-nest-auctions.html?login=1';
+      return;
+    }
+
+    // Check if user is admin
+    const { data: profile } = await sb.from('profiles').select('is_admin').eq('id', user.id).single();
+    if (!profile || !profile.is_admin) {
+      alert('Admin access required. Redirecting to homepage.');
+      window.location.href = 'family-nest-auctions.html';
+      return;
+    }
+  } catch (error) {
+    console.error('Auth error:', error);
+    // Check if is_admin column doesn't exist
+    if (error.message && error.message.includes('is_admin') && error.message.includes('column')) {
+      const proceed = confirm('Admin system not set up. Run setup_admin_system.sql in Supabase first.\n\nClick OK to continue anyway (for setup).');
+      if (!proceed) {
+        window.location.href = 'family-nest-auctions.html';
+        return;
+      }
+      // Allow temporary access for setup
+    } else if (error.message && error.message.includes('JWT')) {
+      // Auth error, redirect to login
+      window.location.href = 'family-nest-auctions.html?login=1';
+      return;
+    } else {
+      // Other error, show alert
+      alert('Admin access error: ' + (error.message || 'Unknown error'));
+      window.location.href = 'family-nest-auctions.html';
+      return;
+    }
+  }
+
+  // User is authenticated admin, continue loading
+  console.log('Admin panel loaded, attaching event listeners...');
+
+
   buildLiveGrid();
   buildChart('gmv-chart',[4800,3900,5200,4100,6300,5800,4400,5100,6800,4200,7200,5600,6100,4820],'var(--green-sage)','gmv-labels',v=>'$'+v.toLocaleString());
   buildChart('user-chart',[42,38,55,48,71,66,44,59,72,41,88,64,77,58],'var(--honey)','user-labels',v=>v+' users');
@@ -790,14 +883,30 @@ document.addEventListener('DOMContentLoaded',()=>{
     },8000);
   }
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
-  loadAdminStats(); loadAdminSellers(); loadAdminUsers();
+  // Load admin data with error handling
+  try {
+    await loadAdminStats();
+  } catch (e) {
+    console.error('Failed to load admin stats:', e);
+  }
+  try {
+    await loadAdminSellers();
+  } catch (e) {
+    console.error('Failed to load admin sellers:', e);
+  }
+  try {
+    await loadAdminUsers();
+  } catch (e) {
+    console.error('Failed to load admin users:', e);
+  }
 });
 
 var _sbAdmin=null;
 function getAdminSB(){
   if(!_sbAdmin) _sbAdmin=window.supabase.createClient(
     'https://hwsjgclteuezauveujit.supabase.co',
-    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+    { auth: { persistSession: true, autoRefreshToken: true } }
   );
   return _sbAdmin;
 }
@@ -817,14 +926,16 @@ async function loadAdminStats(){
     if(r3.count!=null)setText('stat-sales',r3.count.toLocaleString());
     if(r4.count!=null)setText('stat-bids',r4.count.toLocaleString());
     var d=el('stat-listings-delta');if(d&&r1.count!=null)d.textContent='Live right now';
-  }catch(e){}
+  }catch(e){console.error('loadAdminStats error:', e);}
 }
 
 async function loadAdminSellers(){
+  console.log('loadAdminSellers called');
   var sb=getAdminSB(); var tbody=el('sellers-tbody'); if(!tbody)return;
   try{
     var {data,error}=await sb.from('sellers').select('*').order('created_at',{ascending:false}).limit(50);
     if(error)throw error;
+    console.log('Sellers query result:', data ? data.length : 0, 'sellers', data);
     if(!data||!data.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">No sellers in database yet.</td></tr>';return;}
     var verified=data.filter(function(s){return s.is_verified;}).length;
     var pending=data.filter(function(s){return !s.is_verified;}).length;
@@ -832,21 +943,54 @@ async function loadAdminSellers(){
     tbody.innerHTML=data.map(function(s){
       var sp=s.is_verified?'<span class="pill verified">✅ Verified</span>':(s.status==='suspended'?'<span class="pill suspended">⚠️ Suspended</span>':'<span class="pill pending">⏳ Pending</span>');
       var yr=s.created_at?new Date(s.created_at).getFullYear():'—';
-      var sid=(s.id||'').replace(/'/g,"\'");
+      var sid=(s.id||'').replace(/'/g,"\\'");
       var acts=s.is_verified
-        ?'<button class="tbl-action danger" onclick="adminSuspendSeller(''+sid+'',this)">Suspend</button>'
-        :'<button class="tbl-action" onclick="adminApproveSeller(''+sid+'',this)">Approve</button> <button class="tbl-action danger" onclick="adminSuspendSeller(''+sid+'',this)">Reject</button>';
+        ?'<button class="tbl-action danger" onclick="adminSuspendSeller(\\'' + sid + '\\',this)">Suspend</button>'
+        :'<button class="tbl-action" onclick="adminApproveSeller(\\'' + sid + '\\',this)">Approve</button> <button class="tbl-action danger" onclick="adminSuspendSeller(\\'' + sid + '\\',this)">Reject</button>';
       var loc=escA((s.city||'')+(s.state?', '+s.state:''));
       return '<tr><td><strong>'+escA(s.business_name||'Unnamed')+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+loc+'</div></td><td>'+sp+'</td><td>'+loc+'</td><td>—</td><td>'+yr+'</td><td><div class="tbl-actions">'+acts+'</div></td></tr>';
     }).join('');
-  }catch(e){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:20px">Error: '+((e&&e.message)||'unknown')+'</td></tr>';}
+  }catch(e){
+    console.error('loadAdminSellers error:', e);
+    console.error('Error details:', JSON.stringify(e, null, 2));
+    if (e.details) console.error('Details:', e.details);
+    if (e.hint) console.error('Hint:', e.hint);
+    if (e.code) console.error('PostgreSQL error code:', e.code);
+
+    let errorMessage = (e && e.message) || 'Unknown error';
+    if (e.code === '42P01') {
+      errorMessage = 'Sellers table does not exist. Please run the setup_admin_system.sql script in Supabase SQL Editor.';
+    } else if (e.message && e.message.includes('permission denied')) {
+      errorMessage = 'Permission denied. Ensure RLS policies allow admin access. Run setup_admin_system.sql.';
+    }
+
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:20px">Error loading sellers: '+escA(errorMessage)+'<br><small>Check browser console for details.</small></td></tr>';
+  }
 }
 
 async function adminApproveSeller(id,btn){
   if(!id)return;if(btn){btn.textContent='Approving…';btn.disabled=true;}
-  var {error}=await getAdminSB().from('sellers').update({is_verified:true,status:'active'}).eq('id',id);
-  if(error){toast('Error: '+error.message,'⚠️');if(btn){btn.textContent='Approve';btn.disabled=false;}return;}
-  toast('Seller approved','✅ Approved');loadAdminSellers();
+  try {
+    // First get the seller to find user_id
+    var {data:seller,error:sellerError}=await getAdminSB().from('sellers').select('user_id').eq('id',id).single();
+    if(sellerError) throw sellerError;
+
+    // Update seller to verified and active
+    var {error}=await getAdminSB().from('sellers').update({is_verified:true,status:'active'}).eq('id',id);
+    if(error) throw error;
+
+    // Update user's profile to is_seller = true
+    if(seller.user_id){
+      var {error:profileError}=await getAdminSB().from('profiles').update({is_seller:true}).eq('id',seller.user_id);
+      if(profileError) console.warn('Could not update profile:', profileError);
+      // Not critical if profile update fails
+    }
+
+    toast('Seller approved','✅ Approved');loadAdminSellers();
+  } catch(e) {
+    toast('Error: '+(e.message||'Unknown'),'⚠️');
+    if(btn){btn.textContent='Approve';btn.disabled=false;}
+  }
 }
 async function adminSuspendSeller(id,btn){
   if(!id)return;if(btn){btn.textContent='Suspending…';btn.disabled=true;}

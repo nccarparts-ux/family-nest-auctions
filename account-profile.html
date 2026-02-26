@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Cache refresh: 2026-02-25T17:30:00Z -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>My Profile — Family Nest Auctions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -400,12 +403,12 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong>&nbsp;<span id="t-msg"></span></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="js/api.js"></script>
-<script>
+<script src="js/api.js?v=2"></script>
+<script type="text/javascript">
 var SUPABASE_URL='https://hwsjgclteuezauveujit.supabase.co';
 var SUPABASE_KEY='sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS';
 var _sb=null;
-function getSB(){if(!_sb)_sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);return _sb;}
+function getSB(){if(!_sb)_sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY, { auth: { persistSession: true, autoRefreshToken: true } });return _sb;}
 
 function el(id){return document.getElementById(id);}
 function setText(id,v){var e=el(id);if(e)e.textContent=v;}
