@@ -320,6 +320,11 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 
   <!-- SIDEBAR -->
   <nav class="sidebar">
+    <!-- TEST BUTTON -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Debug</div>
+      <button type="button" class="nav-item" onclick="testNav()" style="background: #ff9900; color: #000;"><span class="nav-icon">🔧</span>Test JavaScript</button>
+    </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Platform</div>
       <button type="button" class="nav-item active" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span>Dashboard</button>
@@ -673,6 +678,13 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 // Debug: log when script loads
 console.log('Admin panel script loading...');
 
+// Test function to verify JavaScript is working
+window.testNav = function() {
+  console.log('testNav function called!');
+  alert('JavaScript is working! Click OK to continue debugging.');
+  return true;
+};
+
 // Global click handler for debugging
 document.addEventListener('click', function(e) {
   if (e.target.closest && e.target.closest('.nav-item[type="button"]')) {
@@ -857,6 +869,66 @@ document.addEventListener('DOMContentLoaded',async ()=>{
   // User is authenticated admin, continue loading
   console.log('Admin panel loaded, attaching event listeners...');
 
+  // Robust navigation setup - works even if inline onclick fails
+  console.log('Setting up navigation event listeners...');
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    // Event delegation on sidebar
+    sidebar.addEventListener('click', function(e) {
+      const button = e.target.closest('.nav-item[type="button"]');
+      if (!button) return;
+
+      console.log('Sidebar navigation clicked:', button);
+
+      // Get tab name from onclick attribute or data attribute
+      let tabName = null;
+      const onclick = button.getAttribute('onclick');
+      if (onclick && onclick.includes("switchTab('")) {
+        const match = onclick.match(/switchTab\('([^']+)'/);
+        if (match && match[1]) {
+          tabName = match[1];
+        }
+      }
+
+      // Fallback: try to get from data-tab attribute
+      if (!tabName) {
+        tabName = button.dataset.tab;
+      }
+
+      // Fallback: try to get from button text or icon
+      if (!tabName && button.textContent) {
+        const text = button.textContent.toLowerCase();
+        if (text.includes('dashboard')) tabName = 'overview';
+        else if (text.includes('monitor')) tabName = 'monitor';
+        else if (text.includes('analytics')) tabName = 'analytics';
+        else if (text.includes('listings')) tabName = 'listings';
+        else if (text.includes('users')) tabName = 'users';
+        else if (text.includes('sellers')) tabName = 'sellers';
+        else if (text.includes('sales')) tabName = 'sales';
+        else if (text.includes('disputes')) tabName = 'disputes';
+        else if (text.includes('payouts')) tabName = 'payouts';
+        else if (text.includes('flagged')) tabName = 'flags';
+        else if (text.includes('audit')) tabName = 'audit';
+        else if (text.includes('settings')) tabName = 'settings';
+      }
+
+      if (tabName) {
+        console.log('Switching to tab:', tabName);
+        switchTab(tabName, button);
+      } else {
+        console.error('Could not determine tab name for button:', button);
+        alert('Navigation error: Could not determine which tab to open.');
+      }
+
+      // Prevent default and stop propagation to avoid conflicts
+      e.preventDefault();
+      e.stopPropagation();
+    });
+
+    console.log('Sidebar event listener attached.');
+  } else {
+    console.error('Sidebar not found! Navigation will not work.');
+  }
 
   buildLiveGrid();
   buildChart('gmv-chart',[4800,3900,5200,4100,6300,5800,4400,5100,6800,4200,7200,5600,6100,4820],'var(--green-sage)','gmv-labels',v=>'$'+v.toLocaleString());
