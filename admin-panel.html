@@ -873,61 +873,121 @@ document.addEventListener('DOMContentLoaded',async ()=>{
   console.log('Setting up navigation event listeners...');
   const sidebar = document.querySelector('.sidebar');
   if (sidebar) {
-    // Event delegation on sidebar
+    // Event delegation on sidebar with error handling
     sidebar.addEventListener('click', function(e) {
-      const button = e.target.closest('.nav-item[type="button"]');
-      if (!button) return;
+      try {
+        const button = e.target.closest('.nav-item[type="button"]');
+        if (!button) return;
 
-      console.log('Sidebar navigation clicked:', button);
+        console.log('Sidebar navigation clicked:', button);
 
-      // Get tab name from onclick attribute or data attribute
-      let tabName = null;
-      const onclick = button.getAttribute('onclick');
-      if (onclick && onclick.includes("switchTab('")) {
-        const match = onclick.match(/switchTab\('([^']+)'/);
-        if (match && match[1]) {
-          tabName = match[1];
+        // Get tab name from onclick attribute or data attribute
+        let tabName = null;
+        const onclick = button.getAttribute('onclick');
+        if (onclick && onclick.includes("switchTab('")) {
+          const match = onclick.match(/switchTab\('([^']+)'/);
+          if (match && match[1]) {
+            tabName = match[1];
+          }
         }
-      }
 
-      // Fallback: try to get from data-tab attribute
-      if (!tabName) {
-        tabName = button.dataset.tab;
-      }
+        // Fallback: try to get from data-tab attribute
+        if (!tabName) {
+          tabName = button.dataset.tab;
+        }
 
-      // Fallback: try to get from button text or icon
-      if (!tabName && button.textContent) {
-        const text = button.textContent.toLowerCase();
-        if (text.includes('dashboard')) tabName = 'overview';
-        else if (text.includes('monitor')) tabName = 'monitor';
-        else if (text.includes('analytics')) tabName = 'analytics';
-        else if (text.includes('listings')) tabName = 'listings';
-        else if (text.includes('users')) tabName = 'users';
-        else if (text.includes('sellers')) tabName = 'sellers';
-        else if (text.includes('sales')) tabName = 'sales';
-        else if (text.includes('disputes')) tabName = 'disputes';
-        else if (text.includes('payouts')) tabName = 'payouts';
-        else if (text.includes('flagged')) tabName = 'flags';
-        else if (text.includes('audit')) tabName = 'audit';
-        else if (text.includes('settings')) tabName = 'settings';
-      }
+        // Fallback: try to get from button text or icon
+        if (!tabName && button.textContent) {
+          const text = button.textContent.toLowerCase();
+          if (text.includes('dashboard')) tabName = 'overview';
+          else if (text.includes('monitor')) tabName = 'monitor';
+          else if (text.includes('analytics')) tabName = 'analytics';
+          else if (text.includes('listings')) tabName = 'listings';
+          else if (text.includes('users')) tabName = 'users';
+          else if (text.includes('sellers')) tabName = 'sellers';
+          else if (text.includes('sales')) tabName = 'sales';
+          else if (text.includes('disputes')) tabName = 'disputes';
+          else if (text.includes('payouts')) tabName = 'payouts';
+          else if (text.includes('flagged')) tabName = 'flags';
+          else if (text.includes('audit')) tabName = 'audit';
+          else if (text.includes('settings')) tabName = 'settings';
+        }
 
-      if (tabName) {
-        console.log('Switching to tab:', tabName);
-        switchTab(tabName, button);
-      } else {
-        console.error('Could not determine tab name for button:', button);
-        alert('Navigation error: Could not determine which tab to open.');
-      }
+        if (tabName) {
+          console.log('Switching to tab:', tabName);
+          // Check if switchTab function exists
+          if (typeof window.switchTab === 'function') {
+            switchTab(tabName, button);
+          } else {
+            console.error('switchTab function not found!');
+            alert('Navigation system error: switchTab function is not available.');
+            // Fallback: manually switch panels
+            const panelId = 'panel-' + tabName;
+            const panel = document.getElementById(panelId);
+            if (panel) {
+              document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+              document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+              panel.classList.add('active');
+              button.classList.add('active');
+              console.log('Manual tab switch to:', tabName);
+            }
+          }
+        } else {
+          console.error('Could not determine tab name for button:', button);
+          alert('Navigation error: Could not determine which tab to open.');
+        }
 
-      // Prevent default and stop propagation to avoid conflicts
-      e.preventDefault();
-      e.stopPropagation();
+        // Prevent default and stop propagation to avoid conflicts
+        e.preventDefault();
+        e.stopPropagation();
+      } catch (error) {
+        console.error('Navigation error:', error);
+        alert('Navigation system error: ' + error.message);
+      }
     });
 
     console.log('Sidebar event listener attached.');
+
+    // Add data-tab attributes to all nav buttons for reliable fallback
+    document.querySelectorAll('.sidebar .nav-item[type="button"]').forEach(btn => {
+      const onclick = btn.getAttribute('onclick');
+      if (onclick && onclick.includes("switchTab('")) {
+        const match = onclick.match(/switchTab\('([^']+)'/);
+        if (match && match[1]) {
+          btn.dataset.tab = match[1];
+          console.log('Added data-tab="' + match[1] + '" to button:', btn);
+        }
+      }
+    });
+
+    // Backup: try again after a delay in case something interferes
+    setTimeout(() => {
+      console.log('Running backup navigation check...');
+      const sidebarCheck = document.querySelector('.sidebar');
+      if (sidebarCheck && !sidebarCheck._navAttached) {
+        console.log('Backup: Re-attaching navigation event listener');
+        // Re-attach the same listener as backup
+        sidebarCheck.addEventListener('click', function(e) {
+          const button = e.target.closest('.nav-item[type="button"]');
+          if (button && button.onclick && button.onclick.toString().includes('switchTab')) {
+            console.log('Backup listener triggered for button:', button);
+            // Just let the original onclick handle it
+            return;
+          }
+        });
+        sidebarCheck._navAttached = true;
+      }
+    }, 1000);
   } else {
     console.error('Sidebar not found! Navigation will not work.');
+    // Try again after a short delay in case DOM isn't ready yet
+    setTimeout(() => {
+      const sidebarRetry = document.querySelector('.sidebar');
+      if (sidebarRetry) {
+        console.log('Found sidebar on retry, reloading page to attach navigation');
+        location.reload();
+      }
+    }, 500);
   }
 
   buildLiveGrid();
