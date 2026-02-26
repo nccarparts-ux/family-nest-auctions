@@ -783,8 +783,24 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     }
   } catch (error) {
     console.error('Auth error:', error);
-    window.location.href = 'family-nest-auctions.html?login=1';
-    return;
+    // Check if is_admin column doesn't exist
+    if (error.message && error.message.includes('is_admin') && error.message.includes('column')) {
+      const proceed = confirm('Admin system not set up. Run setup_admin_system.sql in Supabase first.\n\nClick OK to continue anyway (for setup).');
+      if (!proceed) {
+        window.location.href = 'family-nest-auctions.html';
+        return;
+      }
+      // Allow temporary access for setup
+    } else if (error.message && error.message.includes('JWT')) {
+      // Auth error, redirect to login
+      window.location.href = 'family-nest-auctions.html?login=1';
+      return;
+    } else {
+      // Other error, show alert
+      alert('Admin access error: ' + (error.message || 'Unknown error'));
+      window.location.href = 'family-nest-auctions.html';
+      return;
+    }
   }
 
   // User is authenticated admin, continue loading
@@ -820,7 +836,8 @@ var _sbAdmin=null;
 function getAdminSB(){
   if(!_sbAdmin) _sbAdmin=window.supabase.createClient(
     'https://hwsjgclteuezauveujit.supabase.co',
-    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+    { auth: { persistSession: true, autoRefreshToken: true } }
   );
   return _sbAdmin;
 }
@@ -855,14 +872,14 @@ async function loadAdminSellers(){
     tbody.innerHTML=data.map(function(s){
       var sp=s.is_verified?'<span class="pill verified">✅ Verified</span>':(s.status==='suspended'?'<span class="pill suspended">⚠️ Suspended</span>':'<span class="pill pending">⏳ Pending</span>');
       var yr=s.created_at?new Date(s.created_at).getFullYear():'—';
-      var sid=(s.id||'').replace(/'/g,"\'");
+      var sid=(s.id||'').replace(/'/g,"\\'");
       var acts=s.is_verified
-        ?'<button class="tbl-action danger" onclick="adminSuspendSeller(''+sid+'',this)">Suspend</button>'
-        :'<button class="tbl-action" onclick="adminApproveSeller(''+sid+'',this)">Approve</button> <button class="tbl-action danger" onclick="adminSuspendSeller(''+sid+'',this)">Reject</button>';
+        ?'<button class="tbl-action danger" onclick="adminSuspendSeller(\\'' + sid + '\\',this)">Suspend</button>'
+        :'<button class="tbl-action" onclick="adminApproveSeller(\\'' + sid + '\\',this)">Approve</button> <button class="tbl-action danger" onclick="adminSuspendSeller(\\'' + sid + '\\',this)">Reject</button>';
       var loc=escA((s.city||'')+(s.state?', '+s.state:''));
       return '<tr><td><strong>'+escA(s.business_name||'Unnamed')+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+loc+'</div></td><td>'+sp+'</td><td>'+loc+'</td><td>—</td><td>'+yr+'</td><td><div class="tbl-actions">'+acts+'</div></td></tr>';
     }).join('');
-  }catch(e){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:20px">Error: '+((e&&e.message)||'unknown')+'</td></tr>';}
+  }catch(e){console.error('loadAdminSellers error:', e); tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:20px">Error: '+((e&&e.message)||'unknown')+'</td></tr>';}
 }
 
 async function adminApproveSeller(id,btn){
