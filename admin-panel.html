@@ -689,11 +689,18 @@ function switchTab(name,btn){
       panel.classList.add('active');
     } else {
       console.error('Panel not found:', panelId);
+      return;
     }
     // Activate clicked nav item
     if (btn && typeof btn.classList !== 'undefined') {
       btn.classList.add('active');
+    } else {
+      // Find the button with matching onclick
+      const button = document.querySelector(`.nav-item[onclick*="switchTab('${name}']"`);
+      if (button) button.classList.add('active');
     }
+    // Update URL hash for bookmarking
+    window.location.hash = 'tab-' + name;
   } catch (error) {
     console.error('switchTab error:', error);
   }
@@ -821,22 +828,27 @@ document.addEventListener('DOMContentLoaded',async ()=>{
   // User is authenticated admin, continue loading
   console.log('Admin panel loaded, attaching event listeners...');
 
-  // Attach click event listeners to sidebar navigation buttons as fallback
-  document.querySelectorAll('.sidebar .nav-item[type="button"]').forEach(button => {
-    button.addEventListener('click', function(e) {
-      console.log('Button clicked via event listener:', this);
+  // Single event delegation for sidebar navigation
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    sidebar.addEventListener('click', function(e) {
+      const button = e.target.closest('.nav-item[type="button"]');
+      if (!button) return;
+      console.log('Sidebar button clicked:', button);
       // Extract tab name from onclick attribute
-      const onclick = this.getAttribute('onclick');
+      const onclick = button.getAttribute('onclick');
       if (onclick && onclick.includes("switchTab('")) {
         const match = onclick.match(/switchTab\('([^']+)'/);
         if (match && match[1]) {
           const tabName = match[1];
           console.log('Switching to tab:', tabName);
-          switchTab(tabName, this);
+          switchTab(tabName, button);
         }
       }
+      // Prevent double execution if onclick also fires
+      e.stopPropagation();
     });
-  });
+  }
 
   buildLiveGrid();
   buildChart('gmv-chart',[4800,3900,5200,4100,6300,5800,4400,5100,6800,4200,7200,5600,6100,4820],'var(--green-sage)','gmv-labels',v=>'$'+v.toLocaleString());
@@ -930,7 +942,22 @@ async function loadAdminSellers(){
       var loc=escA((s.city||'')+(s.state?', '+s.state:''));
       return '<tr><td><strong>'+escA(s.business_name||'Unnamed')+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+loc+'</div></td><td>'+sp+'</td><td>'+loc+'</td><td>—</td><td>'+yr+'</td><td><div class="tbl-actions">'+acts+'</div></td></tr>';
     }).join('');
-  }catch(e){console.error('loadAdminSellers error:', e); tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:20px">Error: '+((e&&e.message)||'unknown')+'</td></tr>';}
+  }catch(e){
+    console.error('loadAdminSellers error:', e);
+    console.error('Error details:', JSON.stringify(e, null, 2));
+    if (e.details) console.error('Details:', e.details);
+    if (e.hint) console.error('Hint:', e.hint);
+    if (e.code) console.error('PostgreSQL error code:', e.code);
+
+    let errorMessage = (e && e.message) || 'Unknown error';
+    if (e.code === '42P01') {
+      errorMessage = 'Sellers table does not exist. Please run the setup_admin_system.sql script in Supabase SQL Editor.';
+    } else if (e.message && e.message.includes('permission denied')) {
+      errorMessage = 'Permission denied. Ensure RLS policies allow admin access. Run setup_admin_system.sql.';
+    }
+
+    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red);padding:20px">Error loading sellers: '+escA(errorMessage)+'<br><small>Check browser console for details.</small></td></tr>';
+  }
 }
 
 async function adminApproveSeller(id,btn){
