@@ -311,27 +311,27 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
   <nav class="sidebar">
     <div class="sidebar-section">
       <div class="sidebar-label">Platform</div>
-      <button class="nav-item active" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span>Dashboard</button>
-      <button class="nav-item" onclick="switchTab('monitor',this)"><span class="nav-icon">🔴</span>Live Monitor<span class="nav-badge green">18</span></button>
-      <button class="nav-item" onclick="switchTab('analytics',this)"><span class="nav-icon">📈</span>Analytics</button>
+      <button type="button" class="nav-item active" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span>Dashboard</button>
+      <button type="button" class="nav-item" onclick="switchTab('monitor',this)"><span class="nav-icon">🔴</span>Live Monitor<span class="nav-badge green">18</span></button>
+      <button type="button" class="nav-item" onclick="switchTab('analytics',this)"><span class="nav-icon">📈</span>Analytics</button>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Management</div>
-      <button class="nav-item" onclick="switchTab('listings',this)"><span class="nav-icon">📦</span>All Listings<span class="nav-badge honey">247</span></button>
-      <button class="nav-item" onclick="switchTab('users',this)"><span class="nav-icon">👥</span>Users</button>
-      <button class="nav-item" onclick="switchTab('sellers',this)"><span class="nav-icon">🏡</span>Sellers</button>
-      <button class="nav-item" onclick="switchTab('sales',this)"><span class="nav-icon">🗓️</span>Estate Sales</button>
+      <button type="button" class="nav-item" onclick="switchTab('listings',this)"><span class="nav-icon">📦</span>All Listings<span class="nav-badge honey">247</span></button>
+      <button type="button" class="nav-item" onclick="switchTab('users',this)"><span class="nav-icon">👥</span>Users</button>
+      <button type="button" class="nav-item" onclick="switchTab('sellers',this)"><span class="nav-icon">🏡</span>Sellers</button>
+      <button type="button" class="nav-item" onclick="switchTab('sales',this)"><span class="nav-icon">🗓️</span>Estate Sales</button>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Operations</div>
-      <button class="nav-item" onclick="switchTab('disputes',this)"><span class="nav-icon">⚖️</span>Disputes<span class="nav-badge red">3</span></button>
-      <button class="nav-item" onclick="switchTab('payouts',this)"><span class="nav-icon">💰</span>Payouts</button>
-      <button class="nav-item" onclick="switchTab('flags',this)"><span class="nav-icon">🚩</span>Flagged Items<span class="nav-badge red">7</span></button>
+      <button type="button" class="nav-item" onclick="switchTab('disputes',this)"><span class="nav-icon">⚖️</span>Disputes<span class="nav-badge red">3</span></button>
+      <button type="button" class="nav-item" onclick="switchTab('payouts',this)"><span class="nav-icon">💰</span>Payouts</button>
+      <button type="button" class="nav-item" onclick="switchTab('flags',this)"><span class="nav-icon">🚩</span>Flagged Items<span class="nav-badge red">7</span></button>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">System</div>
-      <button class="nav-item" onclick="switchTab('audit',this)"><span class="nav-icon">📋</span>Audit Log</button>
-      <button class="nav-item" onclick="switchTab('settings',this)"><span class="nav-icon">⚙️</span>Platform Settings</button>
+      <button type="button" class="nav-item" onclick="switchTab('audit',this)"><span class="nav-icon">📋</span>Audit Log</button>
+      <button type="button" class="nav-item" onclick="switchTab('settings',this)"><span class="nav-icon">⚙️</span>Platform Settings</button>
     </div>
   </nav>
 
@@ -675,13 +675,28 @@ function toast(msg,title){
   t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3400);
 }
 function switchTab(name,btn){
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  const p=el('panel-'+name);if(p)p.classList.add('active');
-  if(btn)btn.classList.add('active');
-  else document.querySelectorAll('.nav-item').forEach(n=>{
-    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+name+"'"))n.classList.add('active');
-  });
+  try {
+    console.log('switchTab called:', name, btn);
+    // Hide all panels
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    // Deactivate all nav items
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    // Show selected panel
+    const panelId = 'panel-' + name;
+    const panel = document.getElementById(panelId);
+    console.log('Panel ID:', panelId, 'Found:', panel);
+    if (panel) {
+      panel.classList.add('active');
+    } else {
+      console.error('Panel not found:', panelId);
+    }
+    // Activate clicked nav item
+    if (btn && typeof btn.classList !== 'undefined') {
+      btn.classList.add('active');
+    }
+  } catch (error) {
+    console.error('switchTab error:', error);
+  }
 }
 function openDisputeModal(title){
   setText('modal-title','⚖️ Dispute Review');

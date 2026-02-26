@@ -375,7 +375,7 @@
       </div>
       <div id="nav-user-menu" style="display:none;position:absolute;top:48px;right:0;background:var(--white);border-radius:var(--r-md);box-shadow:var(--sh-lg);padding:8px;min-width:180px;z-index:999">
         <a href="account-dashboard.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">👤 My Account</a>
-        <a href="seller-dashboard.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">🏡 Seller Dashboard</a>
+        <a href="seller-dashboard.html" id="nav-seller-dashboard-link" style="display:none;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">🏡 Seller Dashboard</a>
         <a href="messages.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">✉️ Messages</a>
         <hr style="border:none;border-top:1px solid var(--cream-mid);margin:4px 0">
         <button onclick="FNA.Auth.signOut()" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--red);border:none;background:transparent;cursor:pointer;border-radius:var(--r-sm);width:100%;text-align:left;font-family:'Jost',sans-serif;transition:background .15s" onmouseover="this.style.background='#FDECEA'" onmouseout="this.style.background='transparent'">🚪 Sign Out</button>
@@ -392,7 +392,7 @@
   <a href="family-nest-auctions.html" onclick="toggleMenu()">Home</a>
   <a href="auction-browse.html" onclick="toggleMenu()">Live Auctions</a>
   <a href="family-nest-auctions.html#how" onclick="toggleMenu()">How It Works</a>
-  <a href="seller-dashboard.html" onclick="toggleMenu()">Sell With Us</a>
+  <a href="seller-dashboard.html" id="mobile-seller-dashboard-link" onclick="toggleMenu()" style="display: none">Sell With Us</a>
   <a href="account-dashboard.html" onclick="toggleMenu()">My Account</a>
   <div class="mobile-menu-ctas">
     <button onclick="toggleMenu();window.location.href='family-nest-auctions.html?register=1'" style="width:220px;padding:14px;background:var(--honey);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif">Start Bidding Free</button>
@@ -590,7 +590,7 @@
       </div>
     </div>
     <div class="foot-col"><h4>For Buyers</h4><ul><li><a href="auction-browse.html">Browse Live Auctions</a></li><li><a href="#">How Bidding Works</a></li><li><a href="#">Buyer Protection</a></li><li><a href="#">Shipping Info</a></li><li><a href="account-dashboard.html">My Watchlist</a></li><li><a href="account-dashboard.html">Purchase Archive</a></li></ul></div>
-    <div class="foot-col"><h4>For Sellers</h4><ul><li><a href="#">List Your Estate</a></li><li><a href="seller-dashboard.html">Seller Dashboard</a></li><li><a href="#">Pricing &amp; Fees</a></li><li><a href="#">Seller Verification</a></li><li><a href="#">Success Stories</a></li></ul></div>
+    <div class="foot-col"><h4>For Sellers</h4><ul><li><a href="#">List Your Estate</a></li><li><a href="seller-dashboard.html" id="footer-seller-dashboard-link" style="display: none">Seller Dashboard</a></li><li><a href="#">Pricing &amp; Fees</a></li><li><a href="#">Seller Verification</a></li><li><a href="#">Success Stories</a></li></ul></div>
     <div class="foot-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Locations</a></li><li><a href="#">Franchise Opportunities</a></li><li><a href="#">Blog</a></li><li><a href="#">Contact</a></li><li><a href="#">Accessibility</a></li></ul></div>
   </div>
   <div class="foot-bottom">
@@ -869,6 +869,30 @@ async function checkAuthState(){
       var avEl=document.getElementById('nav-user-av');
       if(nameEl)nameEl.textContent=firstName;
       if(avEl)avEl.textContent=firstName[0].toUpperCase();
+
+      // Check if user is an approved seller
+      try {
+        var sb = window.supabase.createClient(
+          'https://hwsjgclteuezauveujit.supabase.co',
+          'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+          { auth: { persistSession: true, autoRefreshToken: true } }
+        );
+        var { data: profile } = await sb.from('profiles').select('is_seller').eq('id', user.id).single();
+
+        if (profile && profile.is_seller) {
+          // Show seller dashboard links
+          var navLink = document.getElementById('nav-seller-dashboard-link');
+          var mobileLink = document.getElementById('mobile-seller-dashboard-link');
+          var footerLink = document.getElementById('footer-seller-dashboard-link');
+
+          if (navLink) navLink.style.display = 'flex';
+          if (mobileLink) mobileLink.style.display = 'block';
+          if (footerLink) footerLink.style.display = 'inline';
+        }
+      } catch (profileError) {
+        console.error('Profile check error:', profileError);
+        // Non-critical, just don't show seller links
+      }
     }
   }catch(e){}
 }

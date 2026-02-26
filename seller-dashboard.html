@@ -341,7 +341,7 @@ chart-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:70
   </div>
   <div class="hd-right">
     <button class="hd-notif" onclick="toast('3 new shipping reminders','🔔 Notifications')">🔔<span class="badge">3</span></button>
-    <a href="admin-panel.html" class="hd-view-site" style="background:rgba(176,48,48,.1);border-color:rgba(176,48,48,.3);color:#e88">Admin Panel</a>
+    <a href="admin-panel.html" id="admin-panel-btn" class="hd-view-site" style="background:rgba(176,48,48,.1);border-color:rgba(176,48,48,.3);color:#e88; display: none">Admin Panel</a>
     <a href="auction-browse.html" class="hd-view-site">← View Site</a>
     <div class="hd-avatar" onclick="toast('Account settings coming soon','👤 Profile')">HS</div>
   </div>
@@ -1097,7 +1097,8 @@ var _sbSeller=null;
 function getSellerSB(){
   if(!_sbSeller) _sbSeller=window.supabase.createClient(
     'https://hwsjgclteuezauveujit.supabase.co',
-    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS'
+    'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+    { auth: { persistSession: true, autoRefreshToken: true } }
   );
   return _sbSeller;
 }
@@ -1735,6 +1736,19 @@ async function submitFranchise(btn){
     } catch (error) {
       console.error('Seller check error:', error);
       // Continue anyway to avoid blocking legitimate sellers due to technical error
+    }
+
+    // Check if user is admin and show admin panel button
+    try {
+      const sb = getSellerSB();
+      const { data: profile } = await sb.from('profiles').select('is_admin').eq('id', user.id).single();
+      if (profile && profile.is_admin) {
+        const adminBtn = document.getElementById('admin-panel-btn');
+        if (adminBtn) adminBtn.style.display = 'inline-block';
+      }
+    } catch (error) {
+      console.error('Admin check error:', error);
+      // Non-critical, just don't show admin button
     }
 
     // Load dashboard data
