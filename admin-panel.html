@@ -320,11 +320,6 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 
   <!-- SIDEBAR -->
   <nav class="sidebar">
-    <!-- TEST BUTTON -->
-    <div class="sidebar-section">
-      <div class="sidebar-label">Debug</div>
-      <button type="button" class="nav-item" onclick="testNav()" style="background: #ff9900; color: #000;"><span class="nav-icon">🔧</span>Test JavaScript</button>
-    </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Platform</div>
       <button type="button" class="nav-item active" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span>Dashboard</button>
@@ -673,24 +668,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
 <!-- TOAST -->
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script type="text/javascript">
-// Debug: log when script loads
-console.log('Admin panel script loading...');
 
-// Test function to verify JavaScript is working
-window.testNav = function() {
-  console.log('testNav function called!');
-  alert('JavaScript is working! Click OK to continue debugging.');
-  return true;
-};
 
-// Global click handler for debugging
-document.addEventListener('click', function(e) {
-  if (e.target.closest && e.target.closest('.nav-item[type="button"]')) {
-    console.log('Global click detected on nav button:', e.target.closest('.nav-item[type="button"]'));
-  }
-}, true); // Use capture phase to catch all clicks
 
 function toggleMenu(){
   var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
@@ -709,7 +689,6 @@ function toast(msg,title){
 }
 function switchTab(name,btn){
   try {
-    console.log('switchTab called:', name, btn);
     // Hide all panels
     document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
     // Deactivate all nav items
@@ -717,10 +696,8 @@ function switchTab(name,btn){
     // Show selected panel
     const panelId = 'panel-' + name;
     const panel = document.getElementById(panelId);
-    console.log('Panel ID:', panelId, 'Found:', panel);
     if (panel) {
       panel.classList.add('active');
-      console.log('Panel activated:', panelId);
     } else {
       console.error('Panel not found:', panelId);
       alert('Panel not found: ' + panelId + '. Check console for details.');
@@ -729,18 +706,15 @@ function switchTab(name,btn){
     // Activate clicked nav item
     if (btn && typeof btn.classList !== 'undefined') {
       btn.classList.add('active');
-      console.log('Button activated:', btn);
     } else {
       // Find the button with matching onclick
       const button = document.querySelector(`.nav-item[onclick*="switchTab('${name}',"`);
       if (button) {
         button.classList.add('active');
-        console.log('Found and activated button by selector:', button);
       }
     }
     // Update URL hash for bookmarking
     window.location.hash = 'tab-' + name;
-    console.log('Tab switched successfully to:', name);
   } catch (error) {
     console.error('switchTab error:', error);
     alert('Error switching tab: ' + error.message);
@@ -867,10 +841,8 @@ document.addEventListener('DOMContentLoaded',async ()=>{
   }
 
   // User is authenticated admin, continue loading
-  console.log('Admin panel loaded, attaching event listeners...');
 
   // Robust navigation setup - works even if inline onclick fails
-  console.log('Setting up navigation event listeners...');
   const sidebar = document.querySelector('.sidebar');
   if (sidebar) {
     // Event delegation on sidebar with error handling
@@ -879,7 +851,6 @@ document.addEventListener('DOMContentLoaded',async ()=>{
         const button = e.target.closest('.nav-item[type="button"]');
         if (!button) return;
 
-        console.log('Sidebar navigation clicked:', button);
 
         // Get tab name from onclick attribute or data attribute
         let tabName = null;
@@ -914,7 +885,6 @@ document.addEventListener('DOMContentLoaded',async ()=>{
         }
 
         if (tabName) {
-          console.log('Switching to tab:', tabName);
           // Check if switchTab function exists
           if (typeof window.switchTab === 'function') {
             switchTab(tabName, button);
@@ -929,7 +899,6 @@ document.addEventListener('DOMContentLoaded',async ()=>{
               document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
               panel.classList.add('active');
               button.classList.add('active');
-              console.log('Manual tab switch to:', tabName);
             }
           }
         } else {
@@ -946,7 +915,6 @@ document.addEventListener('DOMContentLoaded',async ()=>{
       }
     });
 
-    console.log('Sidebar event listener attached.');
 
     // Add data-tab attributes to all nav buttons for reliable fallback
     document.querySelectorAll('.sidebar .nav-item[type="button"]').forEach(btn => {
@@ -955,22 +923,18 @@ document.addEventListener('DOMContentLoaded',async ()=>{
         const match = onclick.match(/switchTab\('([^']+)'/);
         if (match && match[1]) {
           btn.dataset.tab = match[1];
-          console.log('Added data-tab="' + match[1] + '" to button:', btn);
         }
       }
     });
 
     // Backup: try again after a delay in case something interferes
     setTimeout(() => {
-      console.log('Running backup navigation check...');
       const sidebarCheck = document.querySelector('.sidebar');
       if (sidebarCheck && !sidebarCheck._navAttached) {
-        console.log('Backup: Re-attaching navigation event listener');
         // Re-attach the same listener as backup
         sidebarCheck.addEventListener('click', function(e) {
           const button = e.target.closest('.nav-item[type="button"]');
           if (button && button.onclick && button.onclick.toString().includes('switchTab')) {
-            console.log('Backup listener triggered for button:', button);
             // Just let the original onclick handle it
             return;
           }
@@ -984,7 +948,6 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     setTimeout(() => {
       const sidebarRetry = document.querySelector('.sidebar');
       if (sidebarRetry) {
-        console.log('Found sidebar on retry, reloading page to attach navigation');
         location.reload();
       }
     }, 500);
@@ -1062,12 +1025,10 @@ async function loadAdminStats(){
 }
 
 async function loadAdminSellers(){
-  console.log('loadAdminSellers called');
   var sb=getAdminSB(); var tbody=el('sellers-tbody'); if(!tbody)return;
   try{
     var {data,error}=await sb.from('sellers').select('*').order('created_at',{ascending:false}).limit(50);
     if(error)throw error;
-    console.log('Sellers query result:', data ? data.length : 0, 'sellers', data);
     if(!data||!data.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">No sellers in database yet.</td></tr>';return;}
     var verified=data.filter(function(s){return s.is_verified;}).length;
     var pending=data.filter(function(s){return !s.is_verified;}).length;
@@ -1075,10 +1036,10 @@ async function loadAdminSellers(){
     tbody.innerHTML=data.map(function(s){
       var sp=s.is_verified?'<span class="pill verified">✅ Verified</span>':(s.status==='suspended'?'<span class="pill suspended">⚠️ Suspended</span>':'<span class="pill pending">⏳ Pending</span>');
       var yr=s.created_at?new Date(s.created_at).getFullYear():'—';
-      var sid=(s.id||'').replace(/'/g,"\\'");
+      var sid=JSON.stringify(s.id||''); // Safely escape the ID
       var acts=s.is_verified
-        ?'<button class="tbl-action danger" onclick="adminSuspendSeller(\\'' + sid + '\\',this)">Suspend</button>'
-        :'<button class="tbl-action" onclick="adminApproveSeller(\\'' + sid + '\\',this)">Approve</button> <button class="tbl-action danger" onclick="adminSuspendSeller(\\'' + sid + '\\',this)">Reject</button>';
+        ?'<button class="tbl-action danger" onclick="adminSuspendSeller('+sid+',this)">Suspend</button>'
+        :'<button class="tbl-action" onclick="adminApproveSeller('+sid+',this)">Approve</button> <button class="tbl-action danger" onclick="adminSuspendSeller('+sid+',this)">Reject</button>';
       var loc=escA((s.city||'')+(s.state?', '+s.state:''));
       return '<tr><td><strong>'+escA(s.business_name||'Unnamed')+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+loc+'</div></td><td>'+sp+'</td><td>'+loc+'</td><td>—</td><td>'+yr+'</td><td><div class="tbl-actions">'+acts+'</div></td></tr>';
     }).join('');
