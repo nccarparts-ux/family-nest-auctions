@@ -819,6 +819,25 @@ document.addEventListener('DOMContentLoaded',async ()=>{
   }
 
   // User is authenticated admin, continue loading
+  console.log('Admin panel loaded, attaching event listeners...');
+
+  // Attach click event listeners to sidebar navigation buttons as fallback
+  document.querySelectorAll('.sidebar .nav-item[type="button"]').forEach(button => {
+    button.addEventListener('click', function(e) {
+      console.log('Button clicked via event listener:', this);
+      // Extract tab name from onclick attribute
+      const onclick = this.getAttribute('onclick');
+      if (onclick && onclick.includes("switchTab('")) {
+        const match = onclick.match(/switchTab\('([^']+)'/);
+        if (match && match[1]) {
+          const tabName = match[1];
+          console.log('Switching to tab:', tabName);
+          switchTab(tabName, this);
+        }
+      }
+    });
+  });
+
   buildLiveGrid();
   buildChart('gmv-chart',[4800,3900,5200,4100,6300,5800,4400,5100,6800,4200,7200,5600,6100,4820],'var(--green-sage)','gmv-labels',v=>'$'+v.toLocaleString());
   buildChart('user-chart',[42,38,55,48,71,66,44,59,72,41,88,64,77,58],'var(--honey)','user-labels',v=>v+' users');
@@ -844,7 +863,22 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     },8000);
   }
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
-  loadAdminStats(); loadAdminSellers(); loadAdminUsers();
+  // Load admin data with error handling
+  try {
+    await loadAdminStats();
+  } catch (e) {
+    console.error('Failed to load admin stats:', e);
+  }
+  try {
+    await loadAdminSellers();
+  } catch (e) {
+    console.error('Failed to load admin sellers:', e);
+  }
+  try {
+    await loadAdminUsers();
+  } catch (e) {
+    console.error('Failed to load admin users:', e);
+  }
 });
 
 var _sbAdmin=null;
@@ -872,14 +906,16 @@ async function loadAdminStats(){
     if(r3.count!=null)setText('stat-sales',r3.count.toLocaleString());
     if(r4.count!=null)setText('stat-bids',r4.count.toLocaleString());
     var d=el('stat-listings-delta');if(d&&r1.count!=null)d.textContent='Live right now';
-  }catch(e){}
+  }catch(e){console.error('loadAdminStats error:', e);}
 }
 
 async function loadAdminSellers(){
+  console.log('loadAdminSellers called');
   var sb=getAdminSB(); var tbody=el('sellers-tbody'); if(!tbody)return;
   try{
     var {data,error}=await sb.from('sellers').select('*').order('created_at',{ascending:false}).limit(50);
     if(error)throw error;
+    console.log('Sellers query result:', data ? data.length : 0, 'sellers', data);
     if(!data||!data.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">No sellers in database yet.</td></tr>';return;}
     var verified=data.filter(function(s){return s.is_verified;}).length;
     var pending=data.filter(function(s){return !s.is_verified;}).length;
