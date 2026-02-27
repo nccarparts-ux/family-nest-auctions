@@ -858,9 +858,19 @@ document.addEventListener('DOMContentLoaded',async ()=>{
                                   profileError.message.includes('recursion detected')))
       );
 
+      console.log('Checking RLS recursion error:', {
+        hasProfileError: !!profileError,
+        status: profileError?.status,
+        code: profileError?.code,
+        message: profileError?.message,
+        isRLSRecursionError: isRLSRecursionError
+      });
+
       if (isRLSRecursionError) {
         // RLS policy recursion error - need to run setup script
+        console.log('Showing bypass confirmation dialog...');
         const proceed = confirm('Database error: Infinite recursion detected in RLS policy for profiles table.\n\nThis is caused by missing admin setup. Click OK to bypass admin check temporarily (for setup).\n\nTo fix permanently, run setup_admin_system.sql in Supabase SQL Editor, then update your profile to is_admin = true.');
+        console.log('User selected:', proceed ? 'OK' : 'Cancel');
         if (!proceed) {
           window.location.href = 'family-nest-auctions.html';
           return;
