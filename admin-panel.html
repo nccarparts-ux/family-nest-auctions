@@ -488,6 +488,25 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:#0a1210;border
       </div>
     </div>
 
+    <!-- ── ESTATE SALES ── -->
+    <div class="tab-panel" id="panel-sales">
+      <div class="page-header">
+        <div class="ph-row">
+          <div><div class="ph-title">Estate Sales Management</div><div class="ph-sub">Manage estate sales, schedules, and inventory</div></div>
+          <button class="btn-primary" onclick="toast('Estate sales management coming soon','📅 Coming Soon')">➕ Create New Sale</button>
+        </div>
+      </div>
+      <div class="alert-strip blue"><strong>🔄 Feature in development</strong> — Estate sales management interface will be available in the next update.</div>
+      <div class="section-card">
+        <div class="sc-head"><div class="sc-title">📅 Upcoming Estate Sales</div></div>
+        <div style="padding:20px;text-align:center;color:var(--text-mid)">
+          <div style="font-size:48px;margin-bottom:10px">🏗️</div>
+          <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:8px">Estate Sales Dashboard</h3>
+          <p style="max-width:400px;margin:0 auto;font-size:13.5px">This section is currently under development. You can manage individual listings in the <strong>All Listings</strong> tab.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- ── DISPUTES ── -->
     <div class="tab-panel" id="panel-disputes">
       <div class="page-header">
@@ -689,6 +708,7 @@ function toast(msg,title){
 }
 function switchTab(name,btn){
   try {
+    console.log('switchTab called:', name, btn);
     // Hide all panels
     document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
     // Deactivate all nav items
@@ -848,6 +868,7 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     // Event delegation on sidebar with error handling
     sidebar.addEventListener('click', function(e) {
       try {
+        console.log('Sidebar click event:', e.target);
         const button = e.target.closest('.nav-item[type="button"]');
         if (!button) return;
 
@@ -884,6 +905,7 @@ document.addEventListener('DOMContentLoaded',async ()=>{
           else if (text.includes('settings')) tabName = 'settings';
         }
 
+        console.log('Navigation: tabName determined:', tabName, button);
         if (tabName) {
           // Check if switchTab function exists
           if (typeof window.switchTab === 'function') {
