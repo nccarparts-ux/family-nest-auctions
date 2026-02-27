@@ -1121,11 +1121,13 @@ async function loadAdminUsers(){
     if(error)throw error;
     if(!data||!data.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">No users in database yet.</td></tr>';return;}
     tbody.innerHTML=data.map(function(u){
-      var nm=escA(u.full_name||u.email||'Unknown');
+      var rawName = u.full_name||u.email||'Unknown';
+      var nm=escA(rawName);
       var joined=u.created_at?new Date(u.created_at).toLocaleDateString('en-US',{month:'short',year:'numeric'}):'—';
       var role=u.is_seller?'Seller':'Buyer';
       var sp=u.status==='suspended'?'<span class="pill suspended">⚠️ Suspended</span>':'<span class="pill active">✅ Active</span>';
-      return '<tr><td><strong>'+nm+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+escA(u.email||u.id||'')+'</div></td><td>'+role+'</td><td>'+sp+'</td><td>'+joined+'</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal(''+nm.replace(/'/g,"\'")+'')" >View</button><button class="tbl-action danger" onclick="toast('Actioned','⚠️')">Suspend</button></div></td></tr>';
+      var safeName = JSON.stringify(rawName).replace(/^"|"$/g, "'");
+      return '<tr><td><strong>'+nm+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+escA(u.email||u.id||'')+'</div></td><td>'+role+'</td><td>'+sp+'</td><td>'+joined+'</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('+safeName+')">View</button><button class="tbl-action danger" onclick="toast(\'Actioned\',\'⚠️\')">Suspend</button></div></td></tr>';
     }).join('');
   }catch(e){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--red);padding:20px">Error: '+((e&&e.message)||'unknown')+'</td></tr>';}
 }
