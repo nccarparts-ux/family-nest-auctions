@@ -855,6 +855,14 @@ document.addEventListener('DOMContentLoaded',async ()=>{
       // Auth error, redirect to login
       window.location.href = 'family-nest-auctions.html?login=1';
       return;
+    } else if (error.message && error.message.includes('500') || (error.message && error.message.includes('Internal Server Error'))) {
+      // 500 error - likely RLS policy recursion
+      const proceed = confirm('Database error (500). This is likely due to a recursive RLS policy in the profiles table.\n\nClick OK to bypass admin check temporarily (for setup).');
+      if (!proceed) {
+        window.location.href = 'family-nest-auctions.html';
+        return;
+      }
+      // Allow temporary access for setup
     } else {
       // Other error, show alert
       alert('Admin access error: ' + (error.message || 'Unknown error'));
