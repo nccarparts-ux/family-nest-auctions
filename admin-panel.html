@@ -826,6 +826,7 @@ document.addEventListener('DOMContentLoaded',async ()=>{
 
     // Check if user is signed in
     const { data: { user } } = await sb.auth.getUser();
+    console.log('Admin auth - User:', user);
     if (!user) {
       window.location.href = 'family-nest-auctions.html?login=1';
       return;
@@ -833,7 +834,9 @@ document.addEventListener('DOMContentLoaded',async ()=>{
 
     // Check if user is admin
     const { data: profile } = await sb.from('profiles').select('is_admin').eq('id', user.id).single();
+    console.log('Admin auth - Profile:', profile);
     if (!profile || !profile.is_admin) {
+      console.log('Admin check failed:', { hasProfile: !!profile, isAdmin: profile?.is_admin });
       alert('Admin access required. Redirecting to homepage.');
       window.location.href = 'family-nest-auctions.html';
       return;
