@@ -848,22 +848,25 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     if (profileError) {
       console.error('Profile query error:', profileError);
 
-      // Check for 500 Internal Server Error (RLS policy recursion)
-      const is500Error = (
+      // Check for RLS policy recursion errors (500 Internal Server Error or infinite recursion)
+      const isRLSRecursionError = (
         (profileError.status && profileError.status === 500) ||
-        (profileError.code && (profileError.code === 500 || profileError.code === '500')) ||
-        (profileError.message && (profileError.message.includes('500') || profileError.message.includes('Internal Server Error')))
+        (profileError.code && (profileError.code === 500 || profileError.code === '500' || profileError.code === '42P17')) ||
+        (profileError.message && (profileError.message.includes('500') ||
+                                  profileError.message.includes('Internal Server Error') ||
+                                  profileError.message.includes('infinite recursion') ||
+                                  profileError.message.includes('recursion detected')))
       );
 
-      if (is500Error) {
-        // 500 error - likely RLS policy recursion
-        const proceed = confirm('Database error (500). This is likely due to a recursive RLS policy in the profiles table.\n\nClick OK to bypass admin check temporarily (for setup).\n\nTo fix permanently, run setup_admin_system.sql in Supabase SQL Editor.');
+      if (isRLSRecursionError) {
+        // RLS policy recursion error - need to run setup script
+        const proceed = confirm('Database error: Infinite recursion detected in RLS policy for profiles table.\n\nThis is caused by missing admin setup. Click OK to bypass admin check temporarily (for setup).\n\nTo fix permanently, run setup_admin_system.sql in Supabase SQL Editor, then update your profile to is_admin = true.');
         if (!proceed) {
           window.location.href = 'family-nest-auctions.html';
           return;
         }
         // Allow temporary access for setup
-        console.log('Bypassing admin check due to 500 error (setup mode)');
+        console.log('Bypassing admin check due to RLS recursion error (setup mode)');
         // Skip admin check since we're bypassing for setup
         profile = { is_admin: true }; // Set a dummy profile to pass the check
       } else if (profileError.message && profileError.message.includes('JWT')) {
