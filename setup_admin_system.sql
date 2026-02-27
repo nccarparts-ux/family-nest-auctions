@@ -52,7 +52,30 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Uncomment and update with your user ID to make yourself admin
 -- UPDATE profiles SET is_admin = true WHERE id = 'your-user-id-here';
 
--- 5. VERIFY SETUP
+-- 6. ADD ADMIN POLICIES FOR OTHER TABLES USED IN ADMIN PANEL
+
+-- Items table (listings)
+ALTER TABLE items ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "items_admin_access" ON items;
+CREATE POLICY "items_admin_access" ON items
+  FOR ALL USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = true))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = true));
+
+-- Bids table
+ALTER TABLE bids ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "bids_admin_access" ON bids;
+CREATE POLICY "bids_admin_access" ON bids
+  FOR ALL USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = true))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = true));
+
+-- Estate sales table
+ALTER TABLE estate_sales ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "estate_sales_admin_access" ON estate_sales;
+CREATE POLICY "estate_sales_admin_access" ON estate_sales
+  FOR ALL USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = true))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND is_admin = true));
+
+-- 7. VERIFY SETUP
 SELECT
   'Admin system setup complete.' AS status,
   'Run: UPDATE profiles SET is_admin = true WHERE id = (your-user-id)' AS next_step,
