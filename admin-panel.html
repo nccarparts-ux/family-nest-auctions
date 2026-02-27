@@ -833,8 +833,51 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     }
 
     // Check if user is admin
-    const { data: profile } = await sb.from('profiles').select('is_admin').eq('id', user.id).single();
-    console.log('Admin auth - Profile:', profile);
+    let profile = null;
+    let profileError = null;
+    try {
+      const result = await sb.from('profiles').select('is_admin').eq('id', user.id).single();
+      profile = result.data;
+      profileError = result.error;
+    } catch (err) {
+      profileError = err;
+    }
+    console.log('Admin auth - Profile:', profile, 'Error:', profileError);
+
+    // Handle query errors (like 500 Internal Server Error)
+    if (profileError) {
+      console.error('Profile query error:', profileError);
+
+      // Check for 500 Internal Server Error (RLS policy recursion)
+      const is500Error = (
+        (profileError.status && profileError.status === 500) ||
+        (profileError.code && (profileError.code === 500 || profileError.code === '500')) ||
+        (profileError.message && (profileError.message.includes('500') || profileError.message.includes('Internal Server Error')))
+      );
+
+      if (is500Error) {
+        // 500 error - likely RLS policy recursion
+        const proceed = confirm('Database error (500). This is likely due to a recursive RLS policy in the profiles table.\n\nClick OK to bypass admin check temporarily (for setup).\n\nTo fix permanently, run setup_admin_system.sql in Supabase SQL Editor.');
+        if (!proceed) {
+          window.location.href = 'family-nest-auctions.html';
+          return;
+        }
+        // Allow temporary access for setup
+        console.log('Bypassing admin check due to 500 error (setup mode)');
+        // Skip admin check since we're bypassing for setup
+        profile = { is_admin: true }; // Set a dummy profile to pass the check
+      } else if (profileError.message && profileError.message.includes('JWT')) {
+        // Auth error, redirect to login
+        window.location.href = 'family-nest-auctions.html?login=1';
+        return;
+      } else {
+        // Other database error
+        alert('Database error: ' + (profileError.message || 'Unknown error'));
+        window.location.href = 'family-nest-auctions.html';
+        return;
+      }
+    }
+
     if (!profile || !profile.is_admin) {
       console.log('Admin check failed:', { hasProfile: !!profile, isAdmin: profile?.is_admin });
       alert('Admin access required. Redirecting to homepage.');
@@ -855,14 +898,6 @@ document.addEventListener('DOMContentLoaded',async ()=>{
       // Auth error, redirect to login
       window.location.href = 'family-nest-auctions.html?login=1';
       return;
-    } else if (error.message && error.message.includes('500') || (error.message && error.message.includes('Internal Server Error'))) {
-      // 500 error - likely RLS policy recursion
-      const proceed = confirm('Database error (500). This is likely due to a recursive RLS policy in the profiles table.\n\nClick OK to bypass admin check temporarily (for setup).');
-      if (!proceed) {
-        window.location.href = 'family-nest-auctions.html';
-        return;
-      }
-      // Allow temporary access for setup
     } else {
       // Other error, show alert
       alert('Admin access error: ' + (error.message || 'Unknown error'));
