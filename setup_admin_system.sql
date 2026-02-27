@@ -27,6 +27,12 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- 3. ADD NON-RECURSIVE RLS POLICIES FOR PROFILES TABLE
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
+-- Drop generic Supabase auto-generated policies if they exist
+DROP POLICY IF EXISTS "Enable read access for all users" ON profiles;
+DROP POLICY IF EXISTS "Enable insert for authenticated users only" ON profiles;
+DROP POLICY IF EXISTS "Enable update for users based on user_id" ON profiles;
+DROP POLICY IF EXISTS "Enable delete for users based on user_id" ON profiles;
+
 -- Drop all existing policies on profiles to start fresh
 DROP POLICY IF EXISTS "profiles_select_own" ON profiles;
 DROP POLICY IF EXISTS "profiles_update_own" ON profiles;
@@ -55,6 +61,12 @@ CREATE POLICY "profiles_admin_all" ON profiles
 
 -- 2.5 ENABLE RLS ON SELLERS TABLE IF NOT ALREADY ENABLED
 ALTER TABLE sellers ENABLE ROW LEVEL SECURITY;
+
+-- Drop generic Supabase auto-generated policies if they exist
+DROP POLICY IF EXISTS "Enable read access for all users" ON sellers;
+DROP POLICY IF EXISTS "Enable insert for authenticated users only" ON sellers;
+DROP POLICY IF EXISTS "Enable update for users based on user_id" ON sellers;
+DROP POLICY IF EXISTS "Enable delete for users based on user_id" ON sellers;
 
 -- 2.6 ADD RLS POLICY FOR SELLERS TABLE (ADMIN ACCESS)
 DROP POLICY IF EXISTS "sellers_admin_access" ON sellers;
@@ -97,6 +109,12 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Items table (listings)
 ALTER TABLE items ENABLE ROW LEVEL SECURITY;
+
+-- Drop generic Supabase auto-generated policies if they exist
+DROP POLICY IF EXISTS "Enable read access for all users" ON items;
+DROP POLICY IF EXISTS "Enable insert for authenticated users only" ON items;
+DROP POLICY IF EXISTS "Enable update for users based on user_id" ON items;
+DROP POLICY IF EXISTS "Enable delete for users based on user_id" ON items;
 DROP POLICY IF EXISTS "items_admin_access" ON items;
 CREATE POLICY "items_admin_access" ON items
   FOR ALL USING (is_admin_user(auth.uid()))
@@ -104,6 +122,12 @@ CREATE POLICY "items_admin_access" ON items
 
 -- Bids table
 ALTER TABLE bids ENABLE ROW LEVEL SECURITY;
+
+-- Drop generic Supabase auto-generated policies if they exist
+DROP POLICY IF EXISTS "Enable read access for all users" ON bids;
+DROP POLICY IF EXISTS "Enable insert for authenticated users only" ON bids;
+DROP POLICY IF EXISTS "Enable update for users based on user_id" ON bids;
+DROP POLICY IF EXISTS "Enable delete for users based on user_id" ON bids;
 DROP POLICY IF EXISTS "bids_admin_access" ON bids;
 CREATE POLICY "bids_admin_access" ON bids
   FOR ALL USING (is_admin_user(auth.uid()))
@@ -111,6 +135,12 @@ CREATE POLICY "bids_admin_access" ON bids
 
 -- Estate sales table
 ALTER TABLE estate_sales ENABLE ROW LEVEL SECURITY;
+
+-- Drop generic Supabase auto-generated policies if they exist
+DROP POLICY IF EXISTS "Enable read access for all users" ON estate_sales;
+DROP POLICY IF EXISTS "Enable insert for authenticated users only" ON estate_sales;
+DROP POLICY IF EXISTS "Enable update for users based on user_id" ON estate_sales;
+DROP POLICY IF EXISTS "Enable delete for users based on user_id" ON estate_sales;
 DROP POLICY IF EXISTS "estate_sales_admin_access" ON estate_sales;
 CREATE POLICY "estate_sales_admin_access" ON estate_sales
   FOR ALL USING (is_admin_user(auth.uid()))
