@@ -1157,7 +1157,28 @@ async function loadAdminStats(){
     if(r3.count!=null)setText('stat-sales',r3.count.toLocaleString());
     if(r4.count!=null)setText('stat-bids',r4.count.toLocaleString());
     var d=el('stat-listings-delta');if(d&&r1.count!=null)d.textContent='Live right now';
-  }catch(e){console.error('loadAdminStats error:', e);}
+  }catch(e){
+    console.error('loadAdminStats error:', e);
+    // Check for RLS recursion errors
+    const isRLSRecursionError = (
+      (e.status && e.status === 500) ||
+      (e.code && (e.code === 500 || e.code === '500' || e.code === '42P17')) ||
+      (e.message && (e.message.includes('500') ||
+                    e.message.includes('Internal Server Error') ||
+                    e.message.includes('infinite recursion') ||
+                    e.message.includes('recursion detected')))
+    );
+
+    if (isRLSRecursionError) {
+      console.log('loadAdminStats: RLS recursion error - showing placeholder data');
+      // Show placeholder data when RLS errors occur
+      setText('stat-listings', '--');
+      setText('stat-buyers', '--');
+      setText('stat-sales', '--');
+      setText('stat-bids', '--');
+      var d=el('stat-listings-delta');if(d)d.textContent='Setup required';
+    }
+  }
 }
 
 async function loadAdminSellers(){
@@ -1245,7 +1266,30 @@ async function loadAdminUsers(){
       var safeName = JSON.stringify(rawName).replace(/^"|"$/g, "'");
       return '<tr><td><strong>'+nm+'</strong><div style="font-size:11.5px;color:var(--text-light)">'+escA(u.email||u.id||'')+'</div></td><td>'+role+'</td><td>'+sp+'</td><td>'+joined+'</td><td><div class="tbl-actions"><button class="tbl-action" onclick="openUserModal('+safeName+')">View</button><button class="tbl-action danger" onclick="toast(\'Actioned\',\'⚠️\')">Suspend</button></div></td></tr>';
     }).join('');
-  }catch(e){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--red);padding:20px">Error: '+((e&&e.message)||'unknown')+'</td></tr>';}
+  }catch(e){
+    console.error('loadAdminUsers error:', e);
+    let errorMessage = (e && e.message) || 'Unknown error';
+
+    // Check for RLS recursion errors
+    const isRLSRecursionError = (
+      (e.status && e.status === 500) ||
+      (e.code && (e.code === 500 || e.code === '500' || e.code === '42P17')) ||
+      (e.message && (e.message.includes('500') ||
+                    e.message.includes('Internal Server Error') ||
+                    e.message.includes('infinite recursion') ||
+                    e.message.includes('recursion detected')))
+    );
+
+    if (isRLSRecursionError) {
+      errorMessage = 'RLS policy recursion detected. Run setup_admin_system.sql in Supabase SQL Editor to fix admin policies.';
+    } else if (e.code === '42P01') {
+      errorMessage = 'Profiles table does not exist or RLS policies blocking access. Run setup_admin_system.sql.';
+    } else if (e.message && e.message.includes('permission denied')) {
+      errorMessage = 'Permission denied. Ensure RLS policies allow admin access. Run setup_admin_system.sql.';
+    }
+
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--red);padding:20px">Error: '+escA(errorMessage)+'<br><small>Check browser console for details.</small></td></tr>';
+  }
 }
 
 function openAddSellerModal(){
