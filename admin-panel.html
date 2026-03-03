@@ -1146,12 +1146,20 @@ function escA(s){var d=document.createElement('div');d.textContent=s||'';return 
 async function loadAdminStats(){
   try{
     var sb=getAdminSB();
+    console.log('loadAdminStats: Querying all stats...');
     var [r1,r2,r3,r4]=await Promise.all([
       sb.from('items').select('*',{count:'exact',head:true}).eq('status','live'),
       sb.from('profiles').select('*',{count:'exact',head:true}),
       sb.from('estate_sales').select('*',{count:'exact',head:true}).in('status',['live','upcoming']),
       sb.from('bids').select('*',{count:'exact',head:true}).gte('created_at',new Date().toISOString().slice(0,10))
     ]);
+    console.log('loadAdminStats: Results -', {
+      items: r1.count,
+      profiles: r2.count,
+      estate_sales: r3.count,
+      bids: r4.count,
+      errors: [r1.error, r2.error, r3.error, r4.error].filter(e => e)
+    });
     if(r1.count!=null)setText('stat-listings',r1.count.toLocaleString());
     if(r2.count!=null)setText('stat-buyers',r2.count.toLocaleString());
     if(r3.count!=null)setText('stat-sales',r3.count.toLocaleString());
@@ -1184,12 +1192,27 @@ async function loadAdminStats(){
 async function loadAdminSellers(){
   var sb=getAdminSB(); var tbody=el('sellers-tbody'); if(!tbody)return;
   try{
+    console.log('loadAdminSellers: Querying sellers table...');
     var {data,error}=await sb.from('sellers').select('*').order('created_at',{ascending:false}).limit(50);
     if(error)throw error;
+    console.log('loadAdminSellers: Query result - data length:', data ? data.length : 0, 'error:', error);
     if(!data||!data.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-light)">No sellers in database yet.</td></tr>';return;}
+    // Log first seller for debugging
+    if(data.length > 0) {
+      console.log('loadAdminSellers: First seller sample:', {
+        id: data[0].id,
+        business_name: data[0].business_name,
+        city: data[0].city,
+        state: data[0].state,
+        is_verified: data[0].is_verified,
+        status: data[0].status,
+        created_at: data[0].created_at
+      });
+    }
     var verified=data.filter(function(s){return s.is_verified;}).length;
     var pending=data.filter(function(s){return !s.is_verified;}).length;
     var subEl=el('sellers-sub');if(subEl)subEl.textContent=verified+' verified · '+pending+' pending approval';
+    console.log('loadAdminSellers: Counts - verified:', verified, 'pending:', pending);
     tbody.innerHTML=data.map(function(s){
       var sp=s.is_verified?'<span class="pill verified">✅ Verified</span>':(s.status==='suspended'?'<span class="pill suspended">⚠️ Suspended</span>':'<span class="pill pending">⏳ Pending</span>');
       var yr=s.created_at?new Date(s.created_at).getFullYear():'—';
@@ -1254,9 +1277,22 @@ async function adminSuspendSeller(id,btn){
 async function loadAdminUsers(){
   var sb=getAdminSB(); var tbody=el('users-tbody'); if(!tbody)return;
   try{
+    console.log('loadAdminUsers: Querying profiles table...');
     var {data,error}=await sb.from('profiles').select('*').order('created_at',{ascending:false}).limit(50);
     if(error)throw error;
+    console.log('loadAdminUsers: Query result - data length:', data ? data.length : 0, 'error:', error);
     if(!data||!data.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-light)">No users in database yet.</td></tr>';return;}
+    // Log first user for debugging
+    if(data.length > 0) {
+      console.log('loadAdminUsers: First user sample:', {
+        id: data[0].id,
+        email: data[0].email,
+        full_name: data[0].full_name,
+        is_seller: data[0].is_seller,
+        status: data[0].status,
+        created_at: data[0].created_at
+      });
+    }
     tbody.innerHTML=data.map(function(u){
       var rawName = u.full_name||u.email||'Unknown';
       var nm=escA(rawName);
