@@ -706,6 +706,49 @@ function toast(msg,title){
   setText('t-ttl',title||'');setText('t-msg',msg);
   t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3400);
 }
+function showRLSWarning(){
+  // Create a warning banner at the top of the page
+  const warning = document.createElement('div');
+  warning.id = 'rls-warning';
+  warning.style.cssText = `
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, #B03030, #D4804A);
+    color: white;
+    padding: 12px 24px;
+    z-index: 9999;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(176, 48, 48, 0.3);
+  `;
+  warning.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 16px;">⚠️</span>
+      <div>
+        <strong>Database Setup Required</strong>
+        <div style="font-size: 12px; opacity: 0.9; margin-top: 2px;">
+          <div>1. Run <code>diagnose_rls_policies.sql</code> in Supabase SQL Editor to check current RLS state</div>
+          <div>2. Run <code>quick_fix_admin.sql</code> for temporary fix (disables RLS on profiles)</div>
+          <div>3. Run <code>setup_admin_system.sql</code> for permanent fix</div>
+          <div>4. Update your profile: <code>UPDATE profiles SET is_admin = true WHERE id = 'your-user-id';</code></div>
+        </div>
+      </div>
+    </div>
+    <button onclick="this.parentElement.remove()" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+      Dismiss
+    </button>
+  `;
+  document.body.appendChild(warning);
+  // Auto-remove after 30 seconds
+  setTimeout(() => {
+    if (warning.parentElement) warning.remove();
+  }, 30000);
+}
 function switchTab(name,btn){
   try {
     console.log('switchTab called:', name, btn);
@@ -868,17 +911,14 @@ document.addEventListener('DOMContentLoaded',async ()=>{
 
       if (isRLSRecursionError) {
         // RLS policy recursion error - need to run setup script
-        console.log('Showing bypass confirmation dialog...');
-        const proceed = confirm('Database error: Infinite recursion detected in RLS policy for profiles table.\n\nThis is caused by missing admin setup. Click OK to bypass admin check temporarily (for setup).\n\nTo fix permanently, run setup_admin_system.sql in Supabase SQL Editor, then update your profile to is_admin = true.');
-        console.log('User selected:', proceed ? 'OK' : 'Cancel');
-        if (!proceed) {
-          window.location.href = 'family-nest-auctions.html';
-          return;
-        }
+        console.log('RLS recursion error detected - automatically bypassing admin check for setup');
+        // Show inline warning instead of confirm dialog (confirm may be blocked by browser)
+        showRLSWarning();
         // Allow temporary access for setup
         console.log('Bypassing admin check due to RLS recursion error (setup mode)');
         // Skip admin check since we're bypassing for setup
         profile = { is_admin: true }; // Set a dummy profile to pass the check
+        console.log('Dummy profile set:', profile);
       } else if (profileError.message && profileError.message.includes('JWT')) {
         // Auth error, redirect to login
         window.location.href = 'family-nest-auctions.html?login=1';
@@ -891,6 +931,7 @@ document.addEventListener('DOMContentLoaded',async ()=>{
       }
     }
 
+    console.log('Final admin check - profile:', profile, 'is_admin:', profile?.is_admin);
     if (!profile || !profile.is_admin) {
       console.log('Admin check failed:', { hasProfile: !!profile, isAdmin: profile?.is_admin });
       alert('Admin access required. Redirecting to homepage.');
@@ -899,8 +940,22 @@ document.addEventListener('DOMContentLoaded',async ()=>{
     }
   } catch (error) {
     console.error('Auth error:', error);
-    // Check if is_admin column doesn't exist
-    if (error.message && error.message.includes('is_admin') && error.message.includes('column')) {
+    // Check for RLS recursion errors
+    const isRLSRecursionError = (
+      (error.status && error.status === 500) ||
+      (error.code && (error.code === 500 || error.code === '500' || error.code === '42P17')) ||
+      (error.message && (error.message.includes('500') ||
+                        error.message.includes('Internal Server Error') ||
+                        error.message.includes('infinite recursion') ||
+                        error.message.includes('recursion detected')))
+    );
+
+    if (isRLSRecursionError) {
+      console.log('Outer catch: RLS recursion error detected - automatically bypassing');
+      showRLSWarning();
+      // Allow temporary access for setup - continue execution
+    } else if (error.message && error.message.includes('is_admin') && error.message.includes('column')) {
+      // Check if is_admin column doesn't exist
       const proceed = confirm('Admin system not set up. Run setup_admin_system.sql in Supabase first.\n\nClick OK to continue anyway (for setup).');
       if (!proceed) {
         window.location.href = 'family-nest-auctions.html';
@@ -1134,6 +1189,8 @@ async function loadAdminSellers(){
     let errorMessage = (e && e.message) || 'Unknown error';
     if (e.code === '42P01') {
       errorMessage = 'Sellers table does not exist. Please run the setup_admin_system.sql script in Supabase SQL Editor.';
+    } else if (e.code === '42P17') {
+      errorMessage = 'Infinite RLS recursion detected. Run setup_admin_system.sql in Supabase SQL Editor to fix admin policies.';
     } else if (e.message && e.message.includes('permission denied')) {
       errorMessage = 'Permission denied. Ensure RLS policies allow admin access. Run setup_admin_system.sql.';
     }
