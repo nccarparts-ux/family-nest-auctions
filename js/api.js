@@ -1,5 +1,5 @@
 /**
- * Family Nest Auctions — Frontend API Client
+ * BidYard — Frontend API Client
  * Supabase project: hwsjgclteuezauveujit
  */
 
@@ -41,7 +41,7 @@ const Auth = {
 
   async signOut() {
     await sb().auth.signOut()
-    window.location.href = '/family-nest-auctions.html'
+    window.location.href = '/index.html'
   },
 
   async getUser() {
@@ -172,7 +172,7 @@ const Bidding = {
 const Watchlist = {
   async toggle(itemId) {
     const user = await Auth.getUser()
-    if (!user) { window.location.href = '/family-nest-auctions.html?login=1'; return }
+    if (!user) { window.location.href = '/index.html?login=1'; return }
     const { data: existing } = await sb()
       .from('watchlist')
       .select('id')
@@ -656,7 +656,7 @@ const UI = {
 }
 
 // ── EXPORT ─────────────────────────────────────────────────────
-window.FNA = {
+window.BY = {
   Auth,
   Items,
   Bidding,

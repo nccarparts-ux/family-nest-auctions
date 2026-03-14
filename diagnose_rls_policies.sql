@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — RLS Policy Diagnostic
+-- BidYard — RLS Policy Diagnostic
 -- Run this in Supabase SQL Editor to check current RLS state
 -- ============================================================
 

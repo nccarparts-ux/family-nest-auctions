@@ -1,0 +1,23 @@
+{
+  "name": "bidyard",
+  "devDependencies": {
+    "supabase": "^2.78.1",
+    "@playwright/test": "^1.58.1",
+    "serve": "^14.2.4"
+  },
+  "scripts": {
+    "dev": "serve . -p 3000",
+    "start": "npm run dev",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "playwright:install": "playwright install",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:reset": "supabase db reset",
+    "supabase:status": "supabase status",
+    "vercel:deploy": "vercel",
+    "vercel:prod": "vercel --prod"
+  }
+}

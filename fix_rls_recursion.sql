@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Aggressive RLS Recursion Fix
+-- BidYard — Aggressive RLS Recursion Fix
 -- Run this in Supabase SQL Editor to COMPLETELY fix RLS recursion
 -- ============================================================
 

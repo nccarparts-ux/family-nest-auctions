@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Admin Access Check for All Tables
+-- BidYard — Admin Access Check for All Tables
 -- Run this to verify admin can access all tables
 -- ============================================================
 

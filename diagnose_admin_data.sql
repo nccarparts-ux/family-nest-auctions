@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Complete Admin Data Diagnostic
+-- BidYard — Complete Admin Data Diagnostic
 -- Checks table structures, data, and admin access
 -- ============================================================
 
@@ -251,6 +251,7 @@ ORDER BY
 DO $$
 DECLARE
     seller_count INTEGER;
+    rec RECORD;
 BEGIN
     SELECT COUNT(*) INTO seller_count FROM sellers;
     IF seller_count > 0 THEN
@@ -258,7 +259,7 @@ BEGIN
         RAISE NOTICE 'ID | Business Name | City, State | Verified | Status | Created';
         RAISE NOTICE '---|---------------|-------------|----------|--------|---------';
         FOR rec IN (
-            SELECT id, business_name, city, state, is_verified, status, created_at::date as created
+            SELECT id, business_name, city, state, is_verified, COALESCE(status, 'pending') as status, created_at::date as created
             FROM sellers
             ORDER BY created_at DESC
             LIMIT 10

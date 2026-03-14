@@ -6,13 +6,13 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>My Profile — Family Nest Auctions</title>
+<title>My Profile — BidYard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --green-deep:#3A7A5C;--green-mid:#4E9470;--green-sage:#7DB88A;--green-light:#B8D4AE;--green-pale:#EEF7EE;
-  --honey:#C8A96E;--honey-light:#DFC28E;--honey-pale:#F5EDD8;
+  --green-deep:#1E4ED8;--green-mid:#3B6CB0;--green-sage:#6B9FD4;--green-light:#EBF0FA;--green-pale:#d4edda;
+  --honey:#E63946;--honey-light:#FF6B6B;--honey-pale:#FDECEA;
   --cream:#FAF7F2;--cream-mid:#F0EBE3;--cream-dark:#E2D9CE;
   --charcoal:#2C2C2C;--text-mid:#666;--text-light:#999;--white:#fff;
   --red:#B03030;--red-pale:#FDECEA;
@@ -21,19 +21,19 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden}
 header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-deep);box-shadow:0 2px 20px rgba(0,0,0,.2);height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px}
 .logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none}
-.logo-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#fff;line-height:1}
+.logo-name{font-family:'Inter',serif;font-size:18px;font-weight:700;color:#fff;line-height:1}
 .logo-sub{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--honey)}
 .hd-right{display:flex;align-items:center;gap:12px}
-.btn-ghost{padding:8px 18px;border:1.5px solid rgba(255,255,255,.3);border-radius:var(--r-sm);color:#fff;font-size:13px;font-weight:500;background:transparent;cursor:pointer;font-family:'Jost',sans-serif;text-decoration:none;transition:all .2s}
+.btn-ghost{padding:8px 18px;border:1.5px solid rgba(255,255,255,.3);border-radius:var(--r-sm);color:#fff;font-size:13px;font-weight:500;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;transition:all .2s}
 .btn-ghost:hover{border-color:var(--honey);color:var(--honey)}
 .hd-user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:5px 14px 5px 5px;cursor:pointer}
 .hd-avatar{width:30px;height:30px;border-radius:50%;background:var(--honey);color:var(--green-deep);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .hd-uname{font-size:13px;font-weight:600;color:#fff}
 .page-wrap{max-width:900px;margin:0 auto;padding:100px 24px 80px}
-.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--charcoal);margin-bottom:6px}
+.page-title{font-family:'Inter',serif;font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--charcoal);margin-bottom:6px}
 .page-sub{font-size:14px;color:var(--text-mid);margin-bottom:32px}
 .profile-grid{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start}
 .sidebar-card{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-xs);text-align:center;position:sticky;top:88px}
@@ -42,29 +42,29 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
 .avatar-big img{width:100%;height:100%;object-fit:cover}
 .avatar-edit-btn{position:absolute;bottom:0;right:0;background:var(--green-deep);border:2px solid #fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:background .2s}
 .avatar-edit-btn:hover{background:var(--green-mid)}
-.profile-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:4px}
+.profile-name{font-family:'Inter',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:4px}
 .profile-email{font-size:12.5px;color:var(--text-mid);margin-bottom:14px;word-break:break-all}
 .member-badge{display:inline-block;background:var(--green-pale);color:var(--green-deep);font-size:11.5px;font-weight:700;padding:4px 12px;border-radius:100px;margin-bottom:16px}
 .sidebar-nav{display:flex;flex-direction:column;gap:2px;margin-top:6px;text-align:left}
-.snav-item{display:block;padding:9px 12px;border-radius:var(--r-sm);font-size:13.5px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left;font-family:'Jost',sans-serif}
+.snav-item{display:block;padding:9px 12px;border-radius:var(--r-sm);font-size:13.5px;font-weight:500;color:var(--text-mid);cursor:pointer;transition:all .2s;border:none;background:transparent;width:100%;text-align:left;font-family:'Inter',sans-serif}
 .snav-item:hover{background:var(--cream);color:var(--charcoal)}
 .snav-item.active{background:var(--green-pale);color:var(--green-deep);font-weight:700}
 .main-col{display:flex;flex-direction:column;gap:22px}
 .section-card{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-xs)}
-.sec-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--cream-mid)}
+.sec-title{font-family:'Inter',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--cream-mid)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .form-group{display:flex;flex-direction:column;gap:5px}
 .form-group.full{grid-column:1/-1}
 .form-label{font-size:12px;font-weight:700;color:var(--charcoal);letter-spacing:.04em}
-.form-input{padding:10px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13.5px;font-family:'Jost',sans-serif;background:var(--white);color:var(--charcoal);transition:border-color .2s;width:100%}
+.form-input{padding:10px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13.5px;font-family:'Inter',sans-serif;background:var(--white);color:var(--charcoal);transition:border-color .2s;width:100%}
 .form-input:focus{outline:none;border-color:var(--green-mid);box-shadow:0 0 0 3px var(--green-pale)}
 .form-input.error{border-color:var(--red)}
 .form-hint{font-size:11.5px;color:var(--text-light)}
-.btn-primary{padding:11px 22px;background:var(--green-deep);color:#fff;border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+.btn-primary{padding:11px 22px;background:var(--green-deep);color:#fff;border:none;border-radius:var(--r-sm);font-size:13.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
 .btn-primary:hover{background:var(--green-mid);transform:translateY(-1px)}
-.btn-secondary{padding:10px 18px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--charcoal);transition:all .2s}
+.btn-secondary{padding:10px 18px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;color:var(--charcoal);transition:all .2s}
 .btn-secondary:hover{border-color:var(--green-mid);color:var(--green-mid)}
-.btn-danger{padding:10px 18px;background:transparent;border:1.5px solid var(--red);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--red);transition:all .2s}
+.btn-danger{padding:10px 18px;background:transparent;border:1.5px solid var(--red);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;color:var(--red);transition:all .2s}
 .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
 .tab-section{display:none}
 .tab-section.active{display:block}
@@ -94,9 +94,9 @@ header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-de
 <body>
 
 <header>
-  <a class="logo-wrap" href="family-nest-auctions.html">
-    <svg class="logo-mark" viewBox="0 0 40 40" width="36" height="36"><rect width="40" height="40" rx="8" fill="#C8A96E"/><path d="M20 8L8 18v14h8v-8h8v8h8V18L20 8z" fill="#3A7A5C"/></svg>
-    <div><div class="logo-name">Family Nest</div><div class="logo-sub">Estate Auctions</div></div>
+  <a class="logo-wrap" href="index.html">
+    <svg class="logo-mark" viewBox="0 0 40 40" width="36" height="36"><rect width="40" height="40" rx="8" fill="#E63946"/><path d="M20 8L8 18v14h8v-8h8v8h8V18L20 8z" fill="#1E4ED8"/></svg>
+    <div><div class="logo-name">BidYard</div><div class="logo-sub">Online Auctions</div></div>
   </a>
   <div class="hd-right">
     <a href="account-dashboard.html" class="btn-ghost">My Account</a>
@@ -435,7 +435,7 @@ async function loadProfile(){
   var sb=getSB();
   var {data:{user},error:authErr}=await sb.auth.getUser();
   if(authErr||!user){
-    window.location.href='family-nest-auctions.html?login=1';
+    window.location.href='index.html?login=1';
     return;
   }
   _currentUser=user;

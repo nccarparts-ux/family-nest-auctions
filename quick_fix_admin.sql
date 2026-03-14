@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Quick Admin Fix
+-- BidYard — Quick Admin Fix
 -- Run this in Supabase SQL Editor to temporarily fix admin access
 -- WARNING: This disables RLS on profiles - only for development!
 -- ============================================================

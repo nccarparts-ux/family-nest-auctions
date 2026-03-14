@@ -6,14 +6,14 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>My Account — Family Nest Auctions</title>
+<title>My Account — BidYard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --green-deep:   #3A7A5C;--green-mid:    #4E9470;--green-sage:   #7DB88A;
-    --green-light:  #B8D4AE;--green-pale:   #EEF7EE;
-    --honey:#C8A96E;--honey-light:#DFC28E;--honey-pale:#F5EDD8;
+    --green-deep: #1E4ED8;--green-mid: #3B6CB0;--green-sage: #6B9FD4;
+    --green-light: #EBF0FA;--green-pale: #d4edda;
+    --honey:#E63946;--honey-light:#FF6B6B;--honey-pale:#FDECEA;
     --cream:#FAF7F2;--cream-mid:#F0EBE3;--cream-dark:#E2D9CE;
     --charcoal:#2C2C2C;--charcoal-mid:#444;--text-mid:#666;--text-light:#999;
     --white:#fff;--red:#B03030;--orange:#D4804A;--blue:#3B82F6;
@@ -25,7 +25,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden}
+  body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden}
 
   /* ── HEADER ── */
   header{position:fixed;top:0;left:0;right:0;z-index:800;background:var(--green-deep);box-shadow:0 2px 20px rgba(0,0,0,.2)}
@@ -33,7 +33,7 @@
   nav{display:flex;align-items:center;justify-content:space-between;padding:0 36px;height:70px}
   .logo-wrap{display:flex;align-items:center;gap:11px;text-decoration:none}
   .logo-mark{width:40px;height:40px}
-  .logo-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--white)}
+  .logo-name{font-family:'Inter',serif;font-size:18px;font-weight:700;color:var(--white)}
   .logo-sub{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--honey)}
   .nav-links{display:flex;gap:26px;list-style:none}
   .nav-links a{font-size:13.5px;font-weight:500;color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
@@ -54,12 +54,12 @@
   .ph-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;position:relative;z-index:1}
   .ph-user{display:flex;align-items:center;gap:20px}
   .ph-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--honey),var(--honey-light));display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--green-deep);border:3px solid rgba(255,255,255,.2);flex-shrink:0}
-  .ph-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--white);margin-bottom:4px}
+  .ph-name{font-family:'Inter',serif;font-size:28px;font-weight:700;color:var(--white);margin-bottom:4px}
   .ph-meta{font-size:13px;color:rgba(255,255,255,.55);display:flex;gap:16px;flex-wrap:wrap}
   .ph-meta span{display:flex;align-items:center;gap:5px}
   .ph-stats{display:flex;gap:28px;flex-wrap:wrap}
   .ph-stat{text-align:center}
-  .ph-stat-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--white)}
+  .ph-stat-num{font-family:'Inter',serif;font-size:28px;font-weight:700;color:var(--white)}
   .ph-stat-num em{color:var(--honey);font-style:normal}
   .ph-stat-lbl{font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.08em;text-transform:uppercase;margin-top:2px}
 
@@ -67,7 +67,7 @@
   .dash-tabs{background:var(--white);border-bottom:1px solid var(--cream-dark);position:sticky;top:70px;z-index:500}
   .tabs-inner{max-width:1240px;margin:0 auto;padding:0 36px;display:flex;gap:0;overflow-x:auto}
   .tabs-inner::-webkit-scrollbar{height:0}
-  .tab-btn{padding:16px 22px;background:transparent;border:none;border-bottom:3px solid transparent;font-size:14px;font-weight:600;font-family:'Jost',sans-serif;color:var(--text-mid);cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:8px}
+  .tab-btn{padding:16px 22px;background:transparent;border:none;border-bottom:3px solid transparent;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;color:var(--text-mid);cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:8px}
   .tab-btn:hover{color:var(--charcoal)}
   .tab-btn.on{color:var(--green-deep);border-bottom-color:var(--green-deep)}
   .tab-badge{background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;min-width:18px;text-align:center}
@@ -92,7 +92,7 @@
   .stat-card.red{border-left-color:var(--red)}
   .stat-card.blue{border-left-color:var(--blue)}
   .sc-icon{font-size:26px;margin-bottom:10px}
-  .sc-num{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--charcoal);line-height:1}
+  .sc-num{font-family:'Inter',serif;font-size:34px;font-weight:700;color:var(--charcoal);line-height:1}
   .sc-lbl{font-size:12.5px;color:var(--text-mid);margin-top:4px}
   .sc-trend{font-size:12px;font-weight:600;margin-top:6px}
   .sc-trend.up{color:var(--green-mid)}
@@ -108,15 +108,15 @@
   .alert-banner{background:var(--honey-pale);border:1.5px solid var(--honey);border-radius:var(--r-md);padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .2s}
   .alert-banner:hover{background:#f0e4c8}
   .ab-icon{font-size:22px;flex-shrink:0}
-  .ab-text{flex:1;font-size:14px;color:#7a5a20}
+  .ab-text{flex:1;font-size:14px;color:var(--honey)}
   .ab-text strong{display:block;font-size:15px;color:var(--charcoal);margin-bottom:2px}
   .ab-cta{font-size:13px;font-weight:700;color:var(--green-deep);white-space:nowrap}
 
   /* RECENT ACTIVITY */
   .section-card{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-xs);margin-bottom:20px}
   .sc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-  .sc-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal)}
-  .sc-link{font-size:13px;font-weight:600;color:var(--green-mid);text-decoration:none;cursor:pointer;background:transparent;border:none;font-family:'Jost',sans-serif}
+  .sc-title{font-family:'Inter',serif;font-size:20px;font-weight:700;color:var(--charcoal)}
+  .sc-link{font-size:13px;font-weight:600;color:var(--green-mid);text-decoration:none;cursor:pointer;background:transparent;border:none;font-family:'Inter',sans-serif}
 
   .activity-list{display:flex;flex-direction:column;gap:0}
   .act-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--cream-mid)}
@@ -131,7 +131,7 @@
   .act-title{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
   .act-detail{font-size:12.5px;color:var(--text-mid)}
   .act-time{font-size:12px;color:var(--text-light);white-space:nowrap}
-  .act-amount{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;white-space:nowrap}
+  .act-amount{font-family:'Inter',serif;font-size:18px;font-weight:700;white-space:nowrap}
   .act-amount.green{color:var(--green-mid)}
   .act-amount.red{color:var(--red)}
   .act-amount.honey{color:#9a6a20}
@@ -143,22 +143,22 @@
   .bid-thumb{width:110px;min-height:110px;display:flex;align-items:center;justify-content:center;font-size:44px;flex-shrink:0}
   .bid-content{flex:1;padding:16px 18px;display:flex;flex-direction:column;justify-content:center}
   .bid-estate{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green-mid);margin-bottom:3px}
-  .bid-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--charcoal);margin-bottom:8px;line-height:1.25}
+  .bid-name{font-family:'Inter',serif;font-size:18px;font-weight:700;color:var(--charcoal);margin-bottom:8px;line-height:1.25}
   .bid-meta-row{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
   .bid-status{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px}
   .bid-status.leading{background:var(--green-pale);color:var(--green-deep)}
   .bid-status.outbid{background:#FEE2E2;color:var(--red)}
-  .bid-status.winning{background:var(--honey-pale);color:#7a5a20}
+  .bid-status.winning{background:var(--honey-pale);color:var(--honey)}
   .bid-meta-item{font-size:13px;color:var(--text-mid)}
   .bid-meta-item strong{color:var(--charcoal)}
   .bid-right{padding:16px 18px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:10px;min-width:160px;border-left:1px solid var(--cream-mid)}
   .bid-current-lbl{font-size:10.5px;color:var(--text-light);letter-spacing:.06em;text-transform:uppercase}
-  .bid-current-amt{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--charcoal)}
+  .bid-current-amt{font-family:'Inter',serif;font-size:28px;font-weight:700;color:var(--charcoal)}
   .bid-time{font-size:13px;font-weight:600}
   .bid-time.urgent{color:var(--red)}
-  .btn-rebid{padding:9px 18px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap}
+  .btn-rebid{padding:9px 18px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap}
   .btn-rebid:hover{background:var(--green-mid)}
-  .btn-watch-sm{padding:9px 14px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;color:var(--charcoal-mid);cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s}
+  .btn-watch-sm{padding:9px 14px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;color:var(--charcoal-mid);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
   .btn-watch-sm:hover{border-color:var(--honey);color:var(--honey)}
 
   /* ── WATCHLIST PANEL ── */
@@ -170,12 +170,12 @@
   .wl-remove:hover{background:var(--red);color:white}
   .wl-body{padding:14px 16px}
   .wl-estate{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green-mid);margin-bottom:3px}
-  .wl-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--charcoal);margin-bottom:8px;line-height:1.25}
+  .wl-name{font-family:'Inter',serif;font-size:16px;font-weight:700;color:var(--charcoal);margin-bottom:8px;line-height:1.25}
   .wl-footer{display:flex;justify-content:space-between;align-items:center}
-  .wl-bid{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal)}
+  .wl-bid{font-family:'Inter',serif;font-size:20px;font-weight:700;color:var(--charcoal)}
   .wl-time{font-size:12px;color:var(--text-light)}
   .wl-time.u{color:var(--red);font-weight:600}
-  .btn-bid-wl{padding:8px 16px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:12.5px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s;width:100%;margin-top:10px}
+  .btn-bid-wl{padding:8px 16px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:12.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;width:100%;margin-top:10px}
   .btn-bid-wl:hover{background:var(--green-mid)}
 
   /* ── WON ITEMS / PURCHASE ARCHIVE ── */
@@ -185,18 +185,18 @@
   .won-thumb{width:100px;min-height:100px;display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0}
   .won-content{flex:1;padding:16px 18px}
   .won-estate{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green-mid);margin-bottom:3px}
-  .won-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--charcoal);margin-bottom:8px}
+  .won-name{font-family:'Inter',serif;font-size:17px;font-weight:700;color:var(--charcoal);margin-bottom:8px}
   .won-meta{display:flex;flex-wrap:wrap;gap:16px}
   .won-meta-item{font-size:13px;color:var(--text-mid)}
   .won-meta-item strong{color:var(--charcoal)}
   .won-right{padding:16px 18px;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:8px;min-width:150px;border-left:1px solid var(--cream-mid)}
   .won-paid{font-size:11px;color:var(--text-light);margin-bottom:2px}
-  .won-amt{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--green-deep)}
+  .won-amt{font-family:'Inter',serif;font-size:24px;font-weight:700;color:var(--green-deep)}
   .won-status-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:100px}
   .wsp-delivered{background:#E6F4EC;color:#2A6040}
   .wsp-shipped{background:#EFF6FF;color:#1E40AF}
-  .wsp-processing{background:var(--honey-pale);color:#7a5a20}
-  .btn-receipt{padding:7px 14px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:12.5px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--charcoal-mid);transition:all .2s;white-space:nowrap}
+  .wsp-processing{background:var(--honey-pale);color:var(--honey)}
+  .btn-receipt{padding:7px 14px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;color:var(--charcoal-mid);transition:all .2s;white-space:nowrap}
   .btn-receipt:hover{border-color:var(--green-mid);color:var(--green-mid)}
 
   /* ── NOTIFICATIONS PANEL ── */
@@ -224,37 +224,37 @@
   .notif-title{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
   .notif-detail{font-size:12.5px;color:var(--text-mid)}
   .notif-time{font-size:12px;color:var(--text-light);white-space:nowrap}
-  .btn-mark-read{padding:5px 10px;background:transparent;border:1px solid var(--cream-dark);border-radius:var(--r-sm);font-size:11px;font-family:'Jost',sans-serif;cursor:pointer;color:var(--text-mid);transition:all .2s}
+  .btn-mark-read{padding:5px 10px;background:transparent;border:1px solid var(--cream-dark);border-radius:var(--r-sm);font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;color:var(--text-mid);transition:all .2s}
   .btn-mark-read:hover{background:var(--green-pale);border-color:var(--green-mid);color:var(--green-deep)}
 
   /* ── SETTINGS PANEL ── */
   .settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
   .settings-card{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-xs)}
-  .settings-card h3{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--charcoal);margin-bottom:16px}
+  .settings-card h3{font-family:'Inter',serif;font-size:18px;font-weight:700;color:var(--charcoal);margin-bottom:16px}
   .form-group{margin-bottom:16px}
   .form-label{display:block;font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:6px}
-  .form-input{width:100%;padding:10px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-family:'Jost',sans-serif;transition:border .2s}
+  .form-input{width:100%;padding:10px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-family:'Inter',sans-serif;transition:border .2s}
   .form-input:focus{outline:none;border-color:var(--green-mid)}
   .form-hint{font-size:12px;color:var(--text-light);margin-top:4px}
   .checkbox-group{display:flex;align-items:center;gap:8px;margin-bottom:10px}
   .checkbox-group input{width:16px;height:16px}
   .checkbox-group label{font-size:13.5px;color:var(--charcoal)}
-  .btn-save{padding:10px 24px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-save{padding:10px 24px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
   .btn-save:hover{background:var(--green-mid)}
 
   /* ── FOOTER ── */
   footer{background:var(--green-deep);color:rgba(255,255,255,.6);padding:40px 36px 30px;margin-top:60px}
   .footer-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px}
-  .footer-col h4{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:14px}
+  .footer-col h4{font-family:'Inter',serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:14px}
   .footer-links{list-style:none}
   .footer-links li{margin-bottom:8px}
   .footer-links a{font-size:13px;color:rgba(255,255,255,.6);text-decoration:none;transition:color .2s}
   .footer-links a:hover{color:var(--honey)}
   .footer-bottom{max-width:1240px;margin:30px auto 0;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);font-size:12px;color:rgba(255,255,255,.4);text-align:center}lid var(--cream-mid);transition:background .15s;cursor:pointer}
   .notif-item:last-child{border-bottom:none}
-  .notif-item.unread{background:rgba(200,169,110,.06);margin:0 -24px;padding:16px 24px;border-radius:var(--r-sm)}
+  .notif-item.unread{background:rgba(30,78,216,.06);margin:0 -24px;padding:16px 24px;border-radius:var(--r-sm)}
   .notif-item:hover{background:var(--cream)}
-  .notif-item.unread:hover{background:rgba(200,169,110,.1)}
+  .notif-item.unread:hover{background:rgba(30,78,216,.1)}
   .ni-dot{width:8px;height:8px;border-radius:50%;background:var(--green-deep);flex-shrink:0;margin-top:6px}
   .ni-icon{font-size:18px;width:28px;text-align:center;flex-shrink:0}
   .ni-content{flex:1}
@@ -262,7 +262,7 @@
   .ni-detail{font-size:12.5px;color:var(--text-mid)}
   .ni-time{font-size:12px;color:var(--text-light);white-space:nowrap}
   .ni-actions{display:flex;gap:8px;margin-top:6px}
-  .ni-action-btn{font-size:12px;font-weight:600;color:var(--green-mid);background:transparent;border:none;cursor:pointer;font-family:'Jost',sans-serif;padding:2px 0}
+  .ni-action-btn{font-size:12px;font-weight:600;color:var(--green-mid);background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;padding:2px 0}
   .ni-action-btn:hover{text-decoration:underline}px;height:8px;border-radius:50%;background:var(--red);margin-top:6px;flex-shrink:0}
   .ni-dot.read{background:transparent}
   .ni-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
@@ -278,22 +278,22 @@
   .ni-time{font-size:12px;color:var(--text-light)}
   .ni-action{font-size:12.5px;font-weight:600;color:var(--green-mid);margin-top:4px;display:block}
   .notif-controls{display:flex;gap:12px;justify-content:flex-end;margin-bottom:16px}
-  .notif-ctrl-btn{padding:7px 16px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;color:var(--charcoal-mid);transition:all .2s}
+  .notif-ctrl-btn{padding:7px 16px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;color:var(--charcoal-mid);transition:all .2s}
   .notif-ctrl-btn:hover{border-color:var(--green-mid);color:var(--green-mid)}
 
   /* ── PROFILE / SETTINGS PANEL ── */
   .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
   .form-section{background:var(--white);border-radius:var(--r-lg);padding:24px;box-shadow:var(--sh-xs)}
-  .fs-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--cream-mid)}
+  .fs-title{font-family:'Inter',serif;font-size:20px;font-weight:700;color:var(--charcoal);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--cream-mid)}
   .ff{margin-bottom:16px}
   .ff label{display:block;font-size:12.5px;font-weight:700;color:var(--charcoal-mid);margin-bottom:6px;letter-spacing:.02em}
-  .ff input,.ff select,.ff textarea{width:100%;padding:11px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-family:'Jost',sans-serif;color:var(--charcoal);background:var(--white);outline:none;transition:border-color .2s}
+  .ff input,.ff select,.ff textarea{width:100%;padding:11px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-family:'Inter',sans-serif;color:var(--charcoal);background:var(--white);outline:none;transition:border-color .2s}
   .ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--green-mid)}
   .ff textarea{resize:vertical;min-height:80px}
   .ff-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  .btn-save{padding:11px 28px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:14.5px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-save{padding:11px 28px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:14.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
   .btn-save:hover{background:var(--green-mid)}
-  .btn-danger{padding:11px 28px;background:transparent;color:var(--red);border:1.5px solid var(--red);border-radius:var(--r-sm);font-size:14px;font-weight:600;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-danger{padding:11px 28px;background:transparent;color:var(--red);border:1.5px solid var(--red);border-radius:var(--r-sm);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
   .btn-danger:hover{background:var(--red);color:white}
 
   .notif-prefs{display:flex;flex-direction:column;gap:14px}
@@ -311,9 +311,9 @@
   /* ── EMPTY STATES ── */
   .empty-panel{text-align:center;padding:52px 20px;background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-xs)}
   .ep-icon{font-size:52px;margin-bottom:14px}
-  .ep-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--charcoal);margin-bottom:8px}
+  .ep-title{font-family:'Inter',serif;font-size:22px;font-weight:700;color:var(--charcoal);margin-bottom:8px}
   .ep-sub{font-size:14.5px;color:var(--text-mid);margin-bottom:22px}
-  .btn-browse{padding:11px 28px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;font-family:'Jost',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-browse{padding:11px 28px;background:var(--green-deep);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
   .btn-browse:hover{background:var(--green-mid)}
 
   /* ── TOAST ── */
@@ -372,7 +372,7 @@
 /* ── MOBILE MENU OVERLAY ── */
 .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--green-deep);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:28px;opacity:0;pointer-events:none;transition:opacity .3s}
 .mobile-menu.open{display:flex;opacity:1;pointer-events:all}
-.mobile-menu a{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--white);text-decoration:none}
+.mobile-menu a{font-family:'Inter',serif;font-size:34px;font-weight:700;color:var(--white);text-decoration:none}
 .mobile-menu a:hover{color:var(--honey)}
 .mobile-menu-ctas{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
 .mobile-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:var(--white);font-size:32px;cursor:pointer;z-index:10000}
@@ -396,22 +396,22 @@
     <span>⭐ 5-Star Rated &nbsp;·&nbsp; Transparent Pricing &nbsp;·&nbsp; Trusted Nationwide</span>
   </div>
   <nav>
-    <a href="family-nest-auctions.html" class="logo-wrap">
+    <a href="index.html" class="logo-wrap">
       <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
-        <rect width="40" height="40" rx="8" fill="#C8A96E"/>
-        <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#3A7A5C"/>
-        <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#7DB88A" opacity=".75"/>
-        <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#B8D4AE" stroke-width="1.1" fill="none" opacity=".8"/>
+        <rect width="40" height="40" rx="8" fill="#E63946"/>
+        <path d="M20 6L5 17.5V34h10V25h10v9h10V17.5L20 6z" fill="#1E4ED8"/>
+        <ellipse cx="20" cy="28.5" rx="5" ry="2.2" fill="#6B9FD4" opacity=".75"/>
+        <path d="M16 28.5 Q20 25.5 24 28.5" stroke="#EBF0FA" stroke-width="1.1" fill="none" opacity=".8"/>
       </svg>
       <div>
-        <div class="logo-name">Family Nest Auctions</div>
+        <div class="logo-name">BidYard</div>
         <div class="logo-sub">Estate Sale Bidding Platform</div>
       </div>
     </a>
     <ul class="nav-links">
       <li><a href="auction-browse.html">Live Auctions</a></li>
-      <li><a href="family-nest-auctions.html#how">How It Works</a></li>
-      <li><a href="family-nest-auctions.html#why">Why Us</a></li>
+      <li><a href="index.html#how">How It Works</a></li>
+      <li><a href="index.html#why">Why Us</a></li>
       <li><a href="seller-dashboard.html">Sell With Us</a></li>
     </ul>
     <div class="nav-right">
@@ -433,14 +433,14 @@
 
 <div class="mobile-menu" id="mobile-menu">
   <button class="mobile-close" onclick="toggleMenu()">✕</button>
-  <a href="family-nest-auctions.html" onclick="toggleMenu()">Home</a>
+  <a href="index.html" onclick="toggleMenu()">Home</a>
   <a href="auction-browse.html" onclick="toggleMenu()">Live Auctions</a>
-  <a href="family-nest-auctions.html#how" onclick="toggleMenu()">How It Works</a>
+  <a href="index.html#how" onclick="toggleMenu()">How It Works</a>
   <a href="seller-dashboard.html" onclick="toggleMenu()">Sell With Us</a>
   <a href="account-dashboard.html" onclick="toggleMenu()">My Account</a>
   <div class="mobile-menu-ctas">
-    <button onclick="toggleMenu();window.location.href='family-nest-auctions.html?register=1'" style="width:220px;padding:14px;background:var(--honey);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Jost',sans-serif">Start Bidding Free</button>
-    <button onclick="toggleMenu();window.location.href='family-nest-auctions.html?login=1'" style="width:220px;padding:13px;background:transparent;border:2px solid rgba(255,255,255,.5);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:white;font-family:'Jost',sans-serif">Sign In</button>
+    <button onclick="toggleMenu();window.location.href='index.html?register=1'" style="width:220px;padding:14px;background:var(--honey);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Start Bidding Free</button>
+    <button onclick="toggleMenu();window.location.href='index.html?login=1'" style="width:220px;padding:13px;background:transparent;border:2px solid rgba(255,255,255,.5);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:white;font-family:'Inter',sans-serif">Sign In</button>
   </div>
 </div>
 
@@ -895,11 +895,11 @@
 </div><!-- /dash-layout -->
 
 <footer>
-  <a href="family-nest-auctions.html">Home</a>
+  <a href="index.html">Home</a>
   <a href="auction-browse.html">Live Auctions</a>
   <a href="#">Privacy Policy</a>
   <a href="#">Terms of Service</a>
-  <div style="margin-top:14px">© 2026 Family Nest Estate Solutions. All rights reserved.</div>
+  <div style="margin-top:14px">© 2026 BidYard Estate Solutions. All rights reserved.</div>
 </footer>
 
 <div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
@@ -1247,7 +1247,7 @@ document.addEventListener('DOMContentLoaded', async function(){
   try{
     var user = await FNA.Auth.getUser();
     if(!user){
-      window.location.href = 'family-nest-auctions.html?login=1';
+      window.location.href = 'index.html?login=1';
       return;
     }
     await loadDashboardUser();

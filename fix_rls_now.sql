@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Fix RLS Recursion NOW
+-- BidYard — Fix RLS Recursion NOW
 -- Run this ONE script in Supabase SQL Editor to fix everything
 -- ============================================================
 

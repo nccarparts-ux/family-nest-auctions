@@ -72,7 +72,7 @@ jobs:
           script: |
             const url = '${{ steps.vercel.outputs.preview-url }}'
             const pages = [
-              ['🏠 Homepage','family-nest-auctions.html'],
+              ['🏠 Homepage','index.html'],
               ['🔍 Browse','auction-browse.html'],
               ['🪑 Item Detail','auction-item-detail.html'],
               ['👤 Account','account-dashboard.html'],

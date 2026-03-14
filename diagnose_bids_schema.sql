@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Diagnose Bids Table Schema
+-- BidYard — Diagnose Bids Table Schema
 -- Run this in Supabase SQL Editor to see actual schema
 -- ============================================================
 

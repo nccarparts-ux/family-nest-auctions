@@ -1,38 +1,1008 @@
 <!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-<meta content="0; url=family-nest-auctions.html" http-equiv="refresh"/>
-<title>Family Nest Auctions</title>
-
+<html lang="en">
+<head><!-- Cache refresh: 2026-02-25T17:30:00Z -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>BidYard | Online Garage & Estate Sale Auctions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    /* Responsive Design */
-    .mobile-only { display: none; }
-    .desktop-only { display: block; }
-    
-    @media (max-width: 768px) {
-        .mobile-only { display: block; }
-        .desktop-only { display: none; }
-        body { font-size: 14px; }
-        .container { padding: 10px; }
-    }
-    
-    @media (max-width: 480px) {
-        body { font-size: 12px; }
-        h1 { font-size: 24px; }
-    }
-</style>
+  :root {
+    --blue-primary: #1E4ED8;
+    --blue-hover:   #1A43C6;
+    --red-bid:      #E63946;
+    --red-hover:    #C92F3B;
+    --bg-page:      #EFF6FF;
+    --bg-card:      #FFFFFF;
+    --text-dark:    #111827;
+    --text-mid:     #6B7280;
+    --text-light:   #9CA3AF;
+    --border-light: #E5E7EB;
+    --border-mid:   #D1D5DB;
+    --white:        #FFFFFF;
+    --cream:        #F9FAFB;
+    --cream-mid:    #F3F4F6;
+    --cream-dark:   #E5E7EB;
+    --charcoal:     #111827;
+    --charcoal-mid: #374151;
+    --r-sm: 8px; --r-md: 14px; --r-lg: 22px;
+    --sh-xs: 0 2px 8px rgba(17,24,39,.06);
+    --sh-sm: 0 4px 18px rgba(17,24,39,.09);
+    --sh-md: 0 8px 36px rgba(17,24,39,.12);
+    --sh-lg: 0 16px 56px rgba(17,24,39,.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;background:var(--bg-page);color:var(--text-dark);overflow-x:hidden}
 
+  /* LOGO */
+  .logo-wrap{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+  .logo-mark{width:44px;height:44px;flex-shrink:0}
+  .logo-words{display:flex;flex-direction:column;line-height:1.1}
+  .logo-name{font-family:'Inter',sans-serif;font-size:19px;font-weight:700;color:var(--white);letter-spacing:.01em}
+  .logo-sub{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red-bid)}
+
+  /* HEADER */
+  header{position:fixed;top:0;left:0;right:0;z-index:900;background:var(--blue-primary);box-shadow:0 2px 20px rgba(0,0,0,.2)}
+  .ribbon{background:var(--red-bid);padding:5px 36px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;font-weight:600;color:var(--white)}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:0 36px;height:70px}
+  .nav-links{display:flex;gap:26px;list-style:none}
+  .nav-links a{font-size:13.5px;font-weight:500;color:rgba(255,255,255,.8);text-decoration:none;letter-spacing:.03em;transition:color .2s}
+  .nav-links a:hover,.nav-links a.active{color:var(--red-bid)}
+  .nav-ctas{display:flex;gap:10px;align-items:center}
+  .btn-ghost{padding:8px 20px;border:1.5px solid rgba(255,255,255,.3);border-radius:var(--r-sm);color:var(--white);font-size:13.5px;font-weight:500;background:transparent;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+  .btn-ghost:hover{border-color:var(--red-bid);color:var(--red-bid)}
+  .btn-primary{padding:9px 22px;background:var(--red-bid);border:none;border-radius:var(--r-sm);color:var(--white);font-size:13.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+  .btn-primary:hover{background:var(--red-hover);transform:translateY(-1px);box-shadow:0 4px 16px rgba(230,57,70,.35)}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;flex-direction:column;padding-top:108px;background:var(--blue-primary);position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 75% 35%,rgba(30,78,216,.18) 0%,transparent 65%),radial-gradient(ellipse 40% 40% at 15% 85%,rgba(230,57,70,.1) 0%,transparent 55%);pointer-events:none}
+  .hero::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='38' fill='none' stroke='rgba(255,255,255,.025)' stroke-width='1'/%3E%3C/svg%3E");background-size:80px;pointer-events:none}
+  .hero-inner{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;max-width:1240px;margin:0 auto;padding:56px 36px 48px;width:100%}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(230,57,70,.13);border:1px solid rgba(230,57,70,.38);border-radius:100px;padding:5px 15px;color:var(--red-hover);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:22px;animation:rise .7s ease both}
+  .dot{width:6px;height:6px;background:var(--red-bid);border-radius:50%;animation:blink 2s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .hero h1{font-family:'Inter',serif;font-size:clamp(38px,4.8vw,66px);font-weight:700;line-height:1.08;color:var(--white);margin-bottom:20px;animation:rise .7s .1s ease both}
+  .hero h1 em{font-style:italic;color:var(--red-hover)}
+  .hero-desc{font-size:16px;line-height:1.75;color:rgba(255,255,255,.6);margin-bottom:32px;max-width:500px;animation:rise .7s .2s ease both}
+  .search-bar{display:flex;background:var(--white);border-radius:var(--r-md);overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.28);margin-bottom:32px;animation:rise .7s .3s ease both}
+  .search-bar input{flex:1;border:none;outline:none;padding:14px 18px;font-size:14px;font-family:'Inter',sans-serif;color:var(--charcoal);background:transparent}
+  .search-bar select{border:none;border-left:1.5px solid var(--cream-mid);outline:none;padding:14px 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text-mid);background:transparent;cursor:pointer}
+  .btn-search{padding:14px 26px;background:var(--blue-primary);color:white;border:none;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:background .2s;white-space:nowrap}
+  .btn-search:hover{background:var(--blue-hover)}
+  .metrics{display:flex;gap:36px;animation:rise .7s .4s ease both}
+  .metric .num{font-family:'Inter',serif;font-size:30px;font-weight:700;color:var(--white)}
+  .metric .num em{color:var(--red-bid);font-style:normal}
+  .metric .lbl{font-size:11px;color:rgba(255,255,255,.42);letter-spacing:.08em;margin-top:2px}
+
+  /* HERO PREVIEW */
+  .hero-preview{display:flex;flex-direction:column;gap:14px;animation:rise .7s .15s ease both}
+  .prev-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:var(--r-lg);overflow:hidden;backdrop-filter:blur(8px)}
+  .prev-img{height:210px;background:linear-gradient(135deg,#1E4ED844,#E6394622);display:flex;align-items:center;justify-content:center;font-size:78px;position:relative}
+  .prev-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to top,rgba(25,45,30,.6),transparent)}
+  .prev-tag{position:absolute;top:14px;left:14px;background:var(--red-bid);color:var(--white);font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px}
+  .prev-body{padding:18px 20px 20px}
+  .prev-estate{font-size:11px;font-weight:700;color:var(--blue-hover);letter-spacing:.06em;margin-bottom:5px}
+  .prev-title{font-family:'Inter',serif;font-size:19px;font-weight:700;color:var(--white);margin-bottom:14px;line-height:1.25}
+  .prev-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
+  .prev-bid-lbl,.prev-time-lbl{font-size:10.5px;color:rgba(255,255,255,.42);letter-spacing:.07em;margin-bottom:2px}
+  .prev-time-lbl{text-align:right}
+  .prev-bid{font-family:'Inter',sans-serif;font-size:28px;font-weight:700;color:var(--red-bid)}
+  .prev-time{font-size:20px;font-weight:600;color:var(--white);font-variant-numeric:tabular-nums}
+  .prev-time.soon{color:#ff8066}
+  .btn-bid-prev{width:100%;padding:12px;background:var(--blue-primary);color:white;border:none;border-radius:var(--r-sm);font-size:14.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-bid-prev:hover{background:var(--blue-hover);transform:translateY(-1px)}
+  .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .mini-tile{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:var(--r-md);padding:14px 16px;cursor:pointer;transition:all .2s}
+  .mini-tile:hover{background:rgba(255,255,255,.1);border-color:rgba(200,169,110,.4);transform:translateY(-2px)}
+  .mini-icon{font-size:26px;margin-bottom:7px}
+  .mini-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+  .mini-price{font-size:16px;font-weight:700;color:var(--red-bid)}
+  .mini-bids{font-size:11px;color:rgba(255,255,255,.38);margin-top:2px}
+
+  /* TRUST STRIP */
+  .trust-strip{background:var(--red-bid);padding:15px 36px;display:flex;align-items:center;justify-content:center;gap:44px;flex-wrap:wrap}
+  .trust-pill{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:var(--blue-primary)}
+  .trust-pill svg{width:18px;height:18px;flex-shrink:0}
+
+  /* SECTIONS */
+  .sec{padding:80px 36px}
+  .sec-in{max-width:1240px;margin:0 auto}
+  .sec-hd{text-align:center;max-width:600px;margin:0 auto 52px}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--blue-hover);margin-bottom:11px}
+  .sec-title{font-family:'Inter',serif;font-size:clamp(28px,3.5vw,46px);font-weight:700;line-height:1.12;color:var(--charcoal);margin-bottom:14px}
+  .sec-title em{font-style:italic;color:var(--blue-hover)}
+  .sec-sub{font-size:15.5px;line-height:1.75;color:var(--text-mid)}
+
+  /* AUCTIONS */
+  .auctions-sec{background:var(--cream)}
+  .filter-row{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-bottom:40px}
+  .chip{padding:7px 18px;border-radius:100px;border:1.5px solid var(--cream-dark);background:var(--white);font-size:13px;font-weight:600;color:var(--text-mid);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+  .chip.on,.chip:hover{border-color:var(--blue-hover);background:var(--blue-hover);color:var(--white)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:24px}
+
+  /* CARD */
+  .ac{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm);transition:all .3s;position:relative;display:flex;flex-direction:column}
+  .ac:hover{transform:translateY(-6px);box-shadow:var(--sh-lg)}
+  .ac-img{height:195px;display:flex;align-items:center;justify-content:center;font-size:68px;position:relative}
+  .ac-badge{position:absolute;top:13px;right:13px;font-size:11px;font-weight:700;letter-spacing:.07em;padding:4px 11px;border-radius:100px;background:var(--charcoal);color:white}
+  .ac-badge.live{background:#B03030}
+  .ac-badge.hot{background:var(--orange-warm)}
+  .ac-fav{position:absolute;top:13px;left:13px;width:32px;height:32px;background:rgba(255,255,255,.92);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:transform .2s;backdrop-filter:blur(4px)}
+  .ac-fav:hover{transform:scale(1.12)}
+  .ac-body{padding:18px 20px 20px;flex:1;display:flex;flex-direction:column}
+  .ac-estate{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-hover);margin-bottom:5px}
+  .ac-name{font-family:'Inter',serif;font-size:19px;font-weight:700;line-height:1.3;color:var(--charcoal);margin-bottom:8px}
+  .cond{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:3px 10px;border-radius:100px;margin-bottom:13px}
+  .c-ex{background:#E6F4EC;color:#2A6040}
+  .c-gd{background:#EAF2E4;color:#3A6A28}
+  .c-fr{background:#FEF4E2;color:#8A5A10}
+  .ac-pricing{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:13px;border-bottom:1px solid var(--cream-mid);margin-bottom:12px}
+  .ac-bid-lbl,.ac-time-lbl{font-size:10.5px;color:var(--text-light);margin-bottom:2px}
+  .ac-time-lbl{text-align:right}
+  .ac-bid{font-family:'Inter',serif;font-size:26px;font-weight:700;color:var(--charcoal)}
+  .ac-ct{font-size:11.5px;color:var(--text-light)}
+  .ac-time{font-size:17px;font-weight:700;color:var(--charcoal)}
+  .ac-time.u{color:#B03030}
+  /* cost panel */
+  .cost-panel{background:var(--cream);border-left:3px solid var(--red-bid);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:11px 13px;margin-bottom:12px;font-size:12.5px}
+  .cp-hd{font-weight:700;color:var(--blue-primary);margin-bottom:7px}
+  .cp-row{display:flex;justify-content:space-between;color:var(--text-mid);padding:2px 0}
+  .cp-tot{display:flex;justify-content:space-between;font-weight:700;color:var(--blue-primary);border-top:1px solid var(--cream-dark);margin-top:6px;padding-top:6px}
+  .ac-seller{font-size:11.5px;color:var(--text-mid);margin-bottom:13px;display:flex;align-items:center;gap:5px}
+  .stars{color:var(--red-bid);font-size:12px}
+  .ac-actions{display:flex;gap:8px;margin-top:auto}
+  .btn-bid-c{flex:1;padding:10px;background:var(--blue-primary);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-bid-c:hover{background:var(--blue-hover);transform:translateY(-1px)}
+  .btn-watch-c{padding:10px 15px;background:transparent;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--charcoal-mid);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+  .btn-watch-c:hover{border-color:var(--red-bid);color:var(--red-bid)}
+  .load-wrap{text-align:center;margin-top:48px}
+  .btn-load{padding:13px 40px;background:transparent;border:2px solid var(--blue-hover);border-radius:var(--r-sm);color:var(--blue-hover);font-size:15px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+  .btn-load:hover{background:var(--blue-hover);color:white}
+
+  /* HOW IT WORKS */
+  .how-sec{background:var(--blue-primary)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;max-width:1060px;margin:0 auto;position:relative}
+  .steps::before{content:'';position:absolute;top:25px;left:12%;right:12%;height:1.5px;background:linear-gradient(90deg,var(--red-bid) 0%,rgba(200,169,110,.15) 100%)}
+  .step{text-align:center}
+  .step-n{width:52px;height:52px;margin:0 auto 18px;background:linear-gradient(135deg,var(--red-bid),var(--red-hover));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:22px;font-weight:700;color:var(--white);position:relative;z-index:1}
+  .step-t{font-family:'Inter',serif;font-size:19px;font-weight:700;color:var(--white);margin-bottom:10px}
+  .step-d{font-size:14px;line-height:1.72;color:rgba(255,255,255,.52)}
+
+  /* WHY */
+  .why-sec{background:var(--bg-page)}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;max-width:1100px;margin:0 auto;align-items:center}
+  .pillars{display:flex;flex-direction:column;gap:20px}
+  .pillar{display:flex;gap:16px;align-items:flex-start;background:var(--white);border-radius:var(--r-md);padding:20px;box-shadow:var(--sh-xs);border-left:4px solid var(--red-bid);transition:all .22s}
+  .pillar:hover{border-left-color:var(--blue-primary);box-shadow:var(--sh-md);transform:translateX(4px)}
+  .p-icon{width:44px;height:44px;min-width:44px;background:rgba(30,78,216,0.1);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:20px}
+  .p-title{font-size:15.5px;font-weight:700;color:var(--charcoal);margin-bottom:4px}
+  .p-desc{font-size:13.5px;line-height:1.65;color:var(--text-mid)}
+  .promise{background:var(--blue-primary);border-radius:var(--r-lg);padding:38px;position:relative;overflow:hidden}
+  .promise::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(230,57,70,.12),transparent 70%);border-radius:50%}
+  .promise-t{font-family:'Inter',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:22px;text-align:center}
+  .pr-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:14px}
+  .pr-row:last-child{border-bottom:none}
+  .pr-feat{flex:1;color:rgba(255,255,255,.72)}
+  .pr-col{width:52px;text-align:center;font-size:17px}
+  .pr-col.yes{color:var(--red-bid)}
+  .pr-col.no{color:rgba(255,100,80,.7)}
+  .pr-hd{width:52px;text-align:center;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .pr-hd.us{color:var(--red-bid)}
+  .pr-hd.std{color:rgba(255,255,255,.3)}
+
+  /* TESTIMONIALS */
+  .testi-sec{background:var(--white)}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:1100px;margin:0 auto}
+  .tc{background:var(--cream);border-radius:var(--r-lg);padding:28px;position:relative}
+  .tc::before{content:'\201C';font-family:'Inter',serif;font-size:86px;line-height:1;color:var(--blue-hover);position:absolute;top:6px;left:20px}
+  .tc-text{font-size:14.5px;line-height:1.78;color:var(--text-mid);margin-bottom:20px;position:relative;z-index:1}
+  .tc-author{display:flex;align-items:center;gap:12px}
+  .tc-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--blue-primary),var(--red-bid));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:15px}
+  .tc-name{font-weight:700;font-size:14.5px;color:var(--charcoal)}
+  .tc-detail{font-size:11.5px;color:var(--text-light)}
+
+  /* CTA */
+  .cta-sec{background:linear-gradient(140deg,var(--blue-primary) 0%,var(--blue-hover) 100%);padding:80px 36px;text-align:center;position:relative;overflow:hidden}
+  .cta-sec::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q50 20 30 35 Q10 20 30 5Z' fill='rgba(255,255,255,.025)'/%3E%3C/svg%3E");background-size:60px}
+  .cta-t{font-family:'Inter',serif;font-size:clamp(28px,4vw,50px);font-weight:700;color:var(--white);margin-bottom:14px;position:relative}
+  .cta-s{font-size:16.5px;color:rgba(255,255,255,.7);margin-bottom:34px;position:relative}
+  .cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative}
+  .btn-cta-p{padding:15px 36px;background:var(--red-bid);color:var(--white);border:none;border-radius:var(--r-sm);font-size:15.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+  .btn-cta-p:hover{background:var(--red-hover);transform:translateY(-2px);box-shadow:0 8px 28px rgba(230,57,70,.38)}
+  .btn-cta-s{padding:15px 36px;background:transparent;color:white;border:2px solid rgba(255,255,255,.36);border-radius:var(--r-sm);font-size:15.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+  .btn-cta-s:hover{border-color:white;background:rgba(255,255,255,.1)}
+
+  /* FOOTER */
+  footer{background:var(--charcoal);padding:60px 36px 28px;color:rgba(255,255,255,.55)}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;max-width:1240px;margin:0 auto 44px}
+  .foot-desc{font-size:13.5px;line-height:1.75;margin:14px 0 18px}
+  .foot-contact a{display:block;color:var(--red-bid);text-decoration:none;font-size:13.5px;margin-bottom:4px}
+  .foot-col h4{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--red-bid);margin-bottom:14px}
+  .foot-col ul{list-style:none}
+  .foot-col li{margin-bottom:9px}
+  .foot-col a{color:rgba(255,255,255,.5);text-decoration:none;font-size:13.5px;transition:color .2s}
+  .foot-col a:hover{color:white}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:22px;display:flex;justify-content:space-between;align-items:center;max-width:1240px;margin:0 auto;font-size:12.5px;flex-wrap:wrap;gap:10px}
+  .foot-bottom a{color:rgba(255,255,255,.38);text-decoration:none;margin-left:18px}
+  .foot-bottom a:hover{color:white}
+
+  /* OVERLAYS */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+  .overlay.on{opacity:1;pointer-events:all}
+  .modal{background:var(--white);border-radius:var(--r-lg);padding:38px;max-width:460px;width:100%;position:relative;transform:translateY(18px) scale(.97);transition:all .3s}
+  .overlay.on .modal{transform:none}
+  .modal-x{position:absolute;top:14px;right:14px;width:30px;height:30px;background:var(--cream-mid);border:none;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+  .modal h2{font-family:'Inter',serif;font-size:28px;font-weight:700;color:var(--charcoal);margin-bottom:7px}
+  .modal .sub{font-size:14px;color:var(--text-mid);margin-bottom:24px}
+  .ff{margin-bottom:16px}
+  .ff label{display:block;font-size:12.5px;font-weight:600;color:var(--charcoal-mid);margin-bottom:6px}
+  .ff input{width:100%;padding:12px 15px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14.5px;font-family:'Inter',sans-serif;color:var(--charcoal);outline:none;transition:border-color .2s}
+  .ff input:focus{border-color:var(--blue-hover)}
+  .btn-m{width:100%;padding:13px;background:var(--blue-primary);color:white;border:none;border-radius:var(--r-sm);font-size:15.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;margin-top:4px}
+  .btn-m:hover{background:var(--blue-hover)}
+  .m-alt{text-align:center;font-size:13.5px;color:var(--text-mid);margin-top:14px}
+  .m-alt a{color:var(--blue-hover);font-weight:600;text-decoration:none}
+  .cost-box{background:var(--cream);border-radius:var(--r-sm);border-left:3px solid var(--red-bid);padding:14px 16px;margin-bottom:18px}
+  .cb-hd{font-weight:700;color:var(--blue-primary);font-size:13px;margin-bottom:9px}
+  .cb-r{display:flex;justify-content:space-between;font-size:13px;color:var(--text-mid);padding:2px 0}
+  .cb-tot{display:flex;justify-content:space-between;font-weight:700;color:var(--blue-primary);border-top:1px solid var(--cream-dark);padding-top:7px;margin-top:7px;font-size:13px}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:22px;right:22px;background:var(--charcoal);color:white;padding:14px 20px;border-radius:var(--r-md);font-size:13.5px;max-width:290px;box-shadow:var(--sh-lg);border-left:4px solid var(--red-bid);transform:translateX(140%);transition:transform .3s;z-index:9999}
+  .toast.on{transform:none}
+  .toast strong{color:var(--red-bid);display:block;margin-bottom:3px}
+
+  /* ACTIVITY FEED */
+  .act-feed{position:fixed;bottom:22px;left:22px;z-index:8000;display:flex;flex-direction:column;gap:8px}
+  .act-item{background:rgba(17,24,39,.96);backdrop-filter:blur(6px);color:white;padding:11px 15px;border-radius:var(--r-sm);font-size:12.5px;display:flex;align-items:center;gap:10px;box-shadow:var(--sh-md);border-left:3px solid var(--red-bid);animation:slideUp .35s ease;max-width:260px}
+  @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .act-av{width:26px;height:26px;border-radius:50%;background:var(--red-bid);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--white);flex-shrink:0}
+
+  /* ── MOBILE: tablet 920px ── */
+  @media(max-width:920px){.ribbon{display:none}
+    nav{padding:0 16px}
+    .nav-links{display:none}
+    .nav-ctas{display:none}
+    .hero{padding-top:70px}
+    .hero-inner{grid-template-columns:1fr;padding:36px 18px 32px;gap:28px}
+    .hero-preview{display:none}
+    h1{font-size:clamp(30px,7vw,44px)}
+    .hero-desc{font-size:14.5px}
+    .search-bar{flex-direction:column;border-radius:var(--r-md);overflow:visible;gap:8px;background:transparent;box-shadow:none}
+    .search-bar input{border-radius:var(--r-sm);border:none;background:rgba(255,255,255,.12);color:white;padding:13px 16px;font-size:14px}
+    .search-bar input::placeholder{color:rgba(255,255,255,.55)}
+    .search-bar select{border-radius:var(--r-sm);border:none;background:rgba(255,255,255,.12);color:white;padding:13px 16px;font-size:14px;width:100%;-webkit-appearance:none}
+    .btn-search{border-radius:var(--r-sm);padding:13px;width:100%}
+    .metrics{flex-wrap:wrap;gap:18px}
+    .metric{min-width:calc(50% - 9px)}
+    .sec{padding:48px 18px}
+    .cards{grid-template-columns:1fr}
+    .cat-strip{padding:0 18px 12px}
+    .steps{grid-template-columns:1fr 1fr;gap:18px}
+    .steps::before{display:none}
+    .why-grid{grid-template-columns:1fr;gap:32px}
+    .testi-grid{grid-template-columns:1fr}
+    .foot-grid{grid-template-columns:1fr 1fr;gap:28px}
+    .foot-brand{grid-column:1/-1}
+    .load-wrap{padding:0 18px}
+  }
+  /* ── MOBILE: phone 600px ── */
+  @media(max-width:600px){
+    .hero-inner{padding:28px 16px 24px}
+    h1{font-size:28px}
+    .metrics{gap:12px}
+    .metric{min-width:calc(50% - 6px)}
+    .foot-grid{grid-template-columns:1fr}
+    .foot-bottom{flex-direction:column;text-align:center;gap:8px}
+    .steps{grid-template-columns:1fr}
+    .ac-actions{flex-direction:column}
+    .ac-actions button{width:100%}
+    .testi-card{padding:18px}
+    .cta-btns{flex-direction:column;align-items:stretch}
+    .btn-cta-p,.btn-cta-s{text-align:center;padding:14px 20px}
+    .modal{padding:24px 18px;margin:8px}
+  }
+
+  /* ── HAMBURGER ── */
+  .mobile-nav a:hover{color:var(--red-bid)}
+  .mobile-nav-ctas button{width:100%;padding:14px;font-size:16px;border-radius:var(--r-sm);cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;transition:all .2s}
+
+  .mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:var(--blue-primary);z-index:9999;flex-direction:column;align-items:center;justify-content:center;gap:28px;opacity:0;pointer-events:none;transition:opacity .3s}
+  .mobile-menu.open{display:flex;opacity:1;pointer-events:all}
+  .mobile-menu a{font-family:'Inter',serif;font-size:34px;font-weight:700;color:var(--white);text-decoration:none}
+  .mobile-menu a:hover{color:var(--red-bid)}
+  .mobile-menu-ctas{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:8px}
+  .mobile-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:var(--white);font-size:32px;cursor:pointer;z-index:10000}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:transparent;border:none;z-index:10000;position:relative}
+  @media(max-width:960px){.hamburger{display:flex!important}}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--white);border-radius:2px;transition:all .3s}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .hamburger.open span:nth-child(2){opacity:0}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+</style>
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- BidYard API -->
+  <script src="js/api.js?v=2"></script>
 </head>
 <body>
-<main class="container">
-<h1>Welcome to Family Nest Auctions</h1>
-<p>Browse our selection of unique estate items and antiques.</p>
-<div class="featured-items">
-<!-- Items will be loaded dynamically -->
+
+<!-- HEADER -->
+<header>
+  <div class="ribbon">
+    <span>📞 (678) 658-3083 &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="95fcfbf3fad5f3f4f8fcf9ecfbf0e6e1f4e0f6e1fcfafbe6bbf6faf8">[email&#160;protected]</a></span>
+    <span>⭐ 5-Star Rated &nbsp;·&nbsp; Transparent Pricing &nbsp;·&nbsp; Trusted Nationwide</span>
+  </div>
+  <nav>
+    <a href="#" class="logo-wrap">
+      <!-- SVG logo mark matching BidYard brand: house + bidding motif, red + blue -->
+      <svg class="logo-mark" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="44" height="44" rx="9" fill="#E63946"/>
+        <path d="M22 7L6 19.5V37h11V27h10v10h11V19.5L22 7z" fill="#1E4ED8"/>
+        <ellipse cx="22" cy="31.5" rx="5.5" ry="2.5" fill="#E63946" opacity=".75"/>
+        <path d="M18 31.5 Q22 28 26 31.5" stroke="#A0C4FF" stroke-width="1.2" fill="none" opacity=".8"/>
+      </svg>
+      <div class="logo-words">
+        <span class="logo-name">BidYard</span>
+        <span class="logo-sub">Online Garage & Estate Sale Auctions</span>
+      </div>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="auction-browse.html">Live Auctions</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#sellers">Sell With Us</a></li>
+      <li><a href="#">Locations</a></li>
+    </ul>
+
+    <div class="nav-ctas" id="nav-ctas">
+      <button class="btn-ghost" onclick="openOv('login')">Sign In</button>
+      <button class="btn-primary" onclick="openOv('register')">Start Bidding Free</button>
+    </div>
+    <div id="nav-user" style="display:none;position:relative">
+      <div id="nav-user-chip" onclick="toggleUserMenu()" style="display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:100px;padding:6px 14px 6px 6px;cursor:pointer;transition:all .2s">
+        <div id="nav-user-av" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--red-bid),var(--red-hover));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--blue-primary)">U</div>
+        <span id="nav-user-name" style="font-size:13px;font-weight:600;color:var(--white)">Account</span>
+        <span style="color:rgba(255,255,255,.6);font-size:10px">▼</span>
+      </div>
+      <div id="nav-user-menu" style="display:none;position:absolute;top:48px;right:0;background:var(--white);border-radius:var(--r-md);box-shadow:var(--sh-lg);padding:8px;min-width:180px;z-index:999">
+        <a href="account-dashboard.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">👤 My Account</a>
+        <a href="seller-dashboard.html" id="nav-seller-dashboard-link" style="display:none;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">🏡 Seller Dashboard</a>
+        <a href="messages.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">✉️ Messages</a>
+        <hr style="border:none;border-top:1px solid var(--cream-mid);margin:4px 0">
+        <button onclick="FNA.Auth.signOut()" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--red);border:none;background:transparent;cursor:pointer;border-radius:var(--r-sm);width:100%;text-align:left;font-family:'Inter',sans-serif;transition:background .15s" onmouseover="this.style.background='#FDECEA'" onmouseout="this.style.background='transparent'">🚪 Sign Out</button>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="index.html" onclick="toggleMenu()">Home</a>
+  <a href="auction-browse.html" onclick="toggleMenu()">Live Auctions</a>
+  <a href="index.html#how" onclick="toggleMenu()">How It Works</a>
+  <a href="seller-dashboard.html" id="mobile-seller-dashboard-link" onclick="toggleMenu()" style="display: none">Sell With Us</a>
+  <a href="account-dashboard.html" onclick="toggleMenu()">My Account</a>
+  <div class="mobile-menu-ctas">
+    <button onclick="toggleMenu();window.location.href='index.html?register=1'" style="width:220px;padding:14px;background:var(--red-bid);border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif">Start Bidding Free</button>
+    <button onclick="toggleMenu();window.location.href='index.html?login=1'" style="width:220px;padding:13px;background:transparent;border:2px solid rgba(255,255,255,.5);border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;color:white;font-family:'Inter',sans-serif">Sign In</button>
+  </div>
 </div>
-</main>
+
+
+<!-- MOBILE NAV -->
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="dot"></span>Live Estate Auctions Happening Now</div>
+      <h1>Bid on Local Garage & Estate Sales <em>Online</em></h1>
+      <p class="hero-desc">Find hidden treasures from local garage and estate sales. Bid online with full transparency — see total costs upfront, including shipping. No surprises, no hidden fees. Garage sale bidding made easy.</p>
+      <div class="search-bar">
+        <input type="text" placeholder="Search furniture, jewelry, art, vehicles…">
+        <select>
+          <option>All Categories</option>
+          <option>Furniture</option>
+          <option>Jewelry &amp; Watches</option>
+          <option>Art &amp; Collectibles</option>
+          <option>Vehicles</option>
+          <option>Electronics</option>
+          <option>Kitchen &amp; Home</option>
+        </select>
+        <button class="btn-search" onclick="var q=document.querySelector('.search-bar input').value;window.location.href='auction-browse.html'+(q?'?q='+encodeURIComponent(q):'')">🔍 Search</button>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="num">12,<em>400+</em></div><div class="lbl">Active Listings</div></div>
+        <div class="metric"><div class="num">$<em>1</em></div><div class="lbl">Starting Bids</div></div>
+        <div class="metric"><div class="num">5<em>★</em></div><div class="lbl">Avg. Rating</div></div>
+        <div class="metric"><div class="num">18<em> States</em></div><div class="lbl">Nationwide</div></div>
+      </div>
+    </div>
+
+    <div class="hero-preview" id="hero-preview">
+      <div class="prev-card" id="hero-featured-card">
+        <div class="prev-img">🪑<div class="prev-tag">⭐ Featured Sale</div></div>
+        <div class="prev-body">
+          <div class="prev-estate" id="hero-estate">📍 Loading...</div>
+          <div class="prev-title" id="hero-title">Loading...</div>
+          <div class="prev-foot">
+            <div><div class="prev-bid-lbl">Current Bid</div><div class="prev-bid" id="hero-bid">$--</div></div>
+            <div><div class="prev-time-lbl">Ends In</div><div class="prev-time" id="hero-timer">00:00:00</div></div>
+          </div>
+          <button class="btn-bid-prev" id="hero-bid-btn" onclick="openOv('bid')">Bid — See Your Full Cost First</button>
+        </div>
+      </div>
+      <div class="mini-grid" id="hero-mini-grid">
+        <div class="mini-tile" onclick="window.location.href='auction-item-detail.html'"><div class="mini-icon">🪔</div><div class="mini-name">Tiffany Lamp</div><div class="mini-price">$340</div><div class="mini-bids">24 bids · 4h left</div></div>
+        <div class="mini-tile" onclick="window.location.href='auction-item-detail.html'"><div class="mini-icon">🏺</div><div class="mini-name">Antique Persian Rug</div><div class="mini-price">$215</div><div class="mini-bids">11 bids · 1d left</div></div>
+        <div class="mini-tile" onclick="window.location.href='auction-item-detail.html'"><div class="mini-icon">💍</div><div class="mini-name">Estate Jewelry Set</div><div class="mini-price">$890</div><div class="mini-bids">67 bids · 2h left</div></div>
+        <div class="mini-tile" onclick="window.location.href='auction-item-detail.html'"><div class="mini-icon">⌚</div><div class="mini-name">Vintage Rolex</div><div class="mini-price">$4,200</div><div class="mini-bids">142 bids · 6h left</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>No Hidden Fees — Ever</div>
+  <div class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Shipping Shown Before You Bid</div>
+  <div class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>Verified Condition Reports</div>
+  <div class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Trusted Garage Sale Platform</div>
+  <div class="trust-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>5-Star Rated</div>
+</div>
+
+<!-- LIVE AUCTIONS -->
+<section class="sec auctions-sec" id="auctions">
+  <div class="sec-in">
+    <div class="sec-hd">
+      <div class="eyebrow">Live Right Now</div>
+      <h2 class="sec-title">Find <em>Garage Sale Gems</em></h2>
+      <p class="sec-sub">Every listing shows your complete cost — current bid, buyer's premium, and estimated shipping — so you can bid with total confidence and zero surprises.</p>
+    </div>
+    <div class="filter-row">
+      <button class="chip on" onclick="setChip(this)">🏠 All Items</button>
+      <button class="chip" onclick="setChip(this)">🛋 Furniture</button>
+      <button class="chip" onclick="setChip(this)">💍 Jewelry</button>
+      <button class="chip" onclick="setChip(this)">🎨 Art</button>
+      <button class="chip" onclick="setChip(this)">🚗 Vehicles</button>
+      <button class="chip" onclick="setChip(this)">📺 Electronics</button>
+      <button class="chip" onclick="setChip(this)">🏺 Collectibles</button>
+    </div>
+    <div class="cards" id="live-auctions-grid">
+    <!-- Cards loaded dynamically by api.js -->
+    </div>
+    <div class="load-wrap"><button class="btn-load" onclick="window.location.href='auction-browse.html'">Browse All Listings →</button></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec how-sec" id="how">
+  <div class="sec-in">
+    <div class="sec-hd">
+      <div class="eyebrow" style="color:var(--red-bid)">Simple Process</div>
+      <h2 class="sec-title" style="color:var(--white)">Bidding Made <em style="color:var(--red-hover);font-style:italic">Simple</em></h2>
+      <p class="sec-sub" style="color:rgba(255,255,255,.55)">From discovery to doorstep — built to put your confidence first, every step of the way.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="step-n">1</div><div class="step-t">Browse &amp; Discover</div><div class="step-d">Filter by category, location, or price. Every listing includes full photos, a standardized condition report, and complete damage disclosure.</div></div>
+      <div class="step"><div class="step-n">2</div><div class="step-t">See Your Total Cost</div><div class="step-d">Before placing a bid you'll see the current bid, buyer's premium, and estimated shipping all clearly displayed — upfront, always.</div></div>
+      <div class="step"><div class="step-n">3</div><div class="step-t">Bid &amp; Win</div><div class="step-d">Set a maximum bid and our proxy system works for you automatically. Get outbid? We notify you instantly so you stay in control.</div></div>
+      <div class="step"><div class="step-n">4</div><div class="step-t">Receive with Confidence</div><div class="step-d">Items ship from verified, rated sellers. Your purchase history — photos, receipts, descriptions — stays in your account permanently.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY BIDYARD -->
+<section class="sec why-sec" id="why">
+  <div class="sec-in">
+    <div class="sec-hd">
+      <div class="eyebrow">Our Promise</div>
+      <h2 class="sec-title">The Garage Sale Platform That Truly <em>Respects You</em></h2>
+      <p class="sec-sub">We listened to buyers and sellers across the country and built everything they wished existed — transparency, accountability, and care from start to finish.</p>
+    </div>
+    <div class="why-grid">
+      <div class="pillars">
+        <div class="pillar"><div class="p-icon">💡</div><div><div class="p-title">Radical Price Transparency</div><div class="p-desc">Your estimated total — bid, premium, and shipping — is displayed on every listing before you commit. What you see is what you pay.</div></div></div>
+        <div class="pillar"><div class="p-icon">🏅</div><div><div class="p-title">Verified Seller Accountability</div><div class="p-desc">Every seller carries a public score reflecting shipping speed, item accuracy, and communication. Consistent underperformers are removed.</div></div></div>
+        <div class="pillar"><div class="p-icon">🤖</div><div><div class="p-title">AI-Enhanced Item Listings</div><div class="p-desc">Our AI analyzes photos to generate detailed, accurate descriptions and flag potential condition concerns automatically.</div></div></div>
+        <div class="pillar"><div class="p-icon">📂</div><div><div class="p-title">Permanent Purchase Archive</div><div class="p-desc">Every item you've won stays accessible forever — complete with photos, receipts, and descriptions. Your history is always yours.</div></div></div>
+      </div>
+      <div class="promise">
+        <div class="promise-t">What We Deliver vs. the Industry Standard</div>
+        <div>
+          <div class="pr-row" style="border-bottom:none;padding-bottom:2px">
+            <div class="pr-feat"></div>
+            <div class="pr-hd std">Others</div>
+            <div class="pr-hd us">Us</div>
+          </div>
+          <div class="pr-row"><div class="pr-feat">Shipping shown before bidding</div><div class="pr-col no">✗</div><div class="pr-col yes">✓</div></div>
+          <div class="pr-row"><div class="pr-feat">Condition report on every item</div><div class="pr-col no">✗</div><div class="pr-col yes">✓</div></div>
+          <div class="pr-row"><div class="pr-feat">Seller accountability scores</div><div class="pr-col no">✗</div><div class="pr-col yes">✓</div></div>
+          <div class="pr-row"><div class="pr-feat">Buyer dispute resolution</div><div class="pr-col no">✗</div><div class="pr-col yes">✓</div></div>
+          <div class="pr-row"><div class="pr-feat">Permanent purchase archive</div><div class="pr-col no">✗</div><div class="pr-col yes">✓</div></div>
+          <div class="pr-row"><div class="pr-feat">AI-generated item descriptions</div><div class="pr-col no">✗</div><div class="pr-col yes">✓</div></div>
+          <div class="pr-row"><div class="pr-feat">Full bid history transparency</div><div class="pr-col no">✗</div><div class="pr-col yes">✓</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec testi-sec">
+  <div class="sec-in">
+    <div class="sec-hd">
+      <div class="eyebrow">Real Buyers, Real Stories</div>
+      <h2 class="sec-title">Bidders Trust <em>BidYard</em></h2>
+      <p class="sec-sub">Hear from buyers and sellers who've experienced estate auctions done the right way.</p>
+    </div>
+    <div class="testi-grid" id="reviews-grid">
+      <div class="tc"><p class="tc-text">I won a beautiful sideboard and knew exactly what I'd pay before I clicked bid. Zero surprises at checkout. After years of uncertainty with other platforms, this was genuinely a revelation.</p><div class="tc-author"><div class="tc-av">M</div><div><div class="tc-name">Margaret T.</div><div class="tc-detail">⭐⭐⭐⭐⭐ Buyer · Tampa, FL</div></div></div></div>
+      <div class="tc"><p class="tc-text">We listed my mother's entire estate and every single item sold. The seller dashboard is incredible — real-time bids, professional photos, everything handled with care. We'll absolutely be back.</p><div class="tc-author"><div class="tc-av">R</div><div><div class="tc-name">Robert &amp; Diana K.</div><div class="tc-detail">⭐⭐⭐⭐⭐ Seller · Atlanta, GA</div></div></div></div>
+      <div class="tc"><p class="tc-text">The condition reports made all the difference. Bidding on a ring across the country — the photos, grading, and certificate scan gave me total confidence. Won it well under retail value.</p><div class="tc-author"><div class="tc-av">S</div><div><div class="tc-name">Sandra M.</div><div class="tc-detail">⭐⭐⭐⭐⭐ Buyer · Nashville, TN</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec" id="sellers">
+  <h2 class="cta-t">Ready to Find Your Next Treasure?</h2>
+  <p class="cta-s">Join thousands of buyers and sellers across 18 states. Free to sign up — no credit card required.</p>
+  <div class="cta-btns">
+    <a href="#" class="btn-cta-p" onclick="openOv('register');return false">Start Bidding for Free</a>
+    <a href="#" class="btn-cta-s" onclick="openOv('seller');return false">List Your Estate Items</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div>
+      <a href="#" class="logo-wrap">
+        <svg class="logo-mark" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="44" height="44" rx="9" fill="#E63946"/>
+          <path d="M22 7L6 19.5V37h11V27h10v10h11V19.5L22 7z" fill="#1E4ED8"/>
+          <ellipse cx="22" cy="31.5" rx="5.5" ry="2.5" fill="#E63946" opacity=".75"/>
+          <path d="M18 31.5 Q22 28 26 31.5" stroke="#A0C4FF" stroke-width="1.2" fill="none" opacity=".8"/>
+        </svg>
+        <div class="logo-words">
+          <span class="logo-name">BidYard</span>
+          <span class="logo-sub">Online Garage & Estate Sale Auctions</span>
+        </div>
+      </a>
+      <p class="foot-desc">Connecting buyers with local garage and estate sales online. Transparent bidding, fair prices, and easy shipping. Garage sale treasures for everyone.</p>
+      <div class="foot-contact">
+        <a href="tel:6786583083">📞 (678) 658-3083</a>
+        <a href="/cdn-cgi/l/email-protection#4e272028210e282f23272237202b3d3a2f3b2d3a2721203d602d2123">✉️ <span class="__cf_email__" data-cfemail="caa3a4aca58aacaba7a3a6b3a4afb9beabbfa9bea3a5a4b9e4a9a5a7">[email&#160;protected]</span></a>
+      </div>
+    </div>
+    <div class="foot-col"><h4>For Buyers</h4><ul><li><a href="auction-browse.html">Browse Live Auctions</a></li><li><a href="#">How Bidding Works</a></li><li><a href="#">Buyer Protection</a></li><li><a href="#">Shipping Info</a></li><li><a href="account-dashboard.html">My Watchlist</a></li><li><a href="account-dashboard.html">Purchase Archive</a></li></ul></div>
+    <div class="foot-col"><h4>For Sellers</h4><ul><li><a href="#">List Your Estate</a></li><li><a href="seller-dashboard.html" id="footer-seller-dashboard-link" style="display: none">Seller Dashboard</a></li><li><a href="#">Pricing &amp; Fees</a></li><li><a href="#">Seller Verification</a></li><li><a href="#">Success Stories</a></li></ul></div>
+    <div class="foot-col"><h4>Company</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Locations</a></li><li><a href="#">Franchise Opportunities</a></li><li><a href="#">Blog</a></li><li><a href="#">Contact</a></li><li><a href="#">Accessibility</a></li></ul></div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 BidYard. All rights reserved.</span>
+    <div><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Sitemap</a></div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="overlay" id="ov-login"><div class="modal">
+  <button class="modal-x" onclick="closeOv('login')">✕</button>
+  <h2>Welcome Back</h2><p class="sub">Sign in to access your bids, watchlist, and purchase history.</p>
+  <div class="ff"><label>Email Address</label><input type="email" id="login-email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+  <div class="ff"><label>Password</label><input type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSignIn()"></div>
+  <div id="login-error" style="color:#B03030;font-size:13px;margin-bottom:8px;padding:8px 12px;background:#FDECEA;border-radius:6px;display:none"></div>
+  <button class="btn-m" id="login-btn" onclick="doSignIn()">Sign In</button>
+  <div class="m-alt">New here? <a href="#" onclick="closeOv('login');openOv('register')">Create a free account →</a></div>
+</div></div>
+
+<div class="overlay" id="ov-register"><div class="modal">
+  <button class="modal-x" onclick="closeOv('register')">✕</button>
+  <h2>Start Bidding Free</h2><p class="sub">No credit card required. Browse and bid on thousands of estate items today.</p>
+  <div class="ff"><label>Full Name</label><input type="text" id="reg-name" placeholder="Your full name" onkeydown="if(event.key==='Enter')doRegister()"></div>
+  <div class="ff"><label>Email Address</label><input type="email" id="reg-email" placeholder="you@email.com" onkeydown="if(event.key==='Enter')doRegister()"></div>
+  <div class="ff"><label>Create Password</label><input type="password" id="reg-password" placeholder="Create a password" onkeydown="if(event.key==='Enter')doRegister()"></div>
+  <div id="reg-error" style="color:#B03030;font-size:13px;margin-bottom:8px;padding:8px 12px;background:#FDECEA;border-radius:6px;display:none"></div>
+  <button class="btn-m" id="reg-btn" onclick="doRegister()">Create Free Account</button>
+  <div class="m-alt">Already a member? <a href="#" onclick="closeOv('register');openOv('login')">Sign in →</a></div>
+</div></div>
+
+<div class="overlay" id="ov-bid"><div class="modal">
+  <button class="modal-x" onclick="closeOv('bid')">✕</button>
+  <h2>Place Your Bid</h2><p class="sub">Loading...</p>
+  <div class="cost-box">
+    <div class="cb-hd">💡 Your Full Cost at Current Bid</div>
+    <div class="cb-r"><span>Current bid</span><span>$187.00</span></div>
+    <div class="cb-r"><span>Buyer's premium (15%)</span><span>$28.05</span></div>
+    <div class="cb-r"><span>Est. shipping (to FL)</span><span>~$65.00</span></div>
+    <div class="cb-tot"><span>Estimated total if you win now</span><span>~$280</span></div>
+  </div>
+  <div class="ff"><label>Your Maximum Bid — we proxy bid up to this amount on your behalf</label><input type="number" placeholder="$200 minimum" min="200"></div>
+  <button class="btn-m" onclick="closeOv('bid');toast('We\'ll notify you if outbid.','🎉 Bid Confirmed!')">Confirm Bid</button>
+</div></div>
+
+<div class="overlay" id="ov-seller"><div class="modal" style="max-width:520px">
+  <button class="modal-x" onclick="closeOv('seller')">✕</button>
+  <h2>List Your Items</h2><p class="sub">Apply to list your garage sale items on BidYard. We'll review and respond within 48 hours.</p>
+  <div class="ff"><label>Business Name</label><input type="text" id="seller-business" placeholder="e.g. Henderson Estate Sales"></div>
+  <div class="ff"><label>Contact Name</label><input type="text" id="seller-contact" placeholder="Your full name"></div>
+  <div class="ff"><label>Phone Number</label><input type="tel" id="seller-phone" placeholder="(555) 000-0000"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="ff"><label>City</label><input type="text" id="seller-city" placeholder="City"></div>
+    <div class="ff"><label>State</label><input type="text" id="seller-state" placeholder="GA"></div>
+  </div>
+  <div class="ff"><label>Years in Business</label><input type="number" id="seller-years" placeholder="e.g. 5" min="0"></div>
+  <div class="ff"><label>Tell Us About Your Business</label><textarea id="seller-bio" style="width:100%;padding:11px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r-sm);font-size:14px;font-family:'Inter',sans-serif;min-height:80px;outline:none;resize:vertical" placeholder="Describe your estate sales experience, specialties, and the types of items you sell…"></textarea></div>
+  <div id="seller-error" style="color:#B03030;font-size:13px;margin-bottom:8px;padding:8px 12px;background:#FDECEA;border-radius:6px;display:none"></div>
+  <div id="seller-success" style="color:#2a6040;font-size:13px;margin-bottom:8px;padding:8px 12px;background:#E6F4EC;border-radius:6px;display:none"></div>
+  <button class="btn-m" id="seller-btn" onclick="doSellerApply()">Submit Application</button>
+</div></div>
+
+<!-- TOAST + ACTIVITY -->
+<div class="toast" id="the-toast"><strong id="t-ttl"></strong><span id="t-msg"></span></div>
+<div class="act-feed" id="act-feed"></div>
+
+<script type="text/javascript">
+// ── GLOBAL SCOPE — all functions hoisted immediately, safe for inline onclick ──
+
+function $id(id){ return document.getElementById(id); }
+
+// TOAST — null-safe
+function toast(msg, title){
+  var t=$id('the-toast'); if(!t) return;
+  var ttl=$id('t-ttl'), msgEl=$id('t-msg');
+  if(ttl) ttl.textContent = title||'';
+  if(msgEl) msgEl.textContent = msg;
+  t.classList.add('on');
+  setTimeout(function(){ t.classList.remove('on'); }, 3500);
+}
+
+// OVERLAYS
+function openOv(id){
+  document.querySelectorAll('.overlay').forEach(function(o){ o.classList.remove('on'); });
+  var el=$id('ov-'+id); if(el) el.classList.add('on');
+}
+function closeOv(id){
+  var el=$id('ov-'+id); if(el) el.classList.remove('on');
+}
+
+// FAVORITES
+function toggleFav(btn){
+  if(!btn) return;
+  var on=btn.textContent==='❤️';
+  btn.textContent=on?'🤍':'❤️';
+  toast(on?'Removed from favorites':'Added to your favorites!', on?'Removed':'❤️ Saved');
+}
+
+// FILTER CHIPS
+function setChip(el){
+  document.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('on'); });
+  el.classList.add('on');
+  toast('Filtering: '+el.textContent, 'Results updated');
+}
+
+// ACTIVITY FEED DATA
+var acts=[
+  {i:'JA',t:'Bid $355 on Tiffany Lamp'},
+  {i:'RK',t:'Bid $192 on Mahogany Chair'},
+  {i:'SL',t:'Bid $3,820 on Art Deco Ring'},
+  {i:'MP',t:'Bid $230 on Persian Rug'},
+  {i:'TC',t:'Bid $1,260 on Harbor Painting'},
+  {i:'DW',t:'Bid $4,380 on Vintage Watch'},
+  {i:'HB',t:'Won Walnut Sofa Set for $510'},
+  {i:'LM',t:'Bid $6,100 on Estate Piano'},
+];
+var actIdx=0;
+function showAct(){
+  var feed=$id('act-feed'); if(!feed) return;
+  var d=acts[actIdx++%acts.length];
+  var el=document.createElement('div');
+  el.className='act-item';
+  el.innerHTML='<div class="act-av">'+d.i+'</div><div>'+d.t+'</div>';
+  feed.appendChild(el);
+  if(feed.children.length>3) feed.removeChild(feed.firstChild);
+  setTimeout(function(){ el.style.opacity='.45'; }, 5000);
+}
+
+// ── INIT — runs after DOM is fully parsed ──
+document.addEventListener('DOMContentLoaded', function(){
+
+  // Overlay click-outside to close
+  document.querySelectorAll('.overlay').forEach(function(o){
+    o.addEventListener('click', function(e){ if(e.target===o) o.classList.remove('on'); });
+  });
+
+  // Hero bid and timer are set by loadHeroItems() from real Supabase data
+
+  // Activity feed
+  setTimeout(function(){
+    showAct();
+    setInterval(showAct, 4800);
+  }, 2200);
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id=a.getAttribute('href').slice(1);
+      var t=$id(id);
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+    });
+  });
+
+}); // end DOMContentLoaded
+
+
+// Auto-open modals from URL params (?login=1 or ?register=1)
+(function(){
+  var p = new URLSearchParams(window.location.search);
+  if(p.get('login')) { window.addEventListener('load', function(){ openOv('login'); }); }
+  if(p.get('register')) { window.addEventListener('load', function(){ openOv('register'); }); }
+})();
+
+// ── AUTH ──────────────────────────────────────────────────────
+async function doSignIn(){
+  var email=document.getElementById('login-email')?.value?.trim();
+  var pass=document.getElementById('login-password')?.value;
+  var errEl=document.getElementById('login-error');
+  var btn=document.getElementById('login-btn');
+  if(!email||!pass){if(errEl){errEl.textContent='Please enter your email and password.';errEl.style.display='block';}return;}
+  if(btn){btn.textContent='Signing in…';btn.disabled=true;}
+  if(errEl)errEl.style.display='none';
+  try{
+    await FNA.Auth.signIn({email,password:pass});
+    window.location.href='account-dashboard.html';
+  }catch(e){
+    var msg=e.message||'Sign in failed';
+    if(msg.toLowerCase().includes('email not confirmed')||msg.toLowerCase().includes('not confirmed')){
+      msg='Your email address hasn\'t been confirmed yet. Please check your inbox for a confirmation link, then try signing in again.';
+    } else if(msg.toLowerCase().includes('invalid')||msg.toLowerCase().includes('not found')||msg.toLowerCase().includes('credentials')){
+      msg='No account found with that email, or your password is incorrect.';
+    }
+    if(errEl){errEl.textContent=msg;errEl.style.display='block';}
+    if(btn){btn.textContent='Sign In';btn.disabled=false;}
+  }
+}
+
+async function doRegister(){
+  var name=document.getElementById('reg-name')?.value?.trim();
+  var email=document.getElementById('reg-email')?.value?.trim();
+  var pass=document.getElementById('reg-password')?.value;
+  var errEl=document.getElementById('reg-error');
+  var btn=document.getElementById('reg-btn');
+  if(!name||!email||!pass){if(errEl){errEl.textContent='Please fill in all fields.';errEl.style.display='block';}return;}
+  if(pass.length<6){if(errEl){errEl.textContent='Password must be at least 6 characters.';errEl.style.display='block';}return;}
+  if(btn){btn.textContent='Creating account…';btn.disabled=true;}
+  if(errEl)errEl.style.display='none';
+  try{
+    var result=await FNA.Auth.signUp({email,password:pass,fullName:name});
+    if(result&&result.session){
+      // Email confirmation is disabled — user is immediately signed in
+      window.location.href='account-dashboard.html';
+    } else {
+      // Email confirmation is required — tell the user to check their inbox
+      if(errEl){
+        errEl.style.color='var(--green-deep,#3A7A5C)';
+        errEl.textContent='Account created! Please check your email for a confirmation link, then sign in.';
+        errEl.style.display='block';
+      }
+      if(btn){btn.textContent='Check Your Email';btn.disabled=true;}
+    }
+  }catch(e){
+    if(errEl){errEl.textContent=e.message||'Registration failed. Please try again.';errEl.style.display='block';}
+    if(btn){btn.textContent='Create Free Account';btn.disabled=false;}
+  }
+}
+
+async function doSellerApply(){
+  var business=document.getElementById('seller-business')?.value?.trim();
+  var contact=document.getElementById('seller-contact')?.value?.trim();
+  var phone=document.getElementById('seller-phone')?.value?.trim();
+  var city=document.getElementById('seller-city')?.value?.trim();
+  var state=document.getElementById('seller-state')?.value?.trim();
+  var years=parseInt(document.getElementById('seller-years')?.value)||0;
+  var bio=document.getElementById('seller-bio')?.value?.trim();
+  var errEl=document.getElementById('seller-error');
+  var sucEl=document.getElementById('seller-success');
+  var btn=document.getElementById('seller-btn');
+  if(!business||!contact||!phone){if(errEl){errEl.textContent='Please fill in business name, contact name, and phone.';errEl.style.display='block';}return;}
+  if(errEl)errEl.style.display='none';
+  if(btn){btn.textContent='Submitting…';btn.disabled=true;}
+  try{
+    var user=await FNA.Auth.getUser();
+    if(!user){closeOv('seller');openOv('login');return;}
+    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',{ auth: { persistSession: true, autoRefreshToken: true } });
+    await _sb.from('sellers').insert({
+      user_id:user.id,
+      business_name:business,
+      contact_name:contact,
+      phone,
+      city,
+      state,
+      years_in_business:years,
+      bio,
+      is_verified:false,
+      status:'pending'
+    });
+    if(sucEl){sucEl.textContent='Application submitted! We\'ll review and contact you within 48 hours.';sucEl.style.display='block';}
+    if(btn){btn.textContent='Application Submitted ✓';btn.disabled=true;}
+  }catch(e){
+    console.error('Seller apply error:', e);
+    if(errEl){errEl.textContent=e.message||'Could not submit. Please try again.';errEl.style.display='block';}
+    if(btn){btn.textContent='Submit Application';btn.disabled=false;}
+  }
+}
+
+function toggleUserMenu(){
+  var m=document.getElementById('nav-user-menu');
+  if(m)m.style.display=m.style.display==='none'?'block':'none';
+}
+document.addEventListener('click',function(e){
+  var chip=document.getElementById('nav-user-chip');
+  var menu=document.getElementById('nav-user-menu');
+  if(menu&&chip&&!chip.contains(e.target)&&!menu.contains(e.target))menu.style.display='none';
+});
+
+async function checkAuthState(){
+  try{
+    var user=await FNA.Auth.getUser();
+    var ctas=document.getElementById('nav-ctas');
+    var userNav=document.getElementById('nav-user');
+    if(user){
+      if(ctas)ctas.style.display='none';
+      if(userNav)userNav.style.display='block';
+      var firstName=(user.user_metadata?.full_name||user.email||'Account').split(' ')[0];
+      var nameEl=document.getElementById('nav-user-name');
+      var avEl=document.getElementById('nav-user-av');
+      if(nameEl)nameEl.textContent=firstName;
+      if(avEl)avEl.textContent=firstName[0].toUpperCase();
+
+      // Check if user is an approved seller
+      try {
+        var sb = window.supabase.createClient(
+          'https://hwsjgclteuezauveujit.supabase.co',
+          'sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',
+          { auth: { persistSession: true, autoRefreshToken: true } }
+        );
+        var { data: profile } = await sb.from('profiles').select('is_seller').eq('id', user.id).single();
+
+        if (profile && profile.is_seller) {
+          // Show seller dashboard links
+          var navLink = document.getElementById('nav-seller-dashboard-link');
+          var mobileLink = document.getElementById('mobile-seller-dashboard-link');
+          var footerLink = document.getElementById('footer-seller-dashboard-link');
+
+          if (navLink) navLink.style.display = 'flex';
+          if (mobileLink) mobileLink.style.display = 'block';
+          if (footerLink) footerLink.style.display = 'inline';
+        }
+      } catch (profileError) {
+        console.error('Profile check error:', profileError);
+        // Non-critical, just don't show seller links
+      }
+    }
+  }catch(e){}
+}
+
+// ── REVIEWS ───────────────────────────────────────────────────
+async function loadReviews(){
+  var grid=document.getElementById('reviews-grid');
+  if(!grid)return;
+  try{
+    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
+    var {data,error}=await _sb.from('reviews').select('*').order('created_at',{ascending:false}).limit(3);
+    if(error||!data||data.length===0)return;
+    grid.innerHTML=data.map(function(r){
+      var stars='⭐'.repeat(Math.min(5,Math.max(1,r.rating||5)));
+      var initials=(r.author_name||'A').split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+      return '<div class="tc"><p class="tc-text">'+escHtml(r.body||'')+'</p><div class="tc-author"><div class="tc-av">'+initials+'</div><div><div class="tc-name">'+escHtml(r.author_name||'')+'</div><div class="tc-detail">'+stars+' Buyer · '+escHtml(r.author_location||'')+'</div></div></div></div>';
+    }).join('');
+  }catch(e){}
+}
+
+// ── HERO DYNAMIC ITEMS ─────────────────────────────────────────
+async function loadHeroItems(){
+  try{
+    // Use direct fresh client (bypass singleton) for reliability
+    var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS');
+    var {data:items,error}=await _sb.from('items').select('id,title,category,condition,current_bid,starting_bid,buyers_premium_pct,est_shipping_min,est_shipping_max,bid_count,ends_at,sellers(business_name,city,state)').eq('status','live').order('bid_count',{ascending:false}).limit(5);
+    if(error||!items||items.length===0)return;
+
+    // Get true highest bids from bids table to ensure accuracy
+    var itemIds = items.map(item => item.id);
+    var {data:topBids,error:bidsError} = await _sb
+      .from('bids')
+      .select('item_id,amount')
+      .in('item_id', itemIds)
+      .order('amount', {ascending:false});
+
+    // Create map of item_id -> highest bid amount
+    var highestBidMap = {};
+    if(topBids && !bidsError){
+      topBids.forEach(bid => {
+        if(!highestBidMap[bid.item_id] || bid.amount > highestBidMap[bid.item_id]){
+          highestBidMap[bid.item_id] = parseFloat(bid.amount);
+        }
+      });
+    }
+
+    var featured=items[0];
+    // Determine true highest bid for featured item
+    var trueHighestBid = highestBidMap[featured.id];
+    var featuredBid = trueHighestBid || parseFloat(featured.current_bid || featured.starting_bid || 0);
+
+    var titleEl=document.getElementById('hero-title');
+    var bidEl=document.getElementById('hero-bid');
+    var estateEl=document.getElementById('hero-estate');
+    var btnEl=document.getElementById('hero-bid-btn');
+    if(titleEl)titleEl.textContent=featured.title;
+    if(bidEl)bidEl.textContent=FNA.UI.formatPrice(featuredBid);
+    if(estateEl)estateEl.textContent='📍 '+(featured.sellers?.city||'')+', '+(featured.sellers?.state||'')+' — '+(featured.sellers?.business_name||'');
+    if(btnEl){btnEl.onclick=function(){window.location.href='auction-item-detail.html?id='+featured.id;};}
+    // Start countdown for featured item
+    var timerEl=document.getElementById('hero-timer');
+    if(timerEl&&featured.ends_at){
+      timerEl.dataset.endsAt=featured.ends_at;
+      function updateHeroTimer(){
+        var r=FNA.UI.formatCountdown(featured.ends_at);
+        timerEl.textContent=r.text;
+        if(r.urgent)timerEl.classList.add('soon');
+      }
+      updateHeroTimer();
+      setInterval(updateHeroTimer,1000);
+    }
+    // Mini grid
+    var miniGrid=document.getElementById('hero-mini-grid');
+    if(miniGrid&&items.length>1){
+      var cats={'Furniture':'🪑','Art':'🖼️','Jewelry':'💍','Watches':'⌚','Lighting':'🪔','Rugs':'🏺','Collectibles':'🏺','Silver':'🥄','Electronics':'📺'};
+      miniGrid.innerHTML=items.slice(1,5).map(function(item){
+        var icon=cats[item.category]||'🪑';
+        // Determine true highest bid for each mini item
+        var itemTrueHighestBid = highestBidMap[item.id];
+        var itemBid = itemTrueHighestBid || parseFloat(item.current_bid || item.starting_bid || 0);
+        var bid=FNA.UI.formatPrice(itemBid);
+        var countdown=FNA.UI.formatCountdown(item.ends_at);
+        return '<div class="mini-tile" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'"><div class="mini-icon">'+icon+'</div><div class="mini-name">'+escHtml(item.title.substring(0,28))+'</div><div class="mini-price">'+bid+'</div><div class="mini-bids">'+item.bid_count+' bids · '+countdown.text+'</div></div>';
+      }).join('');
+    }
+  }catch(e){}
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// Call auth check and hero/review loaders on DOMContentLoaded
+document.addEventListener('DOMContentLoaded',function(){
+  checkAuthState();
+  loadHeroItems();
+  loadReviews();
+});
+
+
+
+
+
+
+
+
+function toggleMenu(){
+  var h=document.getElementById('hamburger'),m=document.getElementById('mobile-menu');
+  if(!h||!m)return;
+  h.classList.toggle('open');
+  m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+}
+</script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Complete RLS Diagnostic (Single Result Set)
+-- BidYard — Complete RLS Diagnostic (Single Result Set)
 -- Run this in Supabase SQL Editor to see ALL diagnostic info
 -- ============================================================
 

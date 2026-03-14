@@ -1,8 +1,8 @@
 /**
- * Family Nest Auctions — Frontend API Client
+ * BidYard — Frontend API Client
  * Drop this file into your repo as: /js/api.js
  * Add to every HTML page: <script src="/js/api.js"></script>
- * 
+ *
  * Handles: Auth, real-time bidding, watchlist, payments, search
  */
 
@@ -50,7 +50,7 @@ const Auth = {
   async signOut() {
     const sb = initSupabase()
     await sb.auth.signOut()
-    window.location.href = '/family-nest-auctions.html'
+    window.location.href = '/index.html'
   },
 
   async getUser() {
@@ -73,7 +73,7 @@ const Auth = {
   async requireAuth() {
     const user = await Auth.getUser()
     if (!user) {
-      window.location.href = '/family-nest-auctions.html?login=1'
+      window.location.href = '/index.html?login=1'
       return null
     }
     return user
@@ -528,4 +528,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 })
 
 // Export for use from inline scripts
-window.FNA = { Auth, Items, Bidding, Watchlist, Payments, Search, Notifications, Storage, UI }
+window.BY = { Auth, Items, Bidding, Watchlist, Payments, Search, Notifications, Storage, UI }

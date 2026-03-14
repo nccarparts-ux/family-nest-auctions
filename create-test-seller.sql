@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Database Setup & Test Data Script
+-- BidYard — Database Setup & Test Data Script
 -- Run this in your Supabase SQL Editor (supabase.co > SQL Editor)
 -- ============================================================
 
@@ -305,7 +305,7 @@ VALUES
     'Sterling Silver Tea Service',
     5,
     'Best estate auction experience I have had',
-    'Fast shipping, extremely well packaged, item exactly as described. The price transparency upfront is a huge plus — no surprises at checkout. Family Nest sets the standard for online estate auctions.',
+    'Fast shipping, extremely well packaged, item exactly as described. The price transparency upfront is a huge plus — no surprises at checkout. BidYard sets the standard for online estate auctions.',
     '00000000-0000-0000-0000-000000000001',
     NOW() - INTERVAL '5 days'
   ),
@@ -323,7 +323,7 @@ ON CONFLICT DO NOTHING;
 -- ============================================================
 -- HOW TO PROMOTE A USER TO SELLER STATUS
 -- ============================================================
--- After a user signs up at family-nest-auctions.html, run:
+-- After a user signs up at index.html, run:
 --
 --   UPDATE profiles SET is_seller = true WHERE email = 'seller@example.com';
 --
@@ -358,4 +358,4 @@ ON CONFLICT DO NOTHING;
 --     bids, messages, notifications, items
 -- ============================================================
 
-SELECT 'Family Nest Auctions database setup complete!' AS status;
+SELECT 'BidYard database setup complete!' AS status;

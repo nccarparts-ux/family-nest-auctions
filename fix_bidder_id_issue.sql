@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Fix bidder_id column issue
+-- BidYard — Fix bidder_id column issue
 -- Run this AFTER ensure_bidding_setup.sql in Supabase SQL Editor
 -- ============================================================
 

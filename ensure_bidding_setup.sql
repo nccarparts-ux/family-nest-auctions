@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Bidding System Setup Verification
+-- BidYard — Bidding System Setup Verification
 -- Run this in Supabase SQL Editor to ensure bidding works
 -- ============================================================
 

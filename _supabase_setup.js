@@ -1,5 +1,5 @@
 /**
- * Family Nest Auctions — Supabase REST API Setup Script
+ * BidYard — Supabase REST API Setup Script
  * Runs with: node _supabase_setup.js
  * Uses anon key only (safe for frontend) — no direct DB connection
  *
@@ -35,7 +35,7 @@ async function checkTable(name) {
 // ── MAIN ──────────────────────────────────────────────────────
 async function main() {
   console.log('═══════════════════════════════════════════════');
-  console.log(' Family Nest Auctions — Supabase Setup Script');
+  console.log(' BidYard — Supabase Setup Script');
   console.log('═══════════════════════════════════════════════\n');
 
   // 1. Check which tables exist
@@ -117,7 +117,7 @@ async function main() {
             item_name: 'Sterling Silver Tea Service',
             rating: 5,
             title: "Best estate auction experience I've had",
-            body: "Fast shipping, extremely well packaged, item exactly as described. The price transparency upfront is a huge plus — no surprises at checkout. Family Nest sets the standard for online estate auctions.",
+            body: "Fast shipping, extremely well packaged, item exactly as described. The price transparency upfront is a huge plus — no surprises at checkout. BidYard sets the standard for online estate auctions.",
             seller_id: SELLER_ID
           },
           {
@@ -140,7 +140,7 @@ async function main() {
     console.log('  ⏭️  reviews table missing — skipping review seed');
   }
 
-  // Check/seed items (existing item: Mid-Century Walnut Sofa Set, item_number FNA-0001-0001)
+  // Check/seed items (existing item: Mid-Century Walnut Sofa Set, item_number BID-0001-0001)
   if (tableStatus['items']) {
     const existCheck = await rest('GET', '/items?title=eq.Victorian+Carved+Mahogany+Armchair&limit=1');
     const alreadyExists = existCheck.ok && Array.isArray(existCheck.data) && existCheck.data.length > 0;
@@ -158,7 +158,7 @@ async function main() {
           category: 'Furniture',
           condition: 'good',
           period: 'Victorian',
-          item_number: 'FNA-0001-0002',
+          item_number: 'BID-0001-0002',
           starting_bid: 100,
           current_bid: 187,
           bid_count: 18,
@@ -174,7 +174,7 @@ async function main() {
           category: 'Jewelry',
           condition: 'excellent',
           period: 'Art Deco',
-          item_number: 'FNA-0001-0003',
+          item_number: 'BID-0001-0003',
           starting_bid: 500,
           current_bid: 1250,
           bid_count: 55,
@@ -190,7 +190,7 @@ async function main() {
           category: 'Art',
           condition: 'excellent',
           period: 'Early 20th Century',
-          item_number: 'FNA-0001-0004',
+          item_number: 'BID-0001-0004',
           starting_bid: 800,
           current_bid: 2800,
           bid_count: 68,

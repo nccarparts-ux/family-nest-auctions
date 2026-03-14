@@ -4,9 +4,30 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "WebFetch(domain:family-nest-auctions.vercel.app)",
+      "WebFetch(domain:bidyard.vercel.app)",
       "Bash(curl:*)",
-      "Bash(git -C /c/Users/chris/Desktop/family-nest-auctions log --oneline -5)"
+      "Bash(git -C /c/Users/chris/Desktop/bidyard log --oneline -5)",
+      "Bash(git pull:*)",
+      "Bash(git merge:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(supabase:*)",
+      "Bash(vercel:*)",
+      "Bash(npx playwright:*)",
+      "Bash(git --version)",
+      "Bash(docker:*)",
+      "Bash(powershell -Command:*)",
+      "Bash(where supabase:*)",
+      "Bash(echo:*)",
+      "Bash(npx supabase:*)",
+      "Bash(psql:*)",
+      "Bash(tsc:*)",
+      "Bash(timeout:*)",
+      "Bash(npx firecrawl crawl:*)",
+      "Bash(pkill:*)",
+      "Bash(npx vercel:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)"
     ]
   }
 }

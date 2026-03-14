@@ -1,5 +1,5 @@
 -- ============================================================
--- Family Nest Auctions — Missing Tables & Schema Additions
+-- BidYard — Missing Tables & Schema Additions
 -- Run this ONCE in Supabase SQL Editor
 -- ============================================================
 
@@ -144,4 +144,4 @@ DROP POLICY IF EXISTS "avatars_owner_update"  ON storage.objects;
 CREATE POLICY "avatars_owner_update" ON storage.objects
   FOR UPDATE USING (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
 
-SELECT 'Family Nest Auctions — missing tables & schema additions applied!' AS status;
+SELECT 'BidYard — missing tables & schema additions applied!' AS status;
