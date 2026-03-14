@@ -574,7 +574,7 @@ chart-title{font-family:'Inter',serif;font-size:18px;font-weight:700;color:var(-
       startsAt:new Date().toISOString(),
       status:'live'
     };
-    var result=await FNA.Seller.createItem(data);
+    var result=await BY.Seller.createItem(data);
     alert('✅ Item published! ID: '+result.id);
   }catch(e){alert('Error: '+e.message);}
 })()" >🚀 Publish Listing</button>
@@ -1376,7 +1376,7 @@ function publishListing(){
   var btn = document.querySelector('[onclick*="publishListing"]');
   if(btn){ btn.textContent = '⏳ Publishing…'; btn.disabled = true; }
 
-  FNA.Seller.createItem({
+  BY.Seller.createItem({
     title, description: desc, category, condition,
     conditionNotes: condNotes, period,
     startingBid: startBid,
@@ -1446,17 +1446,17 @@ async function submitFranchise(btn){
   // Load real data for seller dashboard
   async function loadSellerDashboard() {
     try {
-      const user = await FNA.Auth.getUser();
+      const user = await BY.Auth.getUser();
       if (!user) {
         window.location.href = 'index.html?login=1';
         return;
       }
 
       // Load dashboard stats
-      const stats = await FNA.Seller.getDashboardStats();
+      const stats = await BY.Seller.getDashboardStats();
       if (stats) {
         // Update stat cards
-        document.querySelectorAll('.stat-card.green .stat-val')[0].textContent = FNA.UI.formatPrice(stats.revenue);
+        document.querySelectorAll('.stat-card.green .stat-val')[0].textContent = BY.UI.formatPrice(stats.revenue);
         document.querySelectorAll('.stat-card.honey .stat-val')[0].textContent = stats.liveCount;
         document.querySelectorAll('.stat-card.blue .stat-val')[0].textContent = stats.totalBids;
         document.querySelectorAll('.stat-card.red .stat-val')[0].textContent = stats.awaitingShipment;
@@ -1465,7 +1465,7 @@ async function submitFranchise(btn){
       }
 
       // Load listings
-      const listings = await FNA.Seller.getMyListings();
+      const listings = await BY.Seller.getMyListings();
       const liveListings = listings.filter(item => item.status === 'live');
       const draftListings = listings.filter(item => item.status === 'draft');
       const endedListings = listings.filter(item => item.status === 'ended' || item.status === 'sold');
@@ -1492,8 +1492,8 @@ async function submitFranchise(btn){
       if (activeListingsContainer && liveListings.length > 0) {
         const topListings = liveListings.slice(0, 4);
         activeListingsContainer.innerHTML = topListings.map(item => {
-          const photo = FNA.UI.primaryPhoto(item.item_photos);
-          const { text: timeLeft, urgent } = FNA.UI.formatCountdown(item.ends_at);
+          const photo = BY.UI.primaryPhoto(item.item_photos);
+          const { text: timeLeft, urgent } = BY.UI.formatCountdown(item.ends_at);
           const conditionClass = item.condition === 'excellent' ? '✅ Excellent' : item.condition === 'good' ? '✔ Good' : '⚠️ Fair';
           
           return `
@@ -1505,7 +1505,7 @@ async function submitFranchise(btn){
                 <div class="listing-tags"><span class="tag live">🟢 Live</span><span class="tag" style="background:#EEF7EE;color:#2a6040">${conditionClass}</span></div>
               </div>
               <div class="listing-right">
-                <div class="listing-bid">${FNA.UI.formatPrice(item.current_bid || item.starting_bid)}</div>
+                <div class="listing-bid">${BY.UI.formatPrice(item.current_bid || item.starting_bid)}</div>
                 <div class="listing-bids">${item.bid_count || 0} bids</div>
                 <div class="listing-time ${urgent ? 'urgent' : ''}">${timeLeft} left</div>
                 <div class="listing-actions">
@@ -1523,8 +1523,8 @@ async function submitFranchise(btn){
       if (listingsContainer) {
         const allListings = [...liveListings, ...draftListings, ...endedListings];
         listingsContainer.innerHTML = allListings.map(item => {
-          const photo = FNA.UI.primaryPhoto(item.item_photos);
-          const { text: timeLeft, urgent } = FNA.UI.formatCountdown(item.ends_at);
+          const photo = BY.UI.primaryPhoto(item.item_photos);
+          const { text: timeLeft, urgent } = BY.UI.formatCountdown(item.ends_at);
           const statusTag = item.status === 'live' ? '🟢 Live' : item.status === 'draft' ? '📝 Draft' : item.status === 'sold' ? '✅ Sold' : '🏁 Ended';
           const tagClass = item.status === 'live' ? 'live' : item.status === 'draft' ? 'draft' : item.status === 'sold' ? 'sold' : 'ended';
           
@@ -1537,7 +1537,7 @@ async function submitFranchise(btn){
                 <div class="listing-tags"><span class="tag ${tagClass}">${statusTag}</span></div>
               </div>
               <div class="listing-right">
-                <div class="listing-bid">${item.status === 'live' || item.status === 'sold' ? FNA.UI.formatPrice(item.current_bid || item.starting_bid) : '—'}</div>
+                <div class="listing-bid">${item.status === 'live' || item.status === 'sold' ? BY.UI.formatPrice(item.current_bid || item.starting_bid) : '—'}</div>
                 <div class="listing-bids">${item.status === 'live' || item.status === 'sold' ? `${item.bid_count || 0} bids` : 'Not live'}</div>
                 <div class="listing-time">${item.status === 'live' ? timeLeft : '—'}</div>
                 <div class="listing-actions">
@@ -1552,7 +1552,7 @@ async function submitFranchise(btn){
       }
 
       // Load estate sales
-      const sales = await FNA.Seller.getMySales();
+      const sales = await BY.Seller.getMySales();
       const salesContainer = document.querySelector('#panel-sales');
       if (salesContainer && sales.length > 0) {
         const salesCards = sales.map(sale => {
@@ -1583,7 +1583,7 @@ async function submitFranchise(btn){
       }
 
       // Load shipping items
-      const shippingItems = await FNA.Seller.getShippingItems();
+      const shippingItems = await BY.Seller.getShippingItems();
       const shippingContainer = document.querySelector('#panel-shipping');
       if (shippingContainer && shippingItems.length > 0) {
         const overdueItems = shippingItems.filter(item => new Date(item.ends_at) < new Date(Date.now() - 7 * 86400000));
@@ -1596,7 +1596,7 @@ async function submitFranchise(btn){
             <div class="ship-row">
               <div><strong>${item.title}</strong><div style="font-size:12px;color:var(--text-light)">Sold ${new Date(item.ends_at).toLocaleDateString()}</div></div>
               <div>Buyer · Location</div>
-              <div>${FNA.UI.formatPrice(item.current_bid || item.starting_bid)}</div>
+              <div>${BY.UI.formatPrice(item.current_bid || item.starting_bid)}</div>
               <div><span class="ship-status pending">⏳ Pending</span></div>
               <div><button class="btn-ship" onclick="generateLabel('${item.id}')">Print Label</button></div>
             </div>
@@ -1613,7 +1613,7 @@ async function submitFranchise(btn){
             <div class="ship-row">
               <div><strong>${item.title}</strong><div style="font-size:12px;color:var(--text-light)">Sold ${new Date(item.ends_at).toLocaleDateString()}</div></div>
               <div>Buyer · Location</div>
-              <div>${FNA.UI.formatPrice(item.current_bid || item.starting_bid)}</div>
+              <div>${BY.UI.formatPrice(item.current_bid || item.starting_bid)}</div>
               <div><span class="ship-status label">📄 Label Ready</span></div>
               <div><button class="btn-ship" style="background:var(--blue)" onclick="markShipped('${item.id}')">Mark Shipped</button></div>
             </div>
@@ -1625,7 +1625,7 @@ async function submitFranchise(btn){
       }
 
       // Load payouts
-      const payouts = await FNA.Seller.getPayouts();
+      const payouts = await BY.Seller.getPayouts();
       const payoutsContainer = document.querySelector('#panel-payouts .payout-table tbody');
       if (payoutsContainer && payouts.length > 0) {
         const payoutRows = payouts.map(payout => {
@@ -1636,9 +1636,9 @@ async function submitFranchise(btn){
             <tr>
               <td><strong>${payout.description || 'Payout'}</strong><div style="font-size:11.5px;color:var(--text-light)">${new Date(payout.created_at).toLocaleDateString()}</div></td>
               <td>${new Date(payout.payout_date).toLocaleDateString()}</td>
-              <td>${FNA.UI.formatPrice(payout.amount)}</td>
-              <td>${FNA.UI.formatPrice(payout.fee || 0)}</td>
-              <td>${FNA.UI.formatPrice(payout.net_amount)}</td>
+              <td>${BY.UI.formatPrice(payout.amount)}</td>
+              <td>${BY.UI.formatPrice(payout.fee || 0)}</td>
+              <td>${BY.UI.formatPrice(payout.net_amount)}</td>
               <td><span class="pay-status ${statusClass}">${statusText}</span></td>
             </tr>
           `;
@@ -1648,7 +1648,7 @@ async function submitFranchise(btn){
       }
 
       // Load reviews
-      const reviews = await FNA.Seller.getReviews();
+      const reviews = await BY.Seller.getReviews();
       const reviewsContainer = document.querySelector('#panel-reviews .section-card:last-child > div');
       if (reviewsContainer && reviews.length > 0) {
         const reviewRows = reviews.map(review => {
@@ -1671,39 +1671,39 @@ async function submitFranchise(btn){
         reviewsContainer.innerHTML = reviewRows;
       }
 
-      FNA.UI.toast('Dashboard loaded successfully', '✅ Ready');
+      BY.UI.toast('Dashboard loaded successfully', '✅ Ready');
     } catch (error) {
       console.error('Error loading seller dashboard:', error);
-      FNA.UI.toast('Error loading dashboard data', '⚠️ Error');
+      BY.UI.toast('Error loading dashboard data', '⚠️ Error');
     }
   }
 
   // Helper functions
   function deleteDraft(itemId) {
     if (confirm('Are you sure you want to delete this draft?')) {
-      FNA.UI.toast('Draft deleted', '🗑️ Deleted');
+      BY.UI.toast('Draft deleted', '🗑️ Deleted');
       // In a real app, you would call an API to delete the item
       setTimeout(() => loadSellerDashboard(), 1000);
     }
   }
 
   function manageSale(saleId) {
-    FNA.UI.toast('Opening sale manager...', '🏡 Manage');
+    BY.UI.toast('Opening sale manager...', '🏡 Manage');
     // In a real app, you would navigate to a sale management page
   }
 
   function generateLabel(itemId) {
-    FNA.UI.toast('Label generated', '📦 Label Created');
+    BY.UI.toast('Label generated', '📦 Label Created');
   }
 
   function markShipped(itemId) {
-    FNA.UI.toast('Item marked as shipped', '✅ Shipped');
+    BY.UI.toast('Item marked as shipped', '✅ Shipped');
   }
 
   // Initialize dashboard when page loads
   document.addEventListener('DOMContentLoaded', async () => {
     // Check if user is authenticated
-    const user = await FNA.Auth.getUser();
+    const user = await BY.Auth.getUser();
     if (!user) {
       window.location.href = 'index.html?login=1';
       return;
@@ -1755,7 +1755,7 @@ async function submitFranchise(btn){
     await loadSellerDashboard();
 
     // Start countdowns
-    FNA.UI.startCountdowns();
+    BY.UI.startCountdowns();
   });
 </script>
 </body>

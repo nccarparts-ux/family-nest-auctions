@@ -909,7 +909,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // Update header auth state
   (async function(){
     try{
-      var user = await FNA.Auth.getUser();
+      var user = await BY.Auth.getUser();
       var ctaDiv = document.querySelector('.nav-ctas');
       if(user && ctaDiv){
         var first = (user.user_metadata?.full_name||user.email||'Account').split(' ')[0];

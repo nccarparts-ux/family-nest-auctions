@@ -963,7 +963,7 @@ function getSB(){
 
 async function loadDashboardUser(){
   try{
-    var user=await FNA.Auth.getUser();
+    var user=await BY.Auth.getUser();
     if(!user)return;
     var name=user.user_metadata?.full_name||user.email||'Member';
     var first=name.split(' ')[0];
@@ -1001,7 +1001,7 @@ async function loadDashboardUser(){
 
 async function loadOverviewData(){
   try{
-    var user=await FNA.Auth.getUser();if(!user)return;
+    var user=await BY.Auth.getUser();if(!user)return;
 
     // Fetch all user bids with item details — one query for everything
     var{data:allBids}=await getSB().from('bids')
@@ -1071,7 +1071,7 @@ async function loadOverviewData(){
         activeBidsList.innerHTML=liveBids.map(function(b){
           var item=b.items||{};
           var isLeading=b.is_winning===true;
-          var countdown=FNA.UI.formatCountdown(item.ends_at);
+          var countdown=BY.UI.formatCountdown(item.ends_at);
           var statusHtml=isLeading
             ?'<span class="bid-status leading">✅ Leading</span>'
             :'<span class="bid-status outbid">😬 Outbid — $'+parseFloat(item.current_bid||0).toLocaleString()+' leads</span>';
@@ -1098,7 +1098,7 @@ async function loadOverviewData(){
 
 async function loadActiveBids(){
   try{
-    var user=await FNA.Auth.getUser();if(!user)return;
+    var user=await BY.Auth.getUser();if(!user)return;
     var{data}=await getSB().from('bids').select('amount,is_winning,created_at,items(id,title,current_bid,ends_at,status)').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20);
     var container=document.querySelector('#panel-bids .bids-list');
     if(!container||!data)return;
@@ -1108,7 +1108,7 @@ async function loadActiveBids(){
     container.innerHTML=rows.map(function(b){
       var item=b.items||{};
       var isLeading=b.is_winning===true;
-      var countdown=FNA.UI.formatCountdown(item.ends_at);
+      var countdown=BY.UI.formatCountdown(item.ends_at);
       var statusHtml=isLeading?'<span class="bid-status leading">✅ Leading</span>':'<span class="bid-status outbid">😬 Outbid — $'+parseFloat(item.current_bid||0).toLocaleString()+' leads</span>';
       return '<div class="bid-row"><div class="bid-thumb" style="background:linear-gradient(135deg,#f0e8d8,#e0d0b8)">🪑</div><div class="bid-content"><div class="bid-estate">'+escHtml2(item.title||'')+'</div><div class="bid-meta-row">'+statusHtml+'<span class="bid-meta-item">Your bid: <strong>$'+parseFloat(b.amount).toLocaleString()+'</strong></span></div></div><div class="bid-right"><div><div class="bid-current-lbl">Ends In</div><div class="bid-time'+(countdown.urgent?' urgent':'')+'">'+countdown.text+'</div></div><button class="btn-rebid" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'">View &amp; Bid</button></div></div>';
     }).join('');
@@ -1117,14 +1117,14 @@ async function loadActiveBids(){
 
 async function loadWatchlist(){
   try{
-    var user=await FNA.Auth.getUser();if(!user)return;
+    var user=await BY.Auth.getUser();if(!user)return;
     var{data}=await getSB().from('watchlist').select('item_id,items(id,title,current_bid,ends_at,status)').eq('user_id',user.id).limit(20);
     var container=document.querySelector('#panel-watchlist .watchlist-grid');
     if(!container||!data)return;
     if(!data.length){container.outerHTML='<div class="empty-panel"><div class="ep-icon">❤️</div><div class="ep-title">Watchlist is Empty</div><div class="ep-sub">Save items you\'re interested in to track them here.</div><button class="btn-browse" onclick="window.location.href=\'auction-browse.html\'">Browse Auctions</button></div>';return;}
     container.innerHTML=data.map(function(w){
       var item=w.items||{};
-      var countdown=FNA.UI.formatCountdown(item.ends_at);
+      var countdown=BY.UI.formatCountdown(item.ends_at);
       return '<div class="wl-card" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'"><div class="wl-img">🪑</div><button class="wl-remove" onclick="event.stopPropagation();removeWatchItem(this)">✕</button><div class="wl-body"><div class="wl-name">'+escHtml2(item.title||'')+'</div><div class="wl-footer"><div class="wl-bid">$'+parseFloat(item.current_bid||0).toLocaleString()+'</div><div class="wl-time'+(countdown.urgent?' u':'')+'">'+countdown.text+'</div></div><button class="btn-bid-wl" onclick="event.stopPropagation();window.location.href=\'auction-item-detail.html?id='+item.id+'\'">View &amp; Bid</button></div></div>';
     }).join('');
   }catch(e){}
@@ -1132,7 +1132,7 @@ async function loadWatchlist(){
 
 async function loadWonItems(){
   try{
-    var user=await FNA.Auth.getUser();if(!user)return;
+    var user=await BY.Auth.getUser();if(!user)return;
     var{data}=await getSB().from('bids').select('amount,created_at,items(id,title,ends_at,status)').eq('user_id',user.id).eq('is_winning',true).order('created_at',{ascending:false}).limit(20);
     var container=document.querySelector('#panel-won .won-list');
     if(!container)return;
@@ -1147,7 +1147,7 @@ async function loadWonItems(){
 
 async function loadNotifications(){
   try{
-    var user=await FNA.Auth.getUser();if(!user)return;
+    var user=await BY.Auth.getUser();if(!user)return;
     var{data,error}=await getSB().from('notifications').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20);
     var container=document.querySelector('#panel-notifications .notif-list');
     if(!container)return;
@@ -1163,7 +1163,7 @@ async function loadNotifications(){
 
 async function loadProfileTab(){
   try{
-    var user=await FNA.Auth.getUser();if(!user)return;
+    var user=await BY.Auth.getUser();if(!user)return;
     var nameInputs=document.querySelectorAll('#panel-profile input[type="text"], #panel-profile input[type="email"]');
     if(nameInputs[0])nameInputs[0].value=user.user_metadata?.full_name||'';
     if(nameInputs[1])nameInputs[1].value=user.email||'';
@@ -1182,7 +1182,7 @@ function escHtml2(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
 // Save profile
 async function saveProfile(){
   try{
-    var user=await FNA.Auth.getUser();if(!user)return;
+    var user=await BY.Auth.getUser();if(!user)return;
     var inputs=document.querySelectorAll('#panel-profile input');
     var fullName=inputs[0]?.value?.trim();
     await getSB().from('profiles').upsert({user_id:user.id,full_name:fullName,email:user.email},{onConflict:'user_id'});
@@ -1245,7 +1245,7 @@ function removeWatchItem(btn){
 // INIT
 document.addEventListener('DOMContentLoaded', async function(){
   try{
-    var user = await FNA.Auth.getUser();
+    var user = await BY.Auth.getUser();
     if(!user){
       window.location.href = 'index.html?login=1';
       return;

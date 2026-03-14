@@ -854,7 +854,7 @@ function toggleProxy(cb){
 async function openConfirm(){
   // Auth check first — redirect to login if not signed in
   try {
-    var user = await FNA.Auth.getUser();
+    var user = await BY.Auth.getUser();
     if(!user){
       toast('Please sign in to place a bid','🔒 Sign In Required');
       setTimeout(function(){ window.location.href='index.html?login=1'; },1500);
@@ -893,7 +893,7 @@ async function submitBid(){
   var btn=document.querySelector('[onclick*="submitBid"]');
   if(btn){ btn.textContent='⏳ Placing…'; btn.disabled=true; }
   try{
-    var user=await FNA.Auth.getUser();
+    var user=await BY.Auth.getUser();
     if(!user){ closeConfirm(); toast('Please sign in to bid','🔒 Sign In Required'); setTimeout(function(){window.location.href='index.html?login=1';},1500); return; }
     console.log('Placing bid for user:', user.id);
     var sb=getSB();
@@ -968,7 +968,7 @@ async function submitBid(){
 async function toggleWatchlist(){
   var itemId=new URLSearchParams(window.location.search).get('id');
   try{
-    var user=await FNA.Auth.getUser();
+    var user=await BY.Auth.getUser();
     if(!user){ toast('Please sign in to save items','🔒 Sign In Required'); return; }
     var sb=getSB();
     // Check session is loaded
@@ -1013,7 +1013,7 @@ function saveNotifications(){
   var email=document.getElementById('notif-email')?.value?.trim();
   var itemId=new URLSearchParams(window.location.search).get('id');
   var prefs={outbid,remind,win,ship};
-  FNA.Auth.getUser().then(function(user){
+  BY.Auth.getUser().then(function(user){
     if(!user){
       if(!email){ toast('Enter your email to get notified','📧 Email needed'); return; }
       localStorage.setItem('fna_notif_email',email);
@@ -1076,7 +1076,7 @@ async function showAllBids(btn){
     return;
   }
   try {
-    var history=await FNA.Items.getBidHistory(itemId);
+    var history=await BY.Items.getBidHistory(itemId);
     if(!history||!history.length){
       fullEl.innerHTML='<div style="text-align:center;color:var(--text-light);padding:14px;font-size:13px">No bids yet — be the first!</div>';
     } else {
@@ -1104,7 +1104,7 @@ async function showAllBids(btn){
 // ── RELATED ITEMS LOADER ─────────────────────────────────────
 async function loadRelatedItems(excludeId){
   try{
-    var items = await FNA.Items.getLive({limit:8});
+    var items = await BY.Items.getLive({limit:8});
     if(excludeId) items = items.filter(function(i){ return i.id !== excludeId; });
     items = items.slice(0,4);
     var grid = document.querySelector('.related-grid');
@@ -1114,7 +1114,7 @@ async function loadRelatedItems(excludeId){
     var emojis = ['🪑','🏺','🪔','🖼️','💍','🎨','🪞','🧺','🕰️','⌚'];
     grid.innerHTML = items.map(function(item, i){
       var bid = parseFloat(item.current_bid || item.starting_bid || 0);
-      var countdown = FNA.UI.formatCountdown(item.ends_at);
+      var countdown = BY.UI.formatCountdown(item.ends_at);
       var seller = item.sellers || {};
       var emoji = emojis[i % emojis.length];
       return '<a class="rel-card" href="auction-item-detail.html?id='+item.id+'">'+
@@ -1140,7 +1140,7 @@ async function loadItemData(){
   if(!id){
     // No ?id= param — auto-load the first live item so the page never shows hardcoded demo data
     try{
-      var liveItems = await FNA.Items.getLive({limit:1});
+      var liveItems = await BY.Items.getLive({limit:1});
       if(liveItems && liveItems.length){
         id = liveItems[0].id;
         history.replaceState({}, '', window.location.pathname + '?id=' + id);
@@ -1409,7 +1409,7 @@ document.addEventListener('DOMContentLoaded', function(){
   // Update header based on auth state
   (async function(){
     try{
-      var user = await FNA.Auth.getUser();
+      var user = await BY.Auth.getUser();
       var ctaDiv = document.querySelector('.nav-ctas');
       if(user && ctaDiv){
         var first = (user.user_metadata?.full_name||user.email||'Account').split(' ')[0];

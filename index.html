@@ -377,7 +377,7 @@
         <a href="seller-dashboard.html" id="nav-seller-dashboard-link" style="display:none;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">🏡 Seller Dashboard</a>
         <a href="messages.html" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--charcoal);text-decoration:none;border-radius:var(--r-sm);transition:background .15s" onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">✉️ Messages</a>
         <hr style="border:none;border-top:1px solid var(--cream-mid);margin:4px 0">
-        <button onclick="FNA.Auth.signOut()" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--red);border:none;background:transparent;cursor:pointer;border-radius:var(--r-sm);width:100%;text-align:left;font-family:'Inter',sans-serif;transition:background .15s" onmouseover="this.style.background='#FDECEA'" onmouseout="this.style.background='transparent'">🚪 Sign Out</button>
+        <button onclick="BY.Auth.signOut()" style="display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--red);border:none;background:transparent;cursor:pointer;border-radius:var(--r-sm);width:100%;text-align:left;font-family:'Inter',sans-serif;transition:background .15s" onmouseover="this.style.background='#FDECEA'" onmouseout="this.style.background='transparent'">🚪 Sign Out</button>
       </div>
     </div>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -762,7 +762,7 @@ async function doSignIn(){
   if(btn){btn.textContent='Signing in…';btn.disabled=true;}
   if(errEl)errEl.style.display='none';
   try{
-    await FNA.Auth.signIn({email,password:pass});
+    await BY.Auth.signIn({email,password:pass});
     window.location.href='account-dashboard.html';
   }catch(e){
     var msg=e.message||'Sign in failed';
@@ -787,7 +787,7 @@ async function doRegister(){
   if(btn){btn.textContent='Creating account…';btn.disabled=true;}
   if(errEl)errEl.style.display='none';
   try{
-    var result=await FNA.Auth.signUp({email,password:pass,fullName:name});
+    var result=await BY.Auth.signUp({email,password:pass,fullName:name});
     if(result&&result.session){
       // Email confirmation is disabled — user is immediately signed in
       window.location.href='account-dashboard.html';
@@ -821,7 +821,7 @@ async function doSellerApply(){
   if(errEl)errEl.style.display='none';
   if(btn){btn.textContent='Submitting…';btn.disabled=true;}
   try{
-    var user=await FNA.Auth.getUser();
+    var user=await BY.Auth.getUser();
     if(!user){closeOv('seller');openOv('login');return;}
     var _sb=window.supabase.createClient('https://hwsjgclteuezauveujit.supabase.co','sb_publishable_3-tTloiwTqSEZCw4_m288w_FoR7OgxS',{ auth: { persistSession: true, autoRefreshToken: true } });
     await _sb.from('sellers').insert({
@@ -857,7 +857,7 @@ document.addEventListener('click',function(e){
 
 async function checkAuthState(){
   try{
-    var user=await FNA.Auth.getUser();
+    var user=await BY.Auth.getUser();
     var ctas=document.getElementById('nav-ctas');
     var userNav=document.getElementById('nav-user');
     if(user){
@@ -948,7 +948,7 @@ async function loadHeroItems(){
     var estateEl=document.getElementById('hero-estate');
     var btnEl=document.getElementById('hero-bid-btn');
     if(titleEl)titleEl.textContent=featured.title;
-    if(bidEl)bidEl.textContent=FNA.UI.formatPrice(featuredBid);
+    if(bidEl)bidEl.textContent=BY.UI.formatPrice(featuredBid);
     if(estateEl)estateEl.textContent='📍 '+(featured.sellers?.city||'')+', '+(featured.sellers?.state||'')+' — '+(featured.sellers?.business_name||'');
     if(btnEl){btnEl.onclick=function(){window.location.href='auction-item-detail.html?id='+featured.id;};}
     // Start countdown for featured item
@@ -956,7 +956,7 @@ async function loadHeroItems(){
     if(timerEl&&featured.ends_at){
       timerEl.dataset.endsAt=featured.ends_at;
       function updateHeroTimer(){
-        var r=FNA.UI.formatCountdown(featured.ends_at);
+        var r=BY.UI.formatCountdown(featured.ends_at);
         timerEl.textContent=r.text;
         if(r.urgent)timerEl.classList.add('soon');
       }
@@ -972,8 +972,8 @@ async function loadHeroItems(){
         // Determine true highest bid for each mini item
         var itemTrueHighestBid = highestBidMap[item.id];
         var itemBid = itemTrueHighestBid || parseFloat(item.current_bid || item.starting_bid || 0);
-        var bid=FNA.UI.formatPrice(itemBid);
-        var countdown=FNA.UI.formatCountdown(item.ends_at);
+        var bid=BY.UI.formatPrice(itemBid);
+        var countdown=BY.UI.formatCountdown(item.ends_at);
         return '<div class="mini-tile" onclick="window.location.href=\'auction-item-detail.html?id='+item.id+'\'"><div class="mini-icon">'+icon+'</div><div class="mini-name">'+escHtml(item.title.substring(0,28))+'</div><div class="mini-price">'+bid+'</div><div class="mini-bids">'+item.bid_count+' bids · '+countdown.text+'</div></div>';
       }).join('');
     }
