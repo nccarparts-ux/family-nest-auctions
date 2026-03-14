@@ -21,6 +21,10 @@ __pycache__/
 # AI/Agent files
 *.txt
 *.md
+!README.md
+!CLAUDE.md
+!ADMIN_SETUP.md
+!SKILLS_SUMMARY.md
 context.txt
 complete_response.txt
 .ai_memory.json
