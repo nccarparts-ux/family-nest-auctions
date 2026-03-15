@@ -51,10 +51,29 @@ test('login modal opens without errors', async ({ page }) => {
 
   await page.goto('/index.html', { waitUntil: 'networkidle' });
 
-  // Click login button to open modal (first visible button)
-  const loginButton = page.locator('button:has-text("Sign In")').first();
-  await expect(loginButton).toBeVisible();
-  await loginButton.click();
+  // Handle mobile vs desktop viewport
+  const viewport = page.viewportSize();
+  const isMobile = viewport && viewport.width < 960;
+
+  if (isMobile) {
+    // Open mobile menu first
+    const hamburger = page.locator('#hamburger');
+    await expect(hamburger).toBeVisible();
+    await hamburger.click();
+
+    // Wait for mobile menu to open
+    await page.waitForSelector('#mobile-menu', { state: 'visible' });
+
+    // Click mobile menu button
+    const loginButton = page.locator('.mobile-menu-ctas button:has-text("Sign In")');
+    await expect(loginButton).toBeVisible();
+    await loginButton.click();
+  } else {
+    // Desktop: click desktop button
+    const loginButton = page.locator('button:has-text("Sign In")').first();
+    await expect(loginButton).toBeVisible();
+    await loginButton.click();
+  }
 
   // Wait for modal to appear
   const modal = page.locator('.overlay.on, [class*="modal"]');
@@ -93,10 +112,29 @@ test('signup modal opens without errors', async ({ page }) => {
 
   await page.goto('/index.html', { waitUntil: 'networkidle' });
 
-  // Click signup button to open modal (first visible button)
-  const signupButton = page.locator('button:has-text("Start Bidding Free")').first();
-  await expect(signupButton).toBeVisible();
-  await signupButton.click();
+  // Handle mobile vs desktop viewport
+  const viewport = page.viewportSize();
+  const isMobile = viewport && viewport.width < 960;
+
+  if (isMobile) {
+    // Open mobile menu first
+    const hamburger = page.locator('#hamburger');
+    await expect(hamburger).toBeVisible();
+    await hamburger.click();
+
+    // Wait for mobile menu to open
+    await page.waitForSelector('#mobile-menu', { state: 'visible' });
+
+    // Click mobile menu button
+    const signupButton = page.locator('.mobile-menu-ctas button:has-text("Start Bidding Free")');
+    await expect(signupButton).toBeVisible();
+    await signupButton.click();
+  } else {
+    // Desktop: click desktop button
+    const signupButton = page.locator('button:has-text("Start Bidding Free")').first();
+    await expect(signupButton).toBeVisible();
+    await signupButton.click();
+  }
 
   // Wait for modal to appear
   const modal = page.locator('.overlay.on, [class*="modal"]');
