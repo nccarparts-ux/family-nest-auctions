@@ -66,6 +66,8 @@ class QAAgent {
       return 'runtime_error';
     } else if (first.type === 'accessibility') {
       return 'accessibility';
+    } else if (first.type === 'test_failure') {
+      return 'test_failure';
     }
     return 'unknown';
   }
@@ -83,6 +85,8 @@ class QAAgent {
         return this.fixMissingResource(first.url, first.message);
       case 'missing_asset':
         return this.fixMissingAsset(first.url, first.message);
+      case 'test_failure':
+        return this.fixTestFailure(first.url, first.message);
       default:
         console.log(`No fix available for ${rootCause}`);
         return false;
@@ -126,6 +130,17 @@ class QAAgent {
 
   fixMissingAsset(url, message) {
     console.log(`Missing asset: ${message}`);
+    return false;
+  }
+
+  fixTestFailure(url, message) {
+    console.log(`Test failure detected: ${message}`);
+    // For now, just log that we need to fix tests
+    // In a real implementation, we would:
+    // 1. Analyze which tests are failing
+    // 2. Determine if it's a selector issue, viewport issue, etc.
+    // 3. Update test files or fix UI
+    console.log('Test failures need manual investigation. Skipping auto-fix for now.');
     return false;
   }
 

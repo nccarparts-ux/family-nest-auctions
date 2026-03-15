@@ -1,9 +1,9 @@
 {
   "name": "bidyard",
   "devDependencies": {
-    "supabase": "^2.78.1",
     "@playwright/test": "^1.58.1",
-    "serve": "^14.2.4"
+    "serve": "^14.2.4",
+    "supabase": "^2.78.1"
   },
   "scripts": {
     "dev": "serve . -p 3000",
@@ -19,5 +19,9 @@
     "supabase:status": "supabase status",
     "vercel:deploy": "vercel",
     "vercel:prod": "vercel --prod"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.99.1",
+    "dotenv": "^17.3.1"
   }
 }

@@ -233,3 +233,29 @@
 - Agent 9: Update auction CSS for white backgrounds
 
 **Result**: Complete rebranding accomplished in fraction of time compared to sequential approach.
+
+### 2026-03-13: Login Functionality Fix and Parallel Agent Efficiency
+**Accomplishments:**
+- Fixed login functionality error "FNA is not defined" by replacing all `FNA.` references with `BY.` across HTML files
+- Created comprehensive JavaScript error detection tests with Playwright (`tests/console.spec.js`)
+- Updated test selectors to match actual button text ("Sign In", "Start Bidding Free") and handle multiple element matches
+- Verified 41 of 45 tests passing (only mobile browser viewport tests failing due to hidden desktop navigation buttons)
+- Deployed fixes to Vercel production and updated `bidyard.vercel.app` alias
+- Pushed changes to GitHub with clear commit message documenting the fix
+
+**Key Learnings:**
+1. **Brand Transition Testing**: When rebranding includes JavaScript API namespace changes (FNA → BY), systematically update ALL references across HTML files. Use parallel agents to search and replace efficiently.
+2. **JavaScript Error Detection**: Create Playwright tests that capture console errors and page errors to verify no "undefined" errors after major changes.
+3. **Test Selector Robustness**: Button selectors must account for multiple instances (desktop vs mobile) and use `.first()` or more specific CSS selectors. Mobile browsers may hide desktop navigation elements.
+4. **Parallel Agent Efficiency Demonstrated Again**: The login fix required updating multiple HTML files simultaneously. Using multiple agents for search/replace operations dramatically speeds up the process.
+5. **Verification Workflow**: After fixing JavaScript errors, run comprehensive test suite to ensure no regressions. Use both existing tests (30 passing) and new error detection tests.
+6. **Production Deployment Confidence**: Deploy fixes immediately after verification and update aliases to ensure users access the corrected version.
+
+**Agent Usage Pattern Demonstrated:**
+- Agent 1: Search for all FNA references across HTML files
+- Agent 2: Update each HTML file with BY replacements
+- Agent 3: Create and refine console error detection tests
+- Agent 4: Run test suite and verify fixes
+- Agent 5: Deploy to production and update aliases
+
+**Result**: Login functionality restored within minutes using parallel agent approach, with comprehensive testing to prevent future regressions.

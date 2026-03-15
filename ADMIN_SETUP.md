@@ -9,8 +9,9 @@
    - Set up `is_admin_user()` SECURITY DEFINER function to prevent RLS recursion
    - Added admin policies for all tables: profiles, sellers, items, bids, estate_sales
 3. **Security Fixed**: Service role key removed from `.env`, personal access token configured
-4. **Tests Passed**: 30 Playwright tests passing
-5. **Deployment Live**: Site deployed to https://bidyard.vercel.app
+4. **Tests Passed**: 41/45 Playwright tests passing (mobile viewport tests require selector adjustments)
+5. **Login Functionality Fixed**: Replaced all FNA references with BY, created JavaScript error detection tests, 41/45 tests passing
+6. **Deployment Live**: Site deployed to https://bidyard.vercel.app
 
 ## 🔧 Remaining Setup Steps
 

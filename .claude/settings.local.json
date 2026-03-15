@@ -27,7 +27,10 @@
       "Bash(pkill:*)",
       "Bash(npx vercel:*)",
       "Bash(ls:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)",
+      "Bash(findstr:*)"
     ]
   }
 }
