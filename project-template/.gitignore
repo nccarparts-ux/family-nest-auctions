@@ -10,9 +10,9 @@
 *.backup
 *.backup2
 
-# Python 
-__pycache__/ 
-*.pyc 
+# Python
+__pycache__/
+*.pyc
 # Python files
 *.py
 *.pyc
@@ -39,7 +39,6 @@ complete_response.txt
 .idea/
 
 # Local tooling and configuration
-!.claude/settings.local.json
 .claude/
 
 # Temporary deployment and test files

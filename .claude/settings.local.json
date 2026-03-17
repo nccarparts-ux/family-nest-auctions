@@ -30,7 +30,12 @@
       "Bash(grep:*)",
       "Bash(netstat:*)",
       "Bash(taskkill:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(PLAYWRIGHT_TEST_BASE_URL=https://family-nest-auctions.vercel.app npm test:*)",
+      "Bash(set PLAYWRIGHT_TEST_BASE_URL=https://family-nest-auctions.vercel.app:*)",
+      "Bash(git init:*)",
+      "Bash(gh:*)",
+      "Bash(bash -c:*)"
     ]
   }
 }
